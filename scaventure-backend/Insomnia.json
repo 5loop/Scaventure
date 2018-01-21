@@ -1,0 +1,347 @@
+{
+	"_type": "export",
+	"__export_format": 3,
+	"__export_date": "2018-01-21T23:22:30.705Z",
+	"__export_source": "insomnia.desktop.app:v5.12.4",
+	"resources": [
+		{
+			"_id": "wrk_dab5962641e84c96bfc6c0dde4c66e0b",
+			"created": 1516564191210,
+			"description": "",
+			"modified": 1516564191210,
+			"name": "Insomnia",
+			"parentId": null,
+			"_type": "workspace"
+		},
+		{
+			"_id": "env_89bf71d2ae1944efbc2baa2ade7b280d",
+			"color": null,
+			"created": 1516564191234,
+			"data": {},
+			"isPrivate": false,
+			"modified": 1516564191234,
+			"name": "New Environment",
+			"parentId": "wrk_dab5962641e84c96bfc6c0dde4c66e0b",
+			"_type": "environment"
+		},
+		{
+			"_id": "jar_e30e457b09e940ebb5e3db8e678a5f1f",
+			"cookies": [],
+			"created": 1516564191284,
+			"modified": 1516564191284,
+			"name": "Default Jar",
+			"parentId": "wrk_dab5962641e84c96bfc6c0dde4c66e0b",
+			"_type": "cookie_jar"
+		},
+		{
+			"_id": "fld_8bfcdf78c0a640cbadc95e1c6d3fa146",
+			"created": 1516564389994,
+			"description": "",
+			"environment": {},
+			"metaSortKey": -1516564389995,
+			"modified": 1516564389994,
+			"name": "Scaventure",
+			"parentId": "wrk_dab5962641e84c96bfc6c0dde4c66e0b",
+			"_type": "request_group"
+		},
+		{
+			"_id": "env_64dee8b6254a4a8a87356844119e859c",
+			"color": null,
+			"created": 1516564469934,
+			"data": {
+				"base_url": "http://localhost:4100"
+			},
+			"isPrivate": false,
+			"modified": 1516568917859,
+			"name": "Scaventure-local",
+			"parentId": "env_89bf71d2ae1944efbc2baa2ade7b280d",
+			"_type": "environment"
+		},
+		{
+			"_id": "fld_3d67862515c94dbb82f53fd2445acb42",
+			"created": 1516564420051,
+			"description": "",
+			"environment": {},
+			"metaSortKey": -1516564420051,
+			"modified": 1516564420051,
+			"name": "users",
+			"parentId": "fld_8bfcdf78c0a640cbadc95e1c6d3fa146",
+			"_type": "request_group"
+		},
+		{
+			"_id": "fld_d17bfeb4b1c84fa699b0b411523005af",
+			"created": 1516566592614,
+			"description": "",
+			"environment": {},
+			"metaSortKey": -1516566592614,
+			"modified": 1516566592614,
+			"name": "quests",
+			"parentId": "fld_8bfcdf78c0a640cbadc95e1c6d3fa146",
+			"_type": "request_group"
+		},
+		{
+			"_id": "req_782a025f91204f918fd92536804bf371",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"email\" : \"scaventure@scv.com\",\n\t\"password\" : \"testtest\"\n}\n"
+			},
+			"created": 1516564438049,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_38f1d0dc69d74f99b436d34b43778c15",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"metaSortKey": -1516564438049,
+			"method": "POST",
+			"modified": 1516570833985,
+			"name": "Register",
+			"parameters": [],
+			"parentId": "fld_3d67862515c94dbb82f53fd2445acb42",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ base_url  }}/api/auth/register",
+			"_type": "request"
+		},
+		{
+			"_id": "req_d4b32b294d2841f98fbf05abaf5b9e71",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"email\" : \"scaventure@scv.com\",\n\t\"password\" : \"testtest\"\n}"
+			},
+			"created": 1516564540122,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_af8b5b1081a446e2912cdcce3ac55a59",
+					"name": "Content-Type",
+					"value": "application/json"
+				},
+				{
+					"id": "pair_240db1bafe4946e68771ed1d16cd5397",
+					"name": "",
+					"value": ""
+				}
+			],
+			"metaSortKey": -1516564540122,
+			"method": "POST",
+			"modified": 1516575340977,
+			"name": "Login",
+			"parameters": [],
+			"parentId": "fld_3d67862515c94dbb82f53fd2445acb42",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ base_url  }}/api/auth/login",
+			"_type": "request"
+		},
+		{
+			"_id": "req_1e25008f09d4475ab443d3869ebf57d9",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"email\" : \"scaventure@scv.com\",\n\t\"password\" : \"testtest\"\n}"
+			},
+			"created": 1516564857217,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_814dc07f130340bbb9b0fb67b28c418f",
+					"name": "Content-Type",
+					"value": "application/json"
+				},
+				{
+					"disabled": false,
+					"id": "pair_286a3e752c3f446bacfd75e19cc774d8",
+					"name": "Authorization",
+					"value": "{% response 'body', 'req_d4b32b294d2841f98fbf05abaf5b9e71', '$.token' %}"
+				}
+			],
+			"metaSortKey": -1516564857217,
+			"method": "POST",
+			"modified": 1516570862309,
+			"name": "Update",
+			"parameters": [],
+			"parentId": "fld_3d67862515c94dbb82f53fd2445acb42",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ base_url  }}/api/auth/update",
+			"_type": "request"
+		},
+		{
+			"_id": "req_565ff6150ac84e33a020bca2eeea00af",
+			"authentication": {},
+			"body": {
+				"mimeType": "",
+				"text": ""
+			},
+			"created": 1516569582808,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_15640bbf12f54e888607ba7a095f2bee",
+					"name": "Authorization",
+					"value": "{% response 'body', 'req_d4b32b294d2841f98fbf05abaf5b9e71', '$.token' %}"
+				}
+			],
+			"metaSortKey": -1516569582808,
+			"method": "GET",
+			"modified": 1516575326721,
+			"name": "Get All Quests",
+			"parameters": [
+				{
+					"id": "pair_78a584d3bedf4253a8d056ccef0a6f56",
+					"name": "",
+					"value": ""
+				},
+				{
+					"id": "pair_ad800ee3292c41e3a056eb71c4afe22c",
+					"name": "",
+					"value": ""
+				}
+			],
+			"parentId": "fld_d17bfeb4b1c84fa699b0b411523005af",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ base_url  }}/api/quests",
+			"_type": "request"
+		},
+		{
+			"_id": "req_1e13902e38a54bf79c8e01d9738dd4dd",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"title\": \"Test Quest\",\n\t\"description\": \"Test Quest Description\",\n\t\"type\": \"public\",\n\t\"loc\": {       \n\t\t\"type\":\"Point\", \n    \"coordinates\":[42,42]\n\t}\n}"
+			},
+			"created": 1516572691194,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_4427221540be4bf6b6612fa975644cf9",
+					"name": "Authorization",
+					"value": "{% response 'body', 'req_d4b32b294d2841f98fbf05abaf5b9e71', '$.token' %}"
+				},
+				{
+					"id": "pair_eece2c57ba2b4cc5895293e2e0eb28ea",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"metaSortKey": -1516572691194,
+			"method": "POST",
+			"modified": 1516574859682,
+			"name": "Add Quest",
+			"parameters": [],
+			"parentId": "fld_d17bfeb4b1c84fa699b0b411523005af",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ base_url  }}/api/quests",
+			"_type": "request"
+		},
+		{
+			"_id": "req_d642fafbe5db44ff8dfefed5086d0b9a",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"title\": \"Updated Test Quest\",\n\t\"description\": \"Updated Test Quest Description\",\n\t\"type\": \"public\",\n\t\"loc\": {       \n\t\t\"type\":\"Point\", \n    \"coordinates\":[44,44]\n\t}\n}"
+			},
+			"created": 1516575113648,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_2ea621592f89465c83539a5f9262dd37",
+					"name": "Content-Type",
+					"value": "application/json"
+				},
+				{
+					"id": "pair_f8fda58f27ab4a6798bd09f3e67fce19",
+					"name": "Authorization",
+					"value": "{% response 'body', 'req_d4b32b294d2841f98fbf05abaf5b9e71', '$.token' %}"
+				}
+			],
+			"metaSortKey": -1516575113648,
+			"method": "POST",
+			"modified": 1516575258341,
+			"name": "Update Quest",
+			"parameters": [
+				{
+					"id": "pair_963c25ce7e404e5f877e01e31d388c2a",
+					"name": "",
+					"value": ""
+				}
+			],
+			"parentId": "fld_d17bfeb4b1c84fa699b0b411523005af",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ base_url  }}/api/quests/5a651a1431ddfd1f0bbf0b8e",
+			"_type": "request"
+		},
+		{
+			"_id": "req_517a226e764d46999826e5dc8beb6052",
+			"authentication": {},
+			"body": {},
+			"created": 1516575716124,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_ff594c4f98ea4fe99ffc83c30245eac3",
+					"name": "Authorization",
+					"value": "{% response 'body', 'req_d4b32b294d2841f98fbf05abaf5b9e71', '$.token' %}"
+				}
+			],
+			"metaSortKey": -1516569582758,
+			"method": "GET",
+			"modified": 1516576201915,
+			"name": "Get One Quest",
+			"parameters": [],
+			"parentId": "fld_d17bfeb4b1c84fa699b0b411523005af",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ base_url  }}/api/quests/5a651a1431ddfd1f0bbf0b8e",
+			"_type": "request"
+		},
+		{
+			"_id": "req_4af07f860d55458ca1c40c1be533339c",
+			"authentication": {},
+			"body": {},
+			"created": 1516576039316,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_a3fe9bca12b2454ab51fcc1df6f2fbea",
+					"name": "Authorization",
+					"value": "{% response 'body', 'req_d4b32b294d2841f98fbf05abaf5b9e71', '$.token' %}"
+				}
+			],
+			"metaSortKey": -1516576039316,
+			"method": "DELETE",
+			"modified": 1516576076521,
+			"name": "Delete a Quest",
+			"parameters": [],
+			"parentId": "fld_d17bfeb4b1c84fa699b0b411523005af",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ base_url  }}/api/quests/5a65164deecf041ab54a1995",
+			"_type": "request"
+		}
+	]
+}

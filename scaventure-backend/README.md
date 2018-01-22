@@ -1,6 +1,19 @@
 
 
 # Backend API
+
+## Project Structure
+
+**.env** - define API secrets & keys 
+
+**Insomnia.json** - import file for [INSOMNIA](https://insomnia.rest/)  REST Client 
+
+**./server** - NodeJS server files
+
+- config  - any configurations/middleware
+- modules - define routes/controllers (main backend logic)
+- utils   - any helpers (e.g. date formatting functions)
+
 ## Running/Installation
 
 **Dependencies**  

@@ -25,6 +25,8 @@ routes.delete('/quests/:id',  requireJwtAuth, QuestController.deleteQuest);
 // routes.post('/quests/:id/feedbacks/:id' , ... ); // update a feedback (iff it was created by the logged-in user)
 
 // Invitations
+// POST /quests/1/users
+routes.post('/quests/:id/users', requireJwtAuth, QuestController.inviteUser);
 
 // routes.get('/quests/:id/users' , ... ); // Get list of users invited to the quest (iff quest is private & logged-in user is the author of the quest)
 // routes.delete('/quests/:id/users/:id', ...); // 'Uninvite' a user (iff quest is private & logged-in user is the author of the quest)

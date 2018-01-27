@@ -1,5 +1,9 @@
-import {Quest} from './model';
+import { Quest, Link } from './model';
 
+import config from '../../config/config';
+var sg = require('sendgrid')(config.sendgrid_key);
+var SHA256 = require("crypto-js/sha256");
+var CryptoJS = require("crypto-js");
 
 /**
 *  Get list of avaiable quests
@@ -103,9 +107,94 @@ export const deleteQuest = async (req, res) => {
 
 // Feedback
 // ...
+/*
 
-// Invitation
-// ...
+Invite User to a Private Quest, check if loggedin user is the author of the quest
+
+Request Body:
+{
+    "email" : "scaventure@scv.com",
+}
+Send email to the invited user containing verification link (see Issue#2 and obi1 branch)
+*/
+// Invitation quest/3/..
+export const inviteUser = async (req, res) => {
+  // id of the logged-in user
+  const userId = req.user._id;
+  const { id } = req.params; // query string in url
+  const { email } = req.body; // request body
+
+  Quest.findById(id, async (err, quest) => {
+
+    // check if quest with the id exists
+    if (!quest) {
+      return res.status(404).json({ error: true, message: 'No quest'});
+    }
+
+    // check if loggedin user is the author of the quest
+    if (userId.toString() != quest.createdBy || quest.type != 'private') {
+      return res.status(403).json({ error: true, message: 'No quest'});
+    }
+
+    // passed validation
+
+    const hash = SHA256(email+id+new Date());
+    console.log(hash.toString())
+
+    // Create a new link in the Link table
+    
+    let link = new Link({
+      userEmail: email,
+      questId: id,
+      hash: hash.toString()
+    });
+
+    await link.save();
+    
+    var request = sg.emptyRequest({
+      method: 'POST',
+      path: '/v3/mail/send',
+      body: {
+        personalizations: [
+          {
+            to: [
+              {
+                email: email.toString()
+              }
+            ],
+            subject: `You were invited to a new exciting quest '${quest.title}'`
+          }
+        ],
+        from: {
+          email: 'scaventureapp@gmail.com'
+        },
+        content: [
+          {
+            type: 'text/plain',
+            value: `Please follow the link http://localhost:4100/api/quests/${id}/verify/${hash}`
+          }
+        ]
+      }
+    });
+     
+    // With promise
+    sg.API(request)
+    .then(function (response) {
+      console.log("Sent!!")
+      console.log(response.statusCode);
+      console.log(response.body);
+      console.log(response.headers);
+      return res.status(200).json({ error: false, message: "Invited the user!"});
+    })
+    .catch(function (error) {
+      console.log("Sent!!")
+      // error is an instance of SendGridError
+      // The full response is attached to error.response
+      console.log(error.response.statusCode);
+      return res.status(500).json({ error: false, message: "Failed to send the email"});
+    });
+  });
+}
 
 // Quest Steps
 // ...

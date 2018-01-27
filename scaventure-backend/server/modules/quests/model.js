@@ -1,5 +1,25 @@
 import mongoose, { Schema } from 'mongoose';
 
+/** Used for private quests */
+const linkSchema = new Schema({
+  userEmail: {
+    type: String,
+    required: true 
+  },
+  questId: {
+    type: Schema.ObjectId,
+    required: true
+  },
+  verified: {
+    type: Boolean,
+    default: false
+  }, 
+  hash: {
+    type: String,
+    required: true
+  }
+});
+
 /** Quest Collection Structure  */
 const questSchema = new Schema({
   title: {
@@ -40,12 +60,6 @@ const questSchema = new Schema({
     type: Schema.ObjectId,
     required: true
   },
-  
-  link: { // only for private quests
-    type: Schema.ObjectId,
-    required: false
-  }
-
 });
 
 // Index to allow geo-optimization
@@ -54,5 +68,6 @@ questSchema.index({'loc': '2dsphere'});
 //////////////////////
 // define models here
 const Quest  = mongoose.model('Quest',  questSchema);
+const Link   = mongoose.model('Link', linkSchema);
 
-export { Quest };
+export { Quest, Link };

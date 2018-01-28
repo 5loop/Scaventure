@@ -33,9 +33,10 @@ routes.delete('/quests/:id',  requireJwtAuth, QuestController.deleteQuest);
 // TO BE IMPLEMENTED @Arpit & @Gaurav
 
 // Quest Steps
-
-// routes.get('/quests/:id/steps', ... ) // get all quest steps
-// ...
-// ...
+routes.get('/quests/:id/steps', requireJwtAuth, QuestController.getQuestSteps);    // get all quest steps
+routes.delete('/quests/:id/steps', requireJwtAuth, QuestController.deleteAllStep); // delete all steps that belong to a certain quest
+routes.get('/quests/:id/steps/:sid', requireJwtAuth, QuestController.getOneStep); // get one step
+routes.delete('/quests/:id/steps/:sid', requireJwtAuth, QuestController.deleteOneStep); // delete one step
+routes.post('/quests/:id/steps/:type', requireJwtAuth, QuestController.addStep);   // add new step
 
 export default routes;

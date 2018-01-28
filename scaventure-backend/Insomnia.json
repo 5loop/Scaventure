@@ -1,7 +1,7 @@
 {
 	"_type": "export",
 	"__export_format": 3,
-	"__export_date": "2018-01-21T23:22:30.705Z",
+	"__export_date": "2018-01-28T03:29:33.626Z",
 	"__export_source": "insomnia.desktop.app:v5.12.4",
 	"resources": [
 		{
@@ -178,6 +178,17 @@
 			"_type": "request"
 		},
 		{
+			"_id": "fld_e4d97c4a011b4806b48af12a4227ec2b",
+			"created": 1517106255237,
+			"description": "",
+			"environment": {},
+			"metaSortKey": -1517106255237,
+			"modified": 1517106255237,
+			"name": "steps",
+			"parentId": "fld_d17bfeb4b1c84fa699b0b411523005af",
+			"_type": "request_group"
+		},
+		{
 			"_id": "req_565ff6150ac84e33a020bca2eeea00af",
 			"authentication": {},
 			"body": {
@@ -195,7 +206,7 @@
 			],
 			"metaSortKey": -1516569582808,
 			"method": "GET",
-			"modified": 1516575326721,
+			"modified": 1517107620556,
 			"name": "Get All Quests",
 			"parameters": [
 				{
@@ -306,7 +317,7 @@
 			],
 			"metaSortKey": -1516569582758,
 			"method": "GET",
-			"modified": 1516576201915,
+			"modified": 1517108550191,
 			"name": "Get One Quest",
 			"parameters": [],
 			"parentId": "fld_d17bfeb4b1c84fa699b0b411523005af",
@@ -314,7 +325,7 @@
 			"settingEncodeUrl": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "{{ base_url  }}/api/quests/5a651a1431ddfd1f0bbf0b8e",
+			"url": "{{ base_url  }}/api/quests/5a651647eecf041ab54a1993",
 			"_type": "request"
 		},
 		{
@@ -341,6 +352,212 @@
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
 			"url": "{{ base_url  }}/api/quests/5a65164deecf041ab54a1995",
+			"_type": "request"
+		},
+		{
+			"_id": "req_ebb1d3a644ff46b0a02d35f5a69d7630",
+			"authentication": {},
+			"body": {},
+			"created": 1517105680743,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_a3fe9bca12b2454ab51fcc1df6f2fbea",
+					"name": "Authorization",
+					"value": "{% response 'body', 'req_d4b32b294d2841f98fbf05abaf5b9e71', '$.token' %}"
+				}
+			],
+			"metaSortKey": -1516841147226.5,
+			"method": "GET",
+			"modified": 1517109915015,
+			"name": "Get Quest Steps",
+			"parameters": [],
+			"parentId": "fld_e4d97c4a011b4806b48af12a4227ec2b",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ base_url  }}/api/quests/5a651a1431ddfd1f0bbf0b8e/steps",
+			"_type": "request"
+		},
+		{
+			"_id": "req_05eaadd5cab34f74999bcf1d2d312d57",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t  \"description\" : \"These foxes tend to make noises\",\n    \"startLocation\" : {       \n\t\t\t\"type\":\"Point\", \n\t\t\t\"coordinates\":[42,42]\n\t\t},\n    \"stepLocation\" : {       \n\t\t\t\"type\":\"Point\", \n\t\t\t\"coordinates\":[42,42]\n\t\t},\n    \"startBoundToLastStep\" : false,\n    \"isRequired\" : true,\n    \"points\": 10,\n    \"stepNumber\": 1,\n    \"question\": \"What Does the Fox Say?\",\n\t  \"options\" : [\"Aheohee\", \"blabla\", \"dunno\", \"woof\"],\n    \"answer\": \"Aheohee\"\n}"
+			},
+			"created": 1517106228885,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_a3fe9bca12b2454ab51fcc1df6f2fbea",
+					"name": "Authorization",
+					"value": "{% response 'body', 'req_d4b32b294d2841f98fbf05abaf5b9e71', '$.token' %}"
+				},
+				{
+					"id": "pair_40ba4f5b21834e21a70451399237470b",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"metaSortKey": -1516841147276.5,
+			"method": "POST",
+			"modified": 1517109852617,
+			"name": "Add QA Step",
+			"parameters": [],
+			"parentId": "fld_e4d97c4a011b4806b48af12a4227ec2b",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ base_url  }}/api/quests/5a6d4254431dad486e895d37/steps/qa",
+			"_type": "request"
+		},
+		{
+			"_id": "req_5e22c64c521a4de1b500bc027dac6799",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t  \"description\" : \"Foxes appear to be living at that location\",\n    \"startLocation\" : {       \n\t\t\t\"type\":\"Point\", \n\t\t\t\"coordinates\":[42,42]\n\t\t},\n    \"stepLocation\" : {       \n\t\t\t\"type\":\"Point\", \n\t\t\t\"coordinates\":[42.64, -73.1]\n\t\t},\n    \"startBoundToLastStep\" : false,\n    \"isRequired\" : true,\n    \"points\": 10,\n    \"stepNumber\": 2,\n    \"radius\" : 20\n}"
+			},
+			"created": 1517107044544,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_a3fe9bca12b2454ab51fcc1df6f2fbea",
+					"name": "Authorization",
+					"value": "{% response 'body', 'req_d4b32b294d2841f98fbf05abaf5b9e71', '$.token' %}"
+				},
+				{
+					"id": "pair_40ba4f5b21834e21a70451399237470b",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"metaSortKey": -1516841147251.5,
+			"method": "POST",
+			"modified": 1517109849606,
+			"name": "Add GPS Step",
+			"parameters": [],
+			"parentId": "fld_e4d97c4a011b4806b48af12a4227ec2b",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ base_url  }}/api/quests/5a6d4254431dad486e895d37/steps/gps",
+			"_type": "request"
+		},
+		{
+			"_id": "req_25ce5edb54dc4d3dbc5f14293ebda3f7",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t  \"description\" : \"A Fox hid it's treasures at that spot and marked it with a QR code\",\n    \"startLocation\" : {       \n\t\t\t\"type\":\"Point\", \n\t\t\t\"coordinates\":[42,42]\n\t\t},\n    \"stepLocation\" : {       \n\t\t\t\"type\":\"Point\", \n\t\t\t\"coordinates\":[42.64, -73.1]\n\t\t},\n    \"startBoundToLastStep\" : false,\n    \"isRequired\" : true,\n    \"points\": 10,\n    \"stepNumber\": 2,\n    \"qrCode\" : \"sdfsdlk3214987ls8ow34fjsk37\"\n}"
+			},
+			"created": 1517107266281,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_a3fe9bca12b2454ab51fcc1df6f2fbea",
+					"name": "Authorization",
+					"value": "{% response 'body', 'req_d4b32b294d2841f98fbf05abaf5b9e71', '$.token' %}"
+				},
+				{
+					"id": "pair_40ba4f5b21834e21a70451399237470b",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"metaSortKey": -1516841147239,
+			"method": "POST",
+			"modified": 1517109897973,
+			"name": "Add QR Step",
+			"parameters": [],
+			"parentId": "fld_e4d97c4a011b4806b48af12a4227ec2b",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ base_url  }}/api/quests/5a651a1431ddfd1f0bbf0b8e/steps/qr",
+			"_type": "request"
+		},
+		{
+			"_id": "req_c3f56c3ca03f46d79f171e9ac3d0fff5",
+			"authentication": {},
+			"body": {},
+			"created": 1517109303432,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_a3fe9bca12b2454ab51fcc1df6f2fbea",
+					"name": "Authorization",
+					"value": "{% response 'body', 'req_d4b32b294d2841f98fbf05abaf5b9e71', '$.token' %}"
+				}
+			],
+			"metaSortKey": -1516708593271.25,
+			"method": "GET",
+			"modified": 1517109394206,
+			"name": "Get One Step",
+			"parameters": [],
+			"parentId": "fld_e4d97c4a011b4806b48af12a4227ec2b",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ base_url  }}/api/quests/5a651647eecf041ab54a1993/steps/5a6d3d9fff25c444a262fcb0",
+			"_type": "request"
+		},
+		{
+			"_id": "req_db5b858ba86040839778ef3c42479a10",
+			"authentication": {},
+			"body": {},
+			"created": 1517109591967,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_a3fe9bca12b2454ab51fcc1df6f2fbea",
+					"name": "Authorization",
+					"value": "{% response 'body', 'req_d4b32b294d2841f98fbf05abaf5b9e71', '$.token' %}"
+				}
+			],
+			"metaSortKey": -1516642316293.625,
+			"method": "DELETE",
+			"modified": 1517109600485,
+			"name": "Delete One Step",
+			"parameters": [],
+			"parentId": "fld_e4d97c4a011b4806b48af12a4227ec2b",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ base_url  }}/api/quests/5a651647eecf041ab54a1993/steps/5a6d3d9fff25c444a262fcb0",
+			"_type": "request"
+		},
+		{
+			"_id": "req_03783a4c3aa443d48492f9ef9a7d3b62",
+			"authentication": {},
+			"body": {},
+			"created": 1517109799987,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_a3fe9bca12b2454ab51fcc1df6f2fbea",
+					"name": "Authorization",
+					"value": "{% response 'body', 'req_d4b32b294d2841f98fbf05abaf5b9e71', '$.token' %}"
+				}
+			],
+			"metaSortKey": -1516609177804.8125,
+			"method": "DELETE",
+			"modified": 1517109871637,
+			"name": "Delete All Steps",
+			"parameters": [],
+			"parentId": "fld_e4d97c4a011b4806b48af12a4227ec2b",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ base_url  }}/api/quests/5a6d4254431dad486e895d37/steps",
 			"_type": "request"
 		}
 	]

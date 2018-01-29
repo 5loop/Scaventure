@@ -41,8 +41,8 @@ routes.post('/quests/:id/steps/:type', requireJwtAuth, QuestController.addStep);
 
 // Steps Hints
 routes.post('/quests/:id/steps/:sid/hints/:type', requireJwtAuth, QuestController.addHint); // Add new hint to a step :type is either 'location' or 'text')
-routes.post('/quest/:id/steps/:sid/hints/:type/:hid', requireJwtAuth, QuestController.updateHint); // Update hint information
+routes.post('/quests/:id/steps/:sid/hints/:type/:hid', requireJwtAuth, QuestController.updateHint); // Update hint information
 routes.get('/quests/:id/steps/:sid/hints/:type/:hid', requireJwtAuth, QuestController.getOneHint); // Get one hint from the step
-routes.get('/quests/:id/steps/:sid/hints/', requireJwtAuth, QuestController.getAllHint); // Get all hints that belong to a certain step
+routes.get('/quests/:id/steps/:sid/hints/', requireJwtAuth, QuestController.getAllHints); // Get all hints that belong to a certain step
 
 export default routes;

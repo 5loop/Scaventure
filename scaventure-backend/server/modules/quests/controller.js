@@ -250,12 +250,18 @@ export const addHint = async (req, res) => {
   });
 
   try {
-    let hint = [];
-
     if (type == 'location') {
-      hint = new Hint({...req.body, stepId: sid});
+      // hint = new Hint({...req.body, stepId: sid});
+      var hint = new Hint();
+      hint.type = 'location';
+      hint.location = { type: 'Point', coordinates: req.body.coordinates};
+      hint.stepId = req.body.stepId;
     } else {
-      hint = new Hint({...req.body, stepId: sid});
+      // hint = new Hint({...req.body, stepId: sid});
+      var hint = new Hint();
+      hint.type = 'text';
+      hint.stepId = req.body.stepId;
+      hint.textHint = req.body.textHint;
     }
 
     await hint.save();

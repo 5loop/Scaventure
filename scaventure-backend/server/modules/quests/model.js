@@ -131,8 +131,38 @@ const GPSStep = Step.discriminator('GPSStep',
     },
 }, options));
 
+// Hint schema
+const hintSchema = new Schema ({
+  type: {
+    type: String,
+    enum: ['location', 'text'],
+    required: true,
+    default: 'text'
+  },
+  location: {
+    type: {
+      type: String,
+      default: 'Point'
+    },
+    coordinates: [Number]
+  },
+  stepId: {
+    type: Schema.ObjectId,
+    ref: 'Step',
+    required: true
+  },
+  textHint: {
+    type: String
+  },
+  penalty: {
+    type: Number,
+    default: 10
+  }
+});
+
 //////////////////////
 // define models here
 const Quest  = mongoose.model('Quest',  questSchema);
+const Hint   = mongoose.model('Hint', hintSchema);
 
-export { Quest, Step, QAStep, QRStep, GPSStep };
+export { Quest, Step, QAStep, QRStep, GPSStep, Hint };

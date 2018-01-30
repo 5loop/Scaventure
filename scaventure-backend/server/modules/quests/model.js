@@ -155,9 +155,18 @@ const hintSchema = new Schema ({
     type: String
   },
   penalty: {
-    type: Number,
-    default: 10
+    type: Number
   }
+});
+
+stepSchema.pre('remove', (next) => {
+  hintSchema.remove({stepId: this._id}).exec();
+  next();
+});
+
+questSchema.pre('remove', (next) => {
+  stepSchema.remove({questId: this._id}).exec();
+  next();
 });
 
 //////////////////////

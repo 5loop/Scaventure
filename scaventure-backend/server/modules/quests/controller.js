@@ -242,7 +242,7 @@ export const addHint = async (req, res) => {
 
   Quest.findById(id, async (err, quest) => {
     if (!quest) {
-      return res.status(404).json({error:this, message: 'Quest does not exist!'})
+      return res.status(404).json({error: this, message: 'Quest does not exist!'})
     }
     if (quest.createdBy != userId.toString()) {
       return res.status(401).json({error: true, message: 'Not Authorized to perform the task!'});
@@ -254,20 +254,21 @@ export const addHint = async (req, res) => {
       // hint = new Hint({...req.body, stepId: sid});
       var hint = new Hint();
       hint.type = 'location';
-      hint.location = { type: 'Point', coordinates: req.body.coordinates};
-      hint.stepId = req.body.stepId;
+      hint.location = { type: req.body.location.type, coordinates: req.body.location.coordinates};
+      hint.stepId = req.params.sid;
     } else {
       // hint = new Hint({...req.body, stepId: sid});
       var hint = new Hint();
       hint.type = 'text';
-      hint.stepId = req.body.stepId;
+      hint.stepId = req.params.sid;
       hint.textHint = req.body.textHint;
     }
-
+    // console.log(hint);
     await hint.save();
 
     return res.status(200).json({error: false, hint, type});
   } catch (e) {
+    // console.log(e);
     return res.status(500).json({error: true, message: 'Error occurred while adding new Hint to step'});
   }
 }

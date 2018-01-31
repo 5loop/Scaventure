@@ -19,9 +19,12 @@
 **Dependencies**  
 Global: 
 
-- `sudo npm install babel-cli -g`  
+- `sudo npm install babel-cli -g` 
 - mongodb
 - node/npm
+Hot reloading: 
+- `sudo npm install babel-core -g`  
+- `sudo npm install babel-watch -g`
 
 Local Dependencies: 
 `cd path/to/scaventure-backend`

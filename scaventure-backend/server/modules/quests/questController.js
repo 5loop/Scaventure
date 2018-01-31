@@ -1,4 +1,4 @@
-import {Quest} from './model';
+import { Quest } from './model';
 
 
 /**
@@ -100,12 +100,3 @@ export const deleteQuest = async (req, res) => {
     return res.status(200).json({ error: false, quest: await quest.remove() });
   });
 }
-
-// Feedback
-// ...
-
-// Invitation
-// ...
-
-// Quest Steps
-// ...

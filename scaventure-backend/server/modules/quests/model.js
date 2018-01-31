@@ -19,9 +19,9 @@ const questSchema = new Schema({
     required: false,
     default:  new Date()
   },
-  loc: { 
-    type: {type: String, default: 'Point'}, 
-    coordinates: [Number] 
+  loc: {
+    type: {type: String, default: 'Point'},
+    coordinates: [Number]
   },
   type: {
     type: String,
@@ -40,7 +40,7 @@ const questSchema = new Schema({
     type: Schema.ObjectId,
     required: true
   },
-  
+
   link: { // only for private quests
     type: Schema.ObjectId,
     required: false
@@ -51,8 +51,127 @@ const questSchema = new Schema({
 // Index to allow geo-optimization
 questSchema.index({'loc': '2dsphere'});
 
+const options = { discriminatorKey: 'type' };
+
+/* This is base schema for steps ( see http://mongoosejs.com/docs/discriminators.html )*/
+const stepSchema = new Schema({
+  description: {
+    type: String,
+    required: true
+  },
+  startLocation: { // where challenge begins
+    type: {type: String, default: 'Point'},
+    coordinates: [Number]
+  },
+  stepLocation: { // where answer lies
+    type: {type: String, default: 'Point'},
+    coordinates: [Number]
+  },
+  startBoundToLastStep: { // true if start is the same as last-step location
+    type: Boolean,
+    default: true
+  },
+  isRequired: {
+    type: Boolean,
+    default: true
+  },
+  points: {
+    type: Number,
+    required: true
+  },
+  stepNumber: { // order of the step
+    type: Number,
+    required: true
+  },
+
+  // keys //
+  questId : {
+    type: Schema.ObjectId,
+    ref: 'Quest',
+    required: true
+  }
+}, options);
+
+stepSchema.index({'startLocation': '2dsphere', 'stepLocation':'2dsphere'});
+const Step = mongoose.model('Step', stepSchema);
+
+const QAStep = Step.discriminator('QAStep',
+  new Schema({
+    question: {
+      type: String,
+      required: true
+    },
+    answer: {
+      type: String,
+      required: true
+    },
+    options: {
+      type: [String],
+      required: false
+    },
+    regEx: {
+      type: String
+    }
+}, options));
+
+const QRStep = Step.discriminator('QRStep',
+  new Schema({
+    qrCode: {
+      type: String,
+      required: true
+    },
+}, options));
+
+
+const GPSStep = Step.discriminator('GPSStep',
+  new Schema({
+    radius: {
+      type: Number,
+      default: 16
+    },
+}, options));
+
+// Hint schema
+const hintSchema = new Schema ({
+  type: {
+    type: String,
+    enum: ['location', 'text'],
+    required: true,
+    default: 'text'
+  },
+  location: {
+    type: {
+      type: String,
+      default: 'Point'
+    },
+    coordinates: [Number]
+  },
+  stepId: {
+    type: Schema.ObjectId,
+    ref: 'Step',
+    required: true
+  },
+  textHint: {
+    type: String
+  },
+  penalty: {
+    type: Number
+  }
+});
+
+stepSchema.pre('remove', (next) => {
+  hintSchema.remove({stepId: this._id}).exec();
+  next();
+});
+
+questSchema.pre('remove', (next) => {
+  stepSchema.remove({questId: this._id}).exec();
+  next();
+});
+
 //////////////////////
 // define models here
 const Quest  = mongoose.model('Quest',  questSchema);
+const Hint   = mongoose.model('Hint', hintSchema);
 
-export { Quest };
+export { Quest, Step, QAStep, QRStep, GPSStep, Hint };

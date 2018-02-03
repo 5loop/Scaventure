@@ -60,15 +60,12 @@ const questSchema = new Schema({
     type: Schema.ObjectId,
     required: true
   },
-<<<<<<< HEAD
-=======
 
   link: { // only for private quests
     type: Schema.ObjectId,
     required: false
   }
 
->>>>>>> 246a24402727cceb9c0dc50c9d43c74e53347ccf
 });
 
 // Index to allow geo-optimization
@@ -188,6 +185,7 @@ stepSchema.pre('remove', (next) => {
 });
 
 questSchema.pre('remove', (next) => {
+  console.log(this);
   stepSchema.remove({questId: this._id}).exec();
   next();
 });
@@ -195,12 +193,7 @@ questSchema.pre('remove', (next) => {
 //////////////////////
 // define models here
 const Quest  = mongoose.model('Quest',  questSchema);
-<<<<<<< HEAD
 const Link   = mongoose.model('Link', linkSchema);
-
-export { Quest, Link };
-=======
 const Hint   = mongoose.model('Hint', hintSchema);
 
-export { Quest, Step, QAStep, QRStep, GPSStep, Hint };
->>>>>>> 246a24402727cceb9c0dc50c9d43c74e53347ccf
+export { Quest, Link, Step, QAStep, QRStep, GPSStep, Hint };

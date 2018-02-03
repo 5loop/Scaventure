@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import * as QuestController from './questController';
 import * as StepController from './stepController';
+import * as InviteController from './InviteController';
 //  import * as FeedbackController from './feedbackController';
 //  import * as InvitationController from './invitationController';
 import passport from 'passport';
@@ -29,7 +30,10 @@ routes.delete('/quests/:id',  requireJwtAuth, QuestController.deleteQuest);
 
 // Invitations
 // POST /quests/1/users
-routes.post('/quests/:id/users', requireJwtAuth, QuestController.inviteUser);
+routes.post('/quests/:id/users', requireJwtAuth, InviteController.inviteUser);
+routes.get('/quests/:id/users/verify/:hash', requireJwtAuth, InviteController.verifyUserLink);
+routes.get('/quests/:id/users' , requireJwtAuth, InviteController.getInvitedUsers); // Get list of users invited to the quest (iff quest is private & logged-in user is the author of the quest)
+routes.delete('/quests/:id/users/:email', requireJwtAuth, InviteController.uninviteUser); // 'Uninvite' a user (iff quest is private & logged-in user is the author of the quest)
 
 // routes.get('/quests/:id/users' , ... ); // Get list of users invited to the quest (iff quest is private & logged-in user is the author of the quest)
 // routes.delete('/quests/:id/users/:id', ...); // 'Uninvite' a user (iff quest is private & logged-in user is the author of the quest)

@@ -1,4 +1,8 @@
+<<<<<<< HEAD:scaventure-backend/server/modules/quests/controller.js
 import { Quest, Link } from './model';
+=======
+import { Quest } from './model';
+>>>>>>> 246a24402727cceb9c0dc50c9d43c74e53347ccf:scaventure-backend/server/modules/quests/questController.js
 
 import config from '../../config/config';
 var sg = require('sendgrid')(config.sendgrid_key);
@@ -103,6 +107,7 @@ export const deleteQuest = async (req, res) => {
 
     return res.status(200).json({ error: false, quest: await quest.remove() });
   });
+<<<<<<< HEAD:scaventure-backend/server/modules/quests/controller.js
 }
 
 // Feedback
@@ -198,3 +203,6 @@ export const inviteUser = async (req, res) => {
 
 // Quest Steps
 // ...
+=======
+}
+>>>>>>> 246a24402727cceb9c0dc50c9d43c74e53347ccf:scaventure-backend/server/modules/quests/questController.js

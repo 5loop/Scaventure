@@ -172,17 +172,17 @@ export const register = function(req, res, next) {
 * POST /confirmation
 */
 export const confirmation = function (req, res, next) {  
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('email', 'Email cannot be blank').notEmpty();
-  req.assert('token', 'Token cannot be blank').notEmpty();
-  req.sanitize('email').normalizeEmail({ remove_dots: false });
+  //req.assert('email', 'Email is not valid').isEmail();
+  //req.assert('email', 'Email cannot be blank').notEmpty();
+  //req.assert('token', 'Token cannot be blank').notEmpty();
+  //req.sanitize('email').normalizeEmail({ remove_dots: false });
 
   // Check for validation errors    
-  var errors = req.validationErrors();
-  if (errors) return res.status(400).send(errors);
+  // var errors = req.validationErrors();
+  // if (errors) return res.status(400).send(errors);
 
   // Find a matching token
-  Token.findOne({ token: req.body.token }, function (err, token) {
+  Token.findOne({ token: req.params.token }, function (err, token) {
       if (!token) return res.status(400).send({ type: 'not-verified', msg: 'We were unable to find a valid token. Your token my have expired.' });
 
       // If we found a token, find a matching user

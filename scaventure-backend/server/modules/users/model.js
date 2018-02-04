@@ -7,7 +7,8 @@ const UserSchema = new Schema({
     type: String,
     lowercase: true,
     unique: true,
-    required: true
+    required: true,
+    isVerified: false
   },
   password: {
     type: String,
@@ -18,6 +19,23 @@ const UserSchema = new Schema({
 },
 {
   timestamps: true
+});
+
+const TokenSchema = new Schema({
+  _userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  token: {
+    type: String,    
+    required: true
+  },  
+  createdAt: { 
+    type: Date, 
+    required: true, 
+    default: Date.now, 
+    expires: 43200 }
 });
 
 // Pre-save of user to database, hash password if password is modified or new
@@ -47,4 +65,6 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
   });
 }
 
-export default mongoose.model('User', UserSchema);  
+const User = mongoose.model('User', UserSchema);  
+const Token = mongoose.model('Token', TokenSchema);  
+export { User, Token };

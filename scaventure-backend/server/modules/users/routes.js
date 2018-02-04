@@ -11,5 +11,6 @@ const routes = new Router();
 routes.post('/auth/register', AuthenticationController.register); 
 routes.post('/auth/login', requireLogin, AuthenticationController.login);
 routes.post('/auth/update', requireJwtAuth, AuthenticationController.update);
-
+routes.post('/auth/confirmation', AuthenticationController.confirmation);
+routes.post('/auth/resendToken', AuthenticationController.resendToken);
 export default routes;

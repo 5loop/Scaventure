@@ -87,7 +87,7 @@ export const deleteQuest = async (req, res) => {
   const { id } = req.params; // quest id
 
   Quest.findById(id, async (err, quest) => {
-
+  
     if (!quest) {
       return res.status(404).json({ error: true, message: 'Quest Does not exist!' });
     }

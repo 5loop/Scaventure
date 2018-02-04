@@ -4,6 +4,9 @@ import User from './model';
 import config from '../../config/config';
 import { validateEmail } from '../../utils/validateInput'; 
 
+var sg = require('sendgrid')(config.sendgrid_key);
+
+
 function generateToken(user) {  
   return jwt.sign(user, config.secret, {
     expiresIn: 10080 // in seconds
@@ -85,7 +88,7 @@ export const register = function(req, res, next) {
   // Check for registration errors
   const email = req.body.email;
   const password = req.body.password;
-  console.log(req.body);
+  
   // Return error if no email provided
   if (!email || !validateEmail(email)) {
     return res.status(422).send({ error: 'You must enter valid email address.'});
@@ -117,6 +120,47 @@ export const register = function(req, res, next) {
         // Respond with JWT if user was created
 
         let userInfo = setUserInfo(user);
+        
+        var request = sg.emptyRequest({
+          method: 'POST',
+          path: '/v3/mail/send',
+          body: {
+            personalizations: [
+              {
+                to: [
+                  {
+                    email: req.body.email
+                  }
+                ],
+                subject: 'Sending with SendGrid is Fun'
+              }
+            ],
+            from: {
+              email: 'scaventureapp@gmail.com'
+            },
+            content: [
+              {
+                type: 'text/plain',
+                value: 'and easy to do anywhere, even with Node.js'
+              }
+            ]
+          }
+        });
+         
+        // With promise
+        sg.API(request)
+          .then(function (response) {
+            console.log("Sent!!")
+            console.log(response.statusCode);
+            console.log(response.body);
+            console.log(response.headers);
+          })
+          .catch(function (error) {
+            console.log("Sent!!")
+            // error is an instance of SendGridError
+            // The full response is attached to error.response
+            console.log(error.response.statusCode);
+          });
 
         res.status(201).json({
           token: 'JWT ' + generateToken(userInfo),

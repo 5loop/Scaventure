@@ -1,15 +1,35 @@
-import { Quest } from './model';
+import { Quest, Link} from './model';
 
 
 /**
 *  Get list of avaiable quests
-*        @olga TODO:
-*          - created by the user
-*          - public quests
-*          - quests the logged-in user was invited to
+*          - ?type=user    - created by logged-in the user
+*          - ?type=public  - public quests
+*          - ?type=private - quests the logged-in user was invited to
 */
 export const getQuests = async (req, res) => {
-  return res.status(200).json({ error: false, quests: await Quest.find()});
+  const { type } = req.query;
+  const userId = req.user._id;
+  const email  = req.user.email;
+
+  let options = {};
+  if (type == 'public') {
+    options.type = type;
+  }
+
+  if (type == 'user') {
+    options.createdBy = userId;
+  }
+
+  if (type == 'private') {
+    const q = Link.find({ userEmail: email, verified: true }).select('questId');
+    q.exec(async (err, questIds) => {
+      questIds = questIds.map( v => v.questId );
+      return res.status(200).json({ error: false, quests: await Quest.find({ '_id' : { $in: questIds } }) });
+    });
+  } else {
+    return res.status(200).json({ error: false, quests: await Quest.find(options) });
+  }
 }
 
 /**

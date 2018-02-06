@@ -1,0 +1,54 @@
+{ "quests" : [
+  {
+    "_id": "5a6793c1bdd6b53515565ba4",
+    "title": "Test Quest",
+    "description": "Test Quest Description",
+    "createdBy": "5a6793b6bdd6b53515565ba3",
+    "__v": 0,
+    "numOfPlayers": 0,
+    "type": "public",
+    "loc": {
+      "coordinates": [
+        42,
+        42
+      ],
+      "type": "Point"
+    },
+    "createdAt": "2018-01-23T19:55:27.002Z"
+  },
+  {
+    "_id": "5a6cdba4da72294463afa17e",
+    "title": "Quest for Parth",
+    "description": "Test Quest Description",
+    "createdBy": "5a6cd9030d14a143899dbf6b",
+    "__v": 0,
+    "numOfPlayers": 0,
+    "type": "private",
+    "loc": {
+      "coordinates": [
+        42,
+        42
+      ],
+      "type": "Point"
+    },
+    "createdAt": "2018-01-27T20:04:50.398Z"
+  },
+  {
+    "_id": "5a6f3e38c571a850dce3b594",
+    "title": "Quest for Parth",
+    "description": "Test Quest Description",
+    "createdBy": "5a6cd9030d14a143899dbf6b",
+    "__v": 0,
+    "numOfPlayers": 0,
+    "type": "private",
+    "loc": {
+      "coordinates": [
+        42,
+        42
+      ],
+      "type": "Point"
+    },
+    "createdAt": "2018-01-29T15:29:20.727Z"
+  }
+]
+}

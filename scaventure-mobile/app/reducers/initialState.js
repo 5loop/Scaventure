@@ -1,6 +1,6 @@
 export default {
   quests: {
     quests: [],
-    loading: true
-  }
-}
+    loading: true,
+  },
+};

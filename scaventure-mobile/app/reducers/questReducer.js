@@ -7,6 +7,6 @@ export function questReducer(state = initialState.quests, action) {
       state = Object.assign({}, state, { quests: action.quests, loading: false });
       return state;
     default:
-       return state;
+      return state;
   }
 }

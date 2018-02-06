@@ -7,14 +7,15 @@ import { connect } from 'react-redux';
 /* -- Local imports -- */
 /* ------------------- */
 import QuestRow from './QuestRow';
+import Colors from '../../constants/colors';
 /* -- Actions */
 import { getQuests } from '../../actions/questActions';
 
-
+console.log(Colors.primaryColor);
 const styles = StyleSheet.create({
   container: {
     paddingTop: 40,
-    backgroundColor: '#F7F7F7',
+    backgroundColor: '#FAFAFA',
     flex: 1,
     justifyContent: 'flex-start',
   },
@@ -25,22 +26,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#333',
     margin: 20,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   buttonText: {
     color: '#FAFAFA',
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
 });
 
 class QuestScreen extends React.Component {
-
   constructor(props, context) {
     super(props, context);
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
-        ds: ds
+      ds,
     };
+  }
+
+  componentDidMount() {
+    this.props.getQuests(); 
   }
 
   renderRow(quest) {
@@ -48,32 +52,29 @@ class QuestScreen extends React.Component {
       <QuestRow quest={quest} />
     );
   }
-  componentDidMount() {
-    this.props.getQuests(); //call our action
-  }
 
   render() {
-    return(
+    return (
       <View style={styles.container}>
-      <ListView
-        enableEmptySections={true}
-        dataSource={this.state.ds.cloneWithRows(this.props.quests)}
-        key={this.props.quests}
-        renderRow  = {this.renderRow.bind(this)}
-      />
-      <TouchableHighlight style={styles.button} onPress={this.props.onAddStarted}>
-        <Text style={styles.buttonText}>Add New</Text>
-      </TouchableHighlight>
-    </View>
+        <ListView
+          enableEmptySections
+          dataSource={this.state.ds.cloneWithRows(this.props.quests)}
+          key={this.props.quests}
+          renderRow={this.renderRow.bind(this)}
+        />
+        <TouchableHighlight style={styles.button}>
+          <Text style={styles.buttonText}>Add New</Text>
+        </TouchableHighlight>
+      </View>
     );
   }
 }
 
 function mapStateToProps(state, props) {
-  console.log(state.quests.quests);
   return {
-    quests: state.quests.quests
-  }
+    quests: state.quests.quests,
+    questsLoading: state.quests.loading,
+  };
 }
 
 function mapDispatchToProps(dispatch) {

@@ -1,13 +1,13 @@
 import React from 'react';
-import {View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 
 export default class MyNotificationsScreen extends React.Component {
   render() {
-    return( 
+    return ( 
       <View>
-        <Text style={{paddingTop:30}}> Hello 
+        <Text style={{ paddingTop: 30 }}> Configure your app here 
         </Text> 
       </View>
-      );
+    );
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ListView, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -12,26 +12,22 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 20,
     marginLeft: 20,
-    marginRight: 20
+    marginRight: 20,
   },
   label: {
     fontSize: 20,
-    fontWeight: '300'
+    fontWeight: '300',
   }, 
   doneButton: {
     borderRadius: 5,
     backgroundColor: '#EAEAEA',
     padding: 5,
-  }
+  },
 });
 
-
-
 class QuestRow extends React.Component {
-  
   render() {
-    console.log(this.props.quest);
-    return( 
+    return ( 
       <View style={styles.container}>
         <Text style={styles.label}> {this.props.quest.title}</Text>
       </View>

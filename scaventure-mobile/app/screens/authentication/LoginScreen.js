@@ -1,3 +1,4 @@
+// Login screen
 import React from 'react';
 
 import {

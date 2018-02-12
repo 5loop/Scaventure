@@ -7,12 +7,15 @@ const UserSchema = new Schema({
     type: String,
     lowercase: true,
     unique: true,
-    required: true,
-    isVerified: false
+    required: true    
   },
   password: {
     type: String,
     required: true
+  },
+  isVerified: {
+    type: Boolean,
+    default: false
   }, 
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date }

@@ -133,23 +133,25 @@ export const register = function(req, res, next) {
               body: {
                 personalizations: [
                   {
-                    email: req.body.email
+                    to: [
+                      {
+                        email: userInfo.email
+                      }
+                    ],
+                    subject: 'Password Reset Key'
                   }
                 ],
-                subject: 'Sending with SendGrid is Fun'
-              }
-            ],
-            from: {
-              email: 'scaventureapp@gmail.com'
-            },
+                from: {
+                  email: 'scaventureapp@gmail.com'
+                },
             content: [
               {
                 type: 'text/plain',
                 value: 'and easy to do anywhere, even with Node.js'
               }
             ]
-          }
-        });
+          });
+        
          
         // With promise
         sg.API(request)
@@ -171,6 +173,7 @@ export const register = function(req, res, next) {
           user: userInfo
         });
       });
+    });
   });
 }
 
@@ -268,8 +271,7 @@ export const forgot_password = function(req, res, next) {
         return res.status(201).json({
           key: 'JWT ' + generateToken(userInfo),
           user: userInfo
-        });
-     
+        });     
     }
   });
 }

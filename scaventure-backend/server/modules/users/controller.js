@@ -90,7 +90,7 @@ export const register = function(req, res, next) {
   // Check for registration errors
   const email = req.body.email;
   const password = req.body.password;
-  
+ 
   // Return error if no email provided
   if (!email || !validateEmail(email)) {
     return res.status(422).send({ error: 'You must enter valid email address.'});
@@ -138,42 +138,41 @@ export const register = function(req, res, next) {
                         email: userInfo.email
                       }
                     ],
-                    subject: 'Password Reset Key'
+                    subject: 'Account Verification Token'
                   }
                 ],
                 from: {
                   email: 'scaventureapp@gmail.com'
                 },
-            content: [
-              {
-                type: 'text/plain',
-                value: 'and easy to do anywhere, even with Node.js'
+                content: [
+                  {
+                    type: 'text/plain',
+                    value: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/api/auth/confirmation\/' + token.token + '.\n'
+                  }
+                ]
               }
-            ]
-          });
-        
-         
-        // With promise
-        sg.API(request)
-          .then(function (response) {
-            console.log("Sent!!")
-            console.log(response.statusCode);
-            console.log(response.body);
-            console.log(response.headers);
-          })
-          .catch(function (error) {
-            console.log("Sent!!")
-            // error is an instance of SendGridError
-            // The full response is attached to error.response
-            console.log(error.response.statusCode);
-          });
+            });
 
-        res.status(201).json({
-          token: 'JWT ' + generateToken(userInfo),
+            sg.API(request)
+            .then(function (response) {
+              console.log("Sent!!")
+              console.log(response.statusCode);
+              console.log(response.body);
+              console.log(response.headers);
+            })
+            .catch(function (error) {
+              console.log("Not Sent!!")
+              // error is an instance of SendGridError          
+              // The full response is attached to error.response
+              console.log(error.response.statusCode);
+            });
+        });        
+
+        return res.status(201).json({
+          key: 'JWT ' + generateToken(userInfo),
           user: userInfo
         });
       });
-    });
   });
 }
 

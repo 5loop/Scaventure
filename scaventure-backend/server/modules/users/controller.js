@@ -6,6 +6,9 @@ import config from '../../config/config';
 import { validateEmail } from '../../utils/validateInput'; 
 
 var sg = require('sendgrid')(config.sendgrid_key);
+var crypto = require('crypto');
+var nodemailer = require('nodemailer');
+var randomize = require('randomatic');
 
 function generateToken(user) {  
   return jwt.sign(user, config.secret, {
@@ -118,14 +121,17 @@ export const register = function(req, res, next) {
         // do email verification here
         // Respond with JWT if user was created
         let userInfo = setUserInfo(user);
+        var token = new Token({ _userId: userInfo._id, token: crypto.randomBytes(16).toString('hex') });
         
-        var request = sg.emptyRequest({
-          method: 'POST',
-          path: '/v3/mail/send',
-          body: {
-            personalizations: [
-              {
-                to: [
+        // Save the verification token
+        token.save(function (err) {
+            if (err) { return res.status(500).send({ msg: err.message }); }
+            // Send the email            
+            var request = sg.emptyRequest({
+              method: 'POST',
+              path: '/v3/mail/send',
+              body: {
+                personalizations: [
                   {
                     email: req.body.email
                   }
@@ -169,18 +175,9 @@ export const register = function(req, res, next) {
 }
 
 /**
-* POST /confirmation
+* Get /confirmation
 */
 export const confirmation = function (req, res, next) {  
-  //req.assert('email', 'Email is not valid').isEmail();
-  //req.assert('email', 'Email cannot be blank').notEmpty();
-  //req.assert('token', 'Token cannot be blank').notEmpty();
-  //req.sanitize('email').normalizeEmail({ remove_dots: false });
-
-  // Check for validation errors    
-  // var errors = req.validationErrors();
-  // if (errors) return res.status(400).send(errors);
-
   // Find a matching token
   Token.findOne({ token: req.params.token }, function (err, token) {
       if (!token) return res.status(400).send({ type: 'not-verified', msg: 'We were unable to find a valid token. Your token my have expired.' });
@@ -200,37 +197,106 @@ export const confirmation = function (req, res, next) {
   });
 };
 
-/**
-* POST /resend
-*/
-export const resendToken = function (req, res, next) {
-  /*req.assert('email', 'Email is not valid').isEmail();
-  req.assert('email', 'Email cannot be blank').notEmpty();
-  req.sanitize('email').normalizeEmail({ remove_dots: false });
 
-  // Check for validation errors    
-  var errors = req.validationErrors();
-  if (errors) return res.status(400).send(errors);
-*/
-  User.findOne({ email: req.body.email }, function (err, user) {
-      if (!user) return res.status(400).send({ msg: 'We were unable to find a user with that email.' });
-      if (user.isVerified) return res.status(400).send({ msg: 'This account has already been verified. Please log in.' });
 
-      // Create a verification token, save it, and send email
-      var token = new Token({ _userId: user._id, token: crypto.randomBytes(16).toString('hex') });
+// forgot password route
+export const forgot_password = function(req, res, next) {
+  // Check for registration errors
+  const email = req.body.email;  
+ 
+  // Return error if no email provided
+  if (!email || !validateEmail(email)) {
+    return res.status(422).send({ error: 'You must enter valid email address.'});
+  }  
 
-      // Save the token
-      token.save(function (err) {
-          if (err) { return res.status(500).send({ msg: err.message }); }
+  User.findOne({ email: email }, function(err, existingUser) {
+      if (err) { return next(err); }
 
-          // Send the email
-          var transporter = nodemailer.createTransport({ service: 'Sendgrid', auth: { user: process.env.SENDGRID_USERNAME, pass: process.env.SENDGRID_KEY } });
-          var mailOptions = { from: 'scaventureapp@gmail.com', to: user.email, subject: 'Account Verification Token', text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '.\n' };
-          transporter.sendMail(mailOptions, function (err) {
-              if (err) { return res.status(500).send({ msg: err.message }); }
-              res.status(200).send('A verification email has been sent to ' + user.email + '.');
-          });
-      });
+      // If user is not unique, return error
+      if (existingUser) {      
+        if (err) { return res.status(500).send({ msg: err.message }); }
 
+        // do email verification here
+        // Respond with JWT if user was created
+        let userInfo = setUserInfo(existingUser);
+        var token = new Token({ _userId: userInfo._id, token: randomize('0', 6) });
+        
+        // Save the verification token
+        token.save(function (err) {
+            if (err) { return res.status(500).send({ msg: err.message }); }            
+            var request = sg.emptyRequest({
+              method: 'POST',
+              path: '/v3/mail/send',
+              body: {
+                personalizations: [
+                  {
+                    to: [
+                      {
+                        email: userInfo.email
+                      }
+                    ],
+                    subject: 'Password Reset Key'
+                  }
+                ],
+                from: {
+                  email: 'scaventureapp@gmail.com'
+                },
+                content: [
+                  {
+                    type: 'text/plain',
+                    value: 'Hello,\n\n' + 'This is your reset password key: ' + token.token + ', enter the key on the reset password screen on app to reset password.\n'
+                  }
+                ]
+              }
+            });
+
+            sg.API(request)
+            .then(function (response) {
+              console.log("Sent!!")
+              console.log(response.statusCode);
+              console.log(response.body);
+              console.log(response.headers);
+            })
+            .catch(function (error) {
+              console.log("Not Sent!!")
+              // error is an instance of SendGridError          
+              // The full response is attached to error.response
+              console.log(error.response.statusCode);
+            });
+        });        
+
+        return res.status(201).json({
+          key: 'JWT ' + generateToken(userInfo),
+          user: userInfo
+        });
+     
+    }
   });
+}
+
+
+/**
+ * Reset password
+ */
+
+export const reset_password = function(req, res, next) {
+  const email = req.body.email;
+  const key = req.body.key;  
+  const password = req.body.password;
+
+  Token.findOne({ token: key }, function (err, token) {
+    if (!token) return res.status(400).send({ type: 'not-verified', msg: 'We were unable to find a valid token. Your token may have expired.' });
+
+    // If we found a token, find a matching user
+    User.findOne({ _id: token._userId }, function (err, user) {
+        if (!user) return res.status(400).send({ msg: 'We were unable to find a user for this token.' });
+        
+        // Verify and save the user
+        user.password = password;
+        user.save(function (err) {
+            if (err) { return res.status(500).send({ msg: err.message }); }
+            return res.status(200).send("The password has been reset. Please log in.");
+        });
+    });
+});
 };

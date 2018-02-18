@@ -2,23 +2,31 @@
 import React from 'react';
 
 import {
-  Text, TextInput, View, StyleSheet, Button, Dimensions,
+  Text, TextInput, View, StyleSheet, Button,
   Image, ImageBackground, TouchableOpacity,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { NavigationActions } from 'react-navigation';
-
 import Colors from '../../constants/colors';
+
+const Device = require('react-native-device-detection');
 
 class LoginScreen extends React.Component {
   stackNav = () => {
-    // NavigationActions.navigate('DrawerOpen');
+    this.props.navigation.navigate('DrawerOpen');
   }
   btnPressed = () => {
     console.warn('button pressed');
   }
 
   render() {
+    if (Device.isIphoneX) {
+      Object.assign(styles, {
+        logo: {
+          marginTop: 129,
+          alignSelf: 'center',
+        },
+      });
+    }
     return (
       <ImageBackground
         style={styles.bg}
@@ -94,7 +102,7 @@ const styles = StyleSheet.create({
     marginLeft: 91,
   },
   logo: {
-    marginTop: 129,
+    marginTop: 50,
     alignSelf: 'center',
   },
   inputField: {

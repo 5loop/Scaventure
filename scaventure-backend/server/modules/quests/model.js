@@ -1,6 +1,33 @@
 import mongoose, { Schema } from 'mongoose';
 
 /** Quest Collection Structure  */
+
+const feedbackSchema = new Schema({
+title: {
+	type: String,
+	required: true
+},
+description: {
+    type: String,
+    required: true
+  },
+datePosted: {
+	type:Date,
+	default: new Date()
+},
+numStars: {
+	type: Number
+},
+questId: {
+	type: Schema.ObjectId
+},
+reportedBy: {
+	type: Schema.ObjectId
+} 
+});
+
+const Feedback  = mongoose.model('Feedback',  feedbackSchema);
+
 const questSchema = new Schema({
   title: {
     type: String,
@@ -55,4 +82,4 @@ questSchema.index({'loc': '2dsphere'});
 // define models here
 const Quest  = mongoose.model('Quest',  questSchema);
 
-export { Quest };
+export { Quest, Feedback };

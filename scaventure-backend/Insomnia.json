@@ -1,8 +1,8 @@
 {
 	"_type": "export",
 	"__export_format": 3,
-	"__export_date": "2018-01-31T00:36:57.822Z",
-	"__export_source": "insomnia.desktop.app:v5.12.4",
+	"__export_date": "2018-02-20T23:40:31.496Z",
+	"__export_source": "insomnia.desktop.app:v5.14.7",
 	"resources": [
 		{
 			"_id": "wrk_dab5962641e84c96bfc6c0dde4c66e0b",
@@ -80,22 +80,11 @@
 			"_type": "request_group"
 		},
 		{
-			"_id": "fld_810443f10e38411d8a9edceb39df2997",
-			"created": 1517268800222,
-			"description": "",
-			"environment": {},
-			"metaSortKey": -1517268800222,
-			"modified": 1517268810770,
-			"name": "steps",
-			"parentId": "fld_8bfcdf78c0a640cbadc95e1c6d3fa146",
-			"_type": "request_group"
-		},
-		{
 			"_id": "req_782a025f91204f918fd92536804bf371",
 			"authentication": {},
 			"body": {
 				"mimeType": "application/json",
-				"text": "{\n\t\"email\" : \"scaventure@scv.com\",\n\t\"password\" : \"testtest\"\n}\n"
+				"text": "{\n\t\"email\" : \"scaventure@scvt.com\",\n\t\"password\" : \"testtest\"\n}\n"
 			},
 			"created": 1516564438049,
 			"description": "",
@@ -108,7 +97,7 @@
 			],
 			"metaSortKey": -1516564438049,
 			"method": "POST",
-			"modified": 1516570833985,
+			"modified": 1518975110236,
 			"name": "Register",
 			"parameters": [],
 			"parentId": "fld_3d67862515c94dbb82f53fd2445acb42",
@@ -124,7 +113,7 @@
 			"authentication": {},
 			"body": {
 				"mimeType": "application/json",
-				"text": "{\n\t\"email\" : \"scaventure@scv.com\",\n\t\"password\" : \"testtest\"\n}"
+				"text": "{\n\t\"email\" : \"scaventure@scvt.com\",\n\t\"password\" : \"testtest\"\n}"
 			},
 			"created": 1516564540122,
 			"description": "",
@@ -142,7 +131,7 @@
 			],
 			"metaSortKey": -1516564540122,
 			"method": "POST",
-			"modified": 1516575340977,
+			"modified": 1518975120541,
 			"name": "Login",
 			"parameters": [],
 			"parentId": "fld_3d67862515c94dbb82f53fd2445acb42",
@@ -363,41 +352,6 @@
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
 			"url": "{{ base_url  }}/api/quests/5a65164deecf041ab54a1995",
-			"_type": "request"
-		},
-		{
-			"_id": "req_56ffd3faa955432391ca5539aa164d93",
-			"authentication": {},
-			"body": {
-				"mimeType": "application/json",
-				"text": "{\n\t\"description\": \"this is a test step\",\n\t\"points\": 50,\n\t\"stepNumber\": 1,\n\t\"stepId\": \"5a6eb787908c0c428259242b\"\n}"
-			},
-			"created": 1517268930599,
-			"description": "",
-			"headers": [
-				{
-					"id": "pair_7aff0ac5f6c94b63a1c74d8b4dcab3ec",
-					"name": "Authorization",
-					"value": "{% response 'body', 'req_d4b32b294d2841f98fbf05abaf5b9e71', '$.token' %}"
-				},
-				{
-					"disabled": false,
-					"id": "pair_41cd76de9fe346ea9f807b40ed92521b",
-					"name": "Content-Type",
-					"value": "application/json"
-				}
-			],
-			"metaSortKey": -1517268930599,
-			"method": "POST",
-			"modified": 1517349995921,
-			"name": "Add Step",
-			"parameters": [],
-			"parentId": "fld_810443f10e38411d8a9edceb39df2997",
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"settingSendCookies": true,
-			"settingStoreCookies": true,
-			"url": "{{ base_url  }}/quests/5a6eb787908c0c428259242b/steps/QAStep",
 			"_type": "request"
 		},
 		{

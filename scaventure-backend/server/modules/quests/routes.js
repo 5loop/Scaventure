@@ -2,6 +2,7 @@ import { Router } from 'express';
 import * as QuestController from './questController';
 import * as StepController from './stepController';
 import * as InviteController from './InviteController';
+import * as HintController from './hintController';
 //  import * as FeedbackController from './feedbackController';
 //  import * as InvitationController from './invitationController';
 import passport from 'passport';
@@ -49,9 +50,11 @@ routes.delete('/quests/:id/steps/:sid', requireJwtAuth, StepController.deleteOne
 routes.post('/quests/:id/steps/:type', requireJwtAuth, StepController.addStep);   // add new step
 
 // Steps Hints
-routes.post('/quests/:id/steps/:sid/hints/:type', requireJwtAuth, StepController.addHint); // Add new hint to a step :type is either 'location' or 'text')
-routes.post('/quests/:id/steps/:sid/hints/:type/:hid', requireJwtAuth, StepController.updateHint); // Update hint information
-routes.get('/quests/:id/steps/:sid/hints/:type/:hid', requireJwtAuth, StepController.getOneHint); // Get one hint from the step
-routes.get('/quests/:id/steps/:sid/hints/', requireJwtAuth, StepController.getAllHints); // Get all hints that belong to a certain step
+routes.post('/quests/:id/steps/:sid/hints/:type', requireJwtAuth, HintController.addHint); // Add new hint to a step :type is either 'location' or 'text')
+routes.post('/quests/:id/steps/:sid/hints/:type/:hid', requireJwtAuth, HintController.updateHint); // Update hint information
+routes.get('/quests/:id/steps/:sid/hints/:type/:hid', requireJwtAuth, HintController.getOneHint); // Get one hint from the step
+routes.get('/quests/:id/steps/:sid/hints', requireJwtAuth, HintController.getAllHints); // Get all hints that belong to a certain step
+routes.delete('/quests/:id/steps/:sid/hints', requireJwtAuth, HintController.deleteAllHints); // Delete all hints that belong to a certain step
+routes.delete('/quests/:id/steps/:sid/hints/:type/:hid', requireJwtAuth, HintController.deleteOneHint); // Delete one hint
 
 export default routes;

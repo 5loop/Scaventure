@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as QuestController from './controller';
+import * as QuestController from './feedbackcontroller';
 import passport from 'passport';
 import { requireJwtAuth } from '../../utils/requireJwtAuth';
 

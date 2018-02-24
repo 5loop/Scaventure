@@ -9,6 +9,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "android.config.googleMaps.apiKey": "AIzaSyA1YwT9x6Plp8GBa0nqGPCWBnRF-kvWWVk",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",

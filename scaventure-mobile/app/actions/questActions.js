@@ -15,3 +15,12 @@ export function getQuests() {
     }, 2000);
   };
 }
+
+export function getOneQuest(id) {
+  return dispatch => {
+    setTimeout(() => {
+      const quest = Data.quests[0];
+      dispatch({ type: LOAD_QUESTS_SUCCESS, quest });
+    }, 2000);
+  };
+}

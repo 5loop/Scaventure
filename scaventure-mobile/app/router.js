@@ -9,6 +9,9 @@ import Colors from '../app/constants/colors';
 // //// SCREENS ////////
 import QuestScreen from './screens/quests/QuestScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import QuestInfo from './screens/quests/QuestInfo';
+import MapTest from './screens/MapTest';
+import QuestLocation from './screens/quests/QuestLocation';
 
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
@@ -55,8 +58,34 @@ const MyQuestsStack = screenToStack(ToBeImplemented, 'MyQuests', 'My Quests');
 
 const CompletedQuestsStack = screenToStack(ToBeImplemented, 'CompletedQuests', 'Completed Quests');
 const SettingsStack = screenToStack(SettingsScreen, 'Settings', 'Settings');
+const QuestInfoStack = StackNavigator({
+  QuestInfo: {
+    screen: QuestInfo,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Quest Information',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <Hamburger navigation={navigation} />,
+    }),
+  },
+  QuestLocation: {
+    screen: QuestLocation,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Quest Location',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <Hamburger navigation={navigation} />,
+    }),
+  }
+
+});
+
+const MapStack = screenToStack(MapTest, 'MapView', 'Map View');
 
 export default DrawerNavigator({
+  QuestInfo: {
+    screen: QuestInfoStack,
+  },
   PublicQuests: {
     screen: PublicQuestsStack,
   },
@@ -71,6 +100,9 @@ export default DrawerNavigator({
   },
   Settings: {
     screen: SettingsStack,
+  },
+  MapStack: {
+    screen: MapStack,
   },
 }, {
   contentOptions: {

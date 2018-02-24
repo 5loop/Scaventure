@@ -9,13 +9,10 @@ import Colors from '../app/constants/colors';
 // //// SCREENS ////////
 import QuestScreen from './screens/quests/QuestScreen';
 import SettingsScreen from './screens/SettingsScreen';
-<<<<<<< HEAD
 import AddQuest from './screens/quests/AddQuest';
-=======
 import LoginScreen from './screens/authentication/LoginScreen';
 import SignupScreen from './screens/authentication/SignupScreen';
 import RestorePwdScreen from './screens/authentication/RestorePwdScreen';
->>>>>>> 851dacb69ab56012216dbc414b5ada56a3ee34b1
 
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
@@ -58,7 +55,6 @@ class ToBeImplemented extends React.Component {
 }
 
 // Stack appears on top of the screen
-<<<<<<< HEAD
 const PublicQuestsStack = StackNavigator({
   'PublicQuests': {
     screen: QuestScreen,
@@ -83,10 +79,6 @@ const PublicQuestsStack = StackNavigator({
 
 
 // screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
-=======
-// const LoginScreenStack = screenToStack(LoginScreen, 'LoginScreen', 'Login');
-const PublicQuestsStack = screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
->>>>>>> 851dacb69ab56012216dbc414b5ada56a3ee34b1
 const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
 const MyQuestsStack = screenToStack(ToBeImplemented, 'MyQuests', 'My Quests');
 

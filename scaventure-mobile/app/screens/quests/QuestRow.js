@@ -53,9 +53,6 @@ const styles = StyleSheet.create({
 
   },
   description: {
-
-    fontSize: 15,
-    fontWeight: '300',
     width:'70%',
     padding:10,
     flexDirection: 'row',
@@ -82,6 +79,7 @@ const styles = StyleSheet.create({
   },
 });
 class QuestRow extends React.Component {
+
   render() {
     return ( 
       <View style={styles.container}>
@@ -93,17 +91,27 @@ class QuestRow extends React.Component {
             
             </View>
             <View style={styles.description}>
-              <Text numberOfLines={4} >{this.props.quest.description} </Text>
+              <Text numberOfLines={3} >{this.props.quest.description} </Text>
             </View>
         </View>
         <View style={styles.buttonRow}>
           
           <View style={styles.buttonItem}>
-            <Button title="More info" color="#FF9C59" style={styles.moreButton}/>
+            <Button 
+              title="More info" 
+              color="#FF9C59" 
+              style={styles.moreButton}
+              onPress={() => this.props.onInfoBttnPress(this.props.quest)}
+            />
           </View>
           
           <View style={styles.buttonItem}>
-            <Button title="Play Quest" color="#7bae6dff" style={styles.playButton}/>
+            <Button 
+              title="Play Quest" 
+              color="#7bae6dff" 
+              style={styles.playButton}
+              onPress={() => console.log('To be implemented!')}
+            />
           </View>
         
         </View>

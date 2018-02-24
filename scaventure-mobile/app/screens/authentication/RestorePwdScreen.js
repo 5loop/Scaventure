@@ -12,7 +12,7 @@ const Device = require('react-native-device-detection');
 
 class LoginScreen extends React.Component {
   stackNav = () => {
-    this.props.navigation.navigate('DrawerOpen');
+    this.props.navigation.goBack(null);
   }
   btnPressed = () => {
     console.warn('button pressed');
@@ -33,8 +33,8 @@ class LoginScreen extends React.Component {
         source={require('../../../assets/images/bg.png')}
       >
         <View style={styles.topRow}>
-          <Feather name="menu" color={Colors.black} size={28} onPress={this.stackNav} />
-          <Text style={styles.title}>Login</Text>
+          <Feather name="arrow-left" color={Colors.black} size={28} onPress={this.stackNav} />
+          <Text style={styles.title}>Reset Password</Text>
         </View>
 
         <Image
@@ -43,10 +43,19 @@ class LoginScreen extends React.Component {
         />
 
         <View style={[styles.inputField, styles.inputMargin]}>
-          <Feather name="user" color={Colors.black} size={28} />
+          <Feather name="mail" color={Colors.black} size={28} />
           <TextInput
             style={styles.textIpt}
-            placeholder='Username'
+            placeholder='Email'
+            onChangeText={(text) => this.setState({ text })}
+          />
+        </View>
+
+        <View style={styles.inputField}>
+          <Feather name="hash" color={Colors.black} size={28} />
+          <TextInput
+            style={styles.textIpt}
+            placeholder='Confirmation code'
             onChangeText={(text) => this.setState({ text })}
           />
         </View>
@@ -56,27 +65,13 @@ class LoginScreen extends React.Component {
           <TextInput
             style={styles.textIpt}
             onChangeText={(text) => this.setState({ text })}
-            placeholder='Password'
-            secureTextEntry
-          />
-        </View>
-        <TouchableOpacity>
-          <Text style={styles.forgot}>Forgot?</Text>
-        </TouchableOpacity>
-
-        <View style={[styles.btn, styles.signinBtn]}>
-          <Button
-            title="Sign in"
-            color="white"
-            onPress={this.btnPressed}
+            placeholder='New password'
           />
         </View>
 
-        <Text style={styles.caption}>Don't have account yet?</Text>
-
-        <View style={[styles.btn, styles.signupBtn]}>
+        <View style={[styles.btn, styles.confirmBtn]}>
           <Button
-            title="Sign up"
+            title="Confirm"
             color="white"
             onPress={this.btnPressed}
           />
@@ -99,7 +94,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-    marginLeft: 91,
+    marginLeft: 40,
   },
   logo: {
     marginTop: 50,
@@ -111,7 +106,7 @@ const styles = StyleSheet.create({
     marginTop: 20.5,
   },
   inputMargin: {
-    marginTop: 130,
+    marginTop: 90,
   },
   textIpt: {
     marginLeft: 7.5,
@@ -122,34 +117,17 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     textAlign: 'center',
   },
-  forgot: {
-    fontSize: 9,
-    textAlign: 'right',
-    marginRight: 87.5,
-  },
   btn: {
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: 19,
   },
-  signinBtn: {
+  confirmBtn: {
     backgroundColor: Colors.primaryColor,
     width: 212,
     height: 38,
     marginLeft: 82,
     marginTop: 104,
-  },
-  caption: {
-    fontSize: 9,
-    textAlign: 'center',
-    marginTop: 20,
-  },
-  signupBtn: {
-    backgroundColor: Colors.secondaryColor,
-    width: 136,
-    height: 38,
-    marginLeft: 120,
-    marginTop: 6,
   },
 });
 

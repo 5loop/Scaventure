@@ -12,6 +12,9 @@ import SettingsScreen from './screens/SettingsScreen';
 import QuestInfo from './screens/quests/QuestInfo';
 import MapTest from './screens/MapTest';
 import QuestLocation from './screens/quests/QuestLocation';
+import LoginScreen from './screens/authentication/LoginScreen';
+import SignupScreen from './screens/authentication/SignupScreen';
+import RestorePwdScreen from './screens/authentication/RestorePwdScreen';
 
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
@@ -52,6 +55,7 @@ class ToBeImplemented extends React.Component {
 }
 
 // Stack appears on top of the screen
+// const LoginScreenStack = screenToStack(LoginScreen, 'LoginScreen', 'Login');
 const PublicQuestsStack = screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
 const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
 const MyQuestsStack = screenToStack(ToBeImplemented, 'MyQuests', 'My Quests');
@@ -85,6 +89,15 @@ const MapStack = screenToStack(MapTest, 'MapView', 'Map View');
 export default DrawerNavigator({
   QuestInfo: {
     screen: QuestInfoStack,
+  },
+  Login: {
+    screen: LoginScreen,
+  },
+  Signup: {
+    screen: SignupScreen,
+  },
+  RestorePwd: {
+    screen: RestorePwdScreen,
   },
   PublicQuests: {
     screen: PublicQuestsStack,

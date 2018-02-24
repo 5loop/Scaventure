@@ -9,12 +9,18 @@ import Colors from '../app/constants/colors';
 // //// SCREENS ////////
 import QuestScreen from './screens/quests/QuestScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import QuestInfo from './screens/quests/QuestInfo';
+import QuestLocation from './screens/quests/QuestLocation';
+import AddQuest from './screens/quests/AddQuest';
 import LoginScreen from './screens/authentication/LoginScreen';
 import SignupScreen from './screens/authentication/SignupScreen';
 import RestorePwdScreen from './screens/authentication/RestorePwdScreen';
+import FeedbackForm from './screens/quests/FeedbackForm';
 
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
+
+const GoBack = ({ navigation }) => <Feather name="arrow-left" color={Colors.white} size={28} onPress={() => navigation.goBack()} />;
 
 const headerStyle = {
   backgroundColor: Colors.primaryColor,
@@ -52,15 +58,62 @@ class ToBeImplemented extends React.Component {
 }
 
 // Stack appears on top of the screen
-// const LoginScreenStack = screenToStack(LoginScreen, 'LoginScreen', 'Login');
-const PublicQuestsStack = screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
+const PublicQuestsStack = StackNavigator({
+  PublicQuests: {
+    screen: QuestScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Public Quests',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <Hamburger navigation={navigation} />,
+    }),
+  },
+  AddQuest: {
+    screen: AddQuest,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Add Quest',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  QuestInfo: {
+    screen: QuestInfo,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Quest Information',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  QuestLocation: {
+    screen: QuestLocation,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Quest Location',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  FeedbackForm: {
+    screen: FeedbackForm,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Add Feedback',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+});
+
+// screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
 const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
 const MyQuestsStack = screenToStack(ToBeImplemented, 'MyQuests', 'My Quests');
-
 const CompletedQuestsStack = screenToStack(ToBeImplemented, 'CompletedQuests', 'Completed Quests');
 const SettingsStack = screenToStack(SettingsScreen, 'Settings', 'Settings');
 
 export default DrawerNavigator({
+
   Login: {
     screen: LoginScreen,
   },

@@ -11,7 +11,6 @@ import Colors from '../../constants/colors';
 /* -- Actions */
 import { getQuests } from '../../actions/questActions';
 
-console.log(Colors.primaryColor);
 const styles = StyleSheet.create({
   container: {
     paddingTop: 40,
@@ -41,19 +40,30 @@ class QuestScreen extends React.Component {
     this.state = {
       ds,
     };
+
+    this.onBttnPress = this.onBttnPress.bind(this);
   }
 
   componentDidMount() {
     this.props.getQuests(); 
   }
 
+  onBttnPress() {
+    this.props.navigation.navigate('AddQuest');
+  }
+
+  onInfoBttnPress(quest) {
+    this.props.navigation.navigate('QuestInfo', { quest });
+  }
+
   renderRow(quest) {
     return (
-      <QuestRow quest={quest} />
+      <QuestRow quest={quest} onInfoBttnPress={this.onInfoBttnPress.bind(this)} />
     );
   }
 
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <ListView
@@ -63,7 +73,7 @@ class QuestScreen extends React.Component {
           renderRow={this.renderRow.bind(this)}
         />
         <TouchableHighlight style={styles.button}>
-          <Text style={styles.buttonText}>Add New</Text>
+          <Text style={styles.buttonText} onPress={this.onBttnPress.bind(this)}>Add New</Text>
         </TouchableHighlight>
       </View>
     );

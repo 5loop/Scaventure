@@ -2,11 +2,13 @@
 import React from 'react';
 
 import {
-  Text, TextInput, View, StyleSheet, Button,
+  Text, TextInput, View, StyleSheet,
   Image, ImageBackground, TouchableOpacity,
 } from 'react-native';
+// import { Navigation } from 'react-navigation';
 import { Feather } from '@expo/vector-icons';
 import Colors from '../../constants/colors';
+import SignupScreen from './SignupScreen';
 
 const Device = require('react-native-device-detection');
 
@@ -16,6 +18,9 @@ class LoginScreen extends React.Component {
   }
   btnPressed = () => {
     console.warn('button pressed');
+  }
+  _toSignUp = () => {
+    this.props.navigation.navigate('SignupScreen');
   }
 
   render() {
@@ -45,6 +50,7 @@ class LoginScreen extends React.Component {
         <View style={[styles.inputField, styles.inputMargin]}>
           <Feather name="user" color={Colors.black} size={28} />
           <TextInput
+            underlineColorAndroid='transparent'
             style={styles.textIpt}
             placeholder='Username'
             onChangeText={(text) => this.setState({ text })}
@@ -64,23 +70,16 @@ class LoginScreen extends React.Component {
           <Text style={styles.forgot}>Forgot?</Text>
         </TouchableOpacity>
 
-        <View style={[styles.btn, styles.signinBtn]}>
-          <Button
-            title="Sign in"
-            color="white"
-            onPress={this.btnPressed}
-          />
-        </View>
+        <TouchableOpacity style={[styles.btn, styles.signinBtn]} onPress={this.btnPressed}>
+          <Text style={styles.btnText}>Sign in</Text>
+        </TouchableOpacity>
 
         <Text style={styles.caption}>Don't have account yet?</Text>
 
-        <View style={[styles.btn, styles.signupBtn]}>
-          <Button
-            title="Sign up"
-            color="white"
-            onPress={this.btnPressed}
-          />
-        </View>
+        <TouchableOpacity style={[styles.btn, styles.signupBtn]} onPress={this._toSignUp}>
+          <Text style={styles.btnText}>Sign up</Text>
+        </TouchableOpacity>
+
       </ImageBackground>
     );
   }
@@ -111,7 +110,7 @@ const styles = StyleSheet.create({
     marginTop: 20.5,
   },
   inputMargin: {
-    marginTop: 130,
+    marginTop: 90,
   },
   textIpt: {
     marginLeft: 7.5,
@@ -131,6 +130,12 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: 19,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnText: {
+    color: Colors.white,
+    fontSize: 16,
   },
   signinBtn: {
     backgroundColor: Colors.primaryColor,

@@ -2,7 +2,7 @@
 import React from 'react';
 
 import {
-  Text, TextInput, View, StyleSheet, Button,
+  Text, TextInput, View, StyleSheet,
   Image, ImageBackground, TouchableOpacity,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
@@ -69,13 +69,17 @@ class LoginScreen extends React.Component {
           />
         </View>
 
-        <View style={[styles.btn, styles.signupBtn]}>
+        <TouchableOpacity style={[styles.btn, styles.signupBtn]} onPress={this.btnPressed}>
+          <Text style={styles.btnText}>Confirm</Text>
+        </TouchableOpacity>
+
+        {/* <View style={[styles.btn, styles.signupBtn]}>
           <Button
             title="Sign up"
             color="white"
             onPress={this.btnPressed}
           />
-        </View>
+        </View> */}
       </ImageBackground>
     );
   }
@@ -121,6 +125,12 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: 19,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnText: {
+    color: Colors.white,
+    fontSize: 16,
   },
   signupBtn: {
     backgroundColor: Colors.primaryColor,

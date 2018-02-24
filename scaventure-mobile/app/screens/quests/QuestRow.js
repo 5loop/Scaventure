@@ -53,12 +53,8 @@ const styles = StyleSheet.create({
 
   },
   description: {
-
-    fontSize: 15,
-    fontWeight: '300',
     width:'70%',
     padding:10,
-
   },
 
   buttonRow: {
@@ -80,6 +76,7 @@ const styles = StyleSheet.create({
   },
 });
 class QuestRow extends React.Component {
+
   render() {
     return ( 
       <View style={styles.container}>
@@ -97,11 +94,21 @@ class QuestRow extends React.Component {
         <View style={styles.buttonRow}>
           
           <View style={styles.buttonItem}>
-            <Button title="More info" color="#FF9C59" style={styles.moreButton}/>
+            <Button 
+              title="More info" 
+              color="#FF9C59" 
+              style={styles.moreButton}
+              onPress={() => this.props.onInfoBttnPress(this.props.quest)}
+            />
           </View>
           
           <View style={styles.buttonItem}>
-            <Button title="Play Quest" color="#7bae6dff" style={styles.playButton}/>
+            <Button 
+              title="Play Quest" 
+              color="#7bae6dff" 
+              style={styles.playButton}
+              onPress={() => console.log('To be implemented!')}
+            />
           </View>
         
         </View>

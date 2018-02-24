@@ -10,12 +10,12 @@ import Colors from '../app/constants/colors';
 import QuestScreen from './screens/quests/QuestScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import QuestInfo from './screens/quests/QuestInfo';
-import MapTest from './screens/MapTest';
 import QuestLocation from './screens/quests/QuestLocation';
 import AddQuest from './screens/quests/AddQuest';
 import LoginScreen from './screens/authentication/LoginScreen';
 import SignupScreen from './screens/authentication/SignupScreen';
 import RestorePwdScreen from './screens/authentication/RestorePwdScreen';
+import FeedbackForm from './screens/quests/FeedbackForm';
 
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
@@ -75,25 +75,15 @@ const PublicQuestsStack = StackNavigator({
       headerStyle,
       headerTitleStyle,
       headerLeft: <GoBack navigation={navigation} />,
-    
     }),
   },
-});
-
-// screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
-const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
-const MyQuestsStack = screenToStack(ToBeImplemented, 'MyQuests', 'My Quests');
-
-const CompletedQuestsStack = screenToStack(ToBeImplemented, 'CompletedQuests', 'Completed Quests');
-const SettingsStack = screenToStack(SettingsScreen, 'Settings', 'Settings');
-const QuestInfoStack = StackNavigator({
   QuestInfo: {
     screen: QuestInfo,
     navigationOptions: ({ navigation }) => ({
       title: 'Quest Information',
       headerStyle,
       headerTitleStyle,
-      headerLeft: <Hamburger navigation={navigation} />,
+      headerLeft: <GoBack navigation={navigation} />,
     }),
   },
   QuestLocation: {
@@ -102,19 +92,28 @@ const QuestInfoStack = StackNavigator({
       title: 'Quest Location',
       headerStyle,
       headerTitleStyle,
-      headerLeft: <Hamburger navigation={navigation} />,
+      headerLeft: <GoBack navigation={navigation} />,
     }),
-  }
-
+  },
+  FeedbackForm: {
+    screen: FeedbackForm,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Add Feedback',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
 });
 
-const MapStack = screenToStack(MapTest, 'MapView', 'Map View');
-
+// screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
+const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
+const MyQuestsStack = screenToStack(ToBeImplemented, 'MyQuests', 'My Quests');
+const CompletedQuestsStack = screenToStack(ToBeImplemented, 'CompletedQuests', 'Completed Quests');
+const SettingsStack = screenToStack(SettingsScreen, 'Settings', 'Settings');
 
 export default DrawerNavigator({
-  QuestInfo: {
-    screen: QuestInfoStack,
-  },
+
   Login: {
     screen: LoginScreen,
   },
@@ -138,9 +137,6 @@ export default DrawerNavigator({
   },
   Settings: {
     screen: SettingsStack,
-  },
-  MapStack: {
-    screen: MapStack,
   },
 }, {
   contentOptions: {

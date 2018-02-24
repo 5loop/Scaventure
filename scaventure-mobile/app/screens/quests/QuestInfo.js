@@ -57,23 +57,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const quest = {
-  _id: '5a6793c1bdd6b53515565ba4',
-  title: 'Test Quest',
-  description: 'Loremstique convallis erat sit amet pellentesque. Suspendisse ut magna ac nisi bibendum porta eu a neque. Ut fermentum justo aliquam nucus sodales ligula id condimentum. ',
-  createdBy: '5a6793b6bdd6b53515565ba3',
-  numOfPlayers: 0,
-  type: 'public',
-  loc: {
-    coordinates: [
-      43.6532,
-      -79.411079,
-    ],
-    type: 'Point',
-  },
-  createdAt: '2018-01-23T19:55:27.002Z',
-};
-
 const feedbacks = [
   {
     title: 'This quest is meh',
@@ -97,17 +80,8 @@ class QuestInfo extends React.Component {
     };
   }
   
-  componentDidMount() {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        console.log(position);
-      },
-      (error) =>  console.log(error),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-    );
-  }
-
-  showMap () {
+  showMap() {
+    const { quest } = this.props.navigation.state.params;
     this.props.navigation.navigate('QuestLocation', { longitude: quest.loc.coordinates[1], latitude: quest.loc.coordinates[0] });
   }
   
@@ -117,6 +91,7 @@ class QuestInfo extends React.Component {
     );
   }
   render() {
+    const { quest } = this.props.navigation.state.params;
     return ( 
       <ScrollView style={styles.container} bounces={false}>
         <ImageBackground
@@ -133,6 +108,7 @@ class QuestInfo extends React.Component {
             <TouchableHighlight
               style={styles.roundButton}
               underlayColor='#fff'
+              onPress={() => this.props.navigation.navigate('FeedbackForm')}
             >
               <Feather name="message-circle" color={Colors.white} size={20} />       
             </TouchableHighlight>

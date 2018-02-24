@@ -12,12 +12,15 @@ import SettingsScreen from './screens/SettingsScreen';
 import QuestInfo from './screens/quests/QuestInfo';
 import MapTest from './screens/MapTest';
 import QuestLocation from './screens/quests/QuestLocation';
+import AddQuest from './screens/quests/AddQuest';
 import LoginScreen from './screens/authentication/LoginScreen';
 import SignupScreen from './screens/authentication/SignupScreen';
 import RestorePwdScreen from './screens/authentication/RestorePwdScreen';
 
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
+
+const GoBack = ({ navigation }) => <Feather name="arrow-left" color={Colors.white} size={28} onPress={() => navigation.goBack()} />;
 
 const headerStyle = {
   backgroundColor: Colors.primaryColor,
@@ -55,8 +58,29 @@ class ToBeImplemented extends React.Component {
 }
 
 // Stack appears on top of the screen
-// const LoginScreenStack = screenToStack(LoginScreen, 'LoginScreen', 'Login');
-const PublicQuestsStack = screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
+const PublicQuestsStack = StackNavigator({
+  PublicQuests: {
+    screen: QuestScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Public Quests',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <Hamburger navigation={navigation} />,
+    }),
+  },
+  AddQuest: {
+    screen: AddQuest,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Add Quest',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    
+    }),
+  },
+});
+
+// screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
 const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
 const MyQuestsStack = screenToStack(ToBeImplemented, 'MyQuests', 'My Quests');
 
@@ -85,6 +109,7 @@ const QuestInfoStack = StackNavigator({
 });
 
 const MapStack = screenToStack(MapTest, 'MapView', 'Map View');
+
 
 export default DrawerNavigator({
   QuestInfo: {

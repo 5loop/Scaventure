@@ -55,6 +55,9 @@ const styles = StyleSheet.create({
   description: {
     width:'70%',
     padding:10,
+    flexDirection: 'row',
+    flexWrap:'wrap',
+
   },
 
   buttonRow: {
@@ -88,7 +91,7 @@ class QuestRow extends React.Component {
             
             </View>
             <View style={styles.description}>
-              <Text>{this.props.quest.description}</Text>
+              <Text numberOfLines={3} >{this.props.quest.description} </Text>
             </View>
         </View>
         <View style={styles.buttonRow}>

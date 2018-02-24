@@ -3,4 +3,5 @@ export default {
   secondaryColor: '#537c8aff',
   tertiaryColor: '#7bae6dff',
   white: '#FAFAFA',
+  black: '#010101',
 };

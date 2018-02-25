@@ -21,6 +21,35 @@ const linkSchema = new Schema({
 });
 
 /** Quest Collection Structure  */
+
+const feedbackSchema = new Schema({
+title: {
+	type: String,
+	required: true
+},
+description: {
+    type: String,
+    required: true
+  },
+datePosted: {
+	type:Date,
+	default: new Date()
+},
+numStars: {
+	type: Number
+},
+questId: {
+	type: Schema.ObjectId
+},
+reportedBy: {
+	type: Schema.ObjectId
+} 
+});
+
+const Feedback  = mongoose.model('Feedback',  feedbackSchema);
+
+
+
 const questSchema = new Schema({
   title: {
     type: String,
@@ -192,4 +221,8 @@ questSchema.pre('remove', function (next) {
 });
 
 
+
+export { Quest, Feedback };
+
 export { Quest, Link, Step, QAStep, QRStep, GPSStep, Hint };
+

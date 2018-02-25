@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import * as FeedbackController from './feedbackcontroller';
 import * as QuestController from './questController';
 import * as StepController from './stepController';
 import * as InviteController from './InviteController';
@@ -23,11 +24,10 @@ routes.delete('/quests/:id',  requireJwtAuth, QuestController.deleteQuest);
 // TO BE IMPLEMENTED @Parth
 
 // Feedback
-
-// routes.get('/quesst/:id/feedbacks' , ... ); // Get list of feedbacks for a quest
-// routes.post('/quests/:id/feedbacks' , ... ); // Add a feedback to a quest
-// routes.delete('/quests/:id/feedbacks/:id' , ... ); // delete a feedback (iff it was created by the logged-in user)
-// routes.post('/quests/:id/feedbacks/:id' , ... ); // update a feedback (iff it was created by the logged-in user)
+routes.get('/quests/:id/feedbacks' , requireJwtAuth, FeedbackController.getFeedback ); // Get list of feedbacks for a quest
+routes.post('/quests/:id/feedbacks' , requireJwtAuth, FeedbackController.addFeedback ); // Add a feedback to a quest
+routes.delete('/quests/:id/feedbacks/:id' , requireJwtAuth, FeedbackController.deleteFeedback ); // delete a feedback (iff it was created by the logged-in user)
+routes.post('/quests/:id/feedbacks/:id' , requireJwtAuth, FeedbackController.updateFeedback); // update a feedback (iff it was created by the logged-in user)
 
 // Invitations
 // POST /quests/1/users

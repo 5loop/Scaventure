@@ -18,10 +18,10 @@ routes.delete('/quests/:id',  requireJwtAuth, QuestController.deleteQuest);
 // TO BE IMPLEMENTED @Parth
 
 // Feedback
-routes.get('/quests/:id/feedbacks' , requireJwtAuth, feedbackcontroller.getFeedback ); // Get list of feedbacks for a quest
-routes.post('/quests/:id/feedbacks' , requireJwtAuth, feedbackcontroller.addFeedback ); // Add a feedback to a quest
-routes.delete('/quests/:id/feedbacks/:id' , requireJwtAuth, feedbackController.deleteFeedback ); // delete a feedback (iff it was created by the logged-in user)
-routes.post('/quests/:id/feedbacks/:id' , requireJwtAuth, feedbackController.updateFeedback); // update a feedback (iff it was created by the logged-in user)
+routes.get('/quests/:id/feedbacks' , requireJwtAuth, FeedbackController.getFeedback ); // Get list of feedbacks for a quest
+routes.post('/quests/:id/feedbacks' , requireJwtAuth, FeedbackController.addFeedback ); // Add a feedback to a quest
+routes.delete('/quests/:id/feedbacks/:id' , requireJwtAuth, FeedbackController.deleteFeedback ); // delete a feedback (iff it was created by the logged-in user)
+routes.post('/quests/:id/feedbacks/:id' , requireJwtAuth, FeedbackController.updateFeedback); // update a feedback (iff it was created by the logged-in user)
 
 // Invitations
 

@@ -5,25 +5,25 @@ import {
   Text, TextInput, View, StyleSheet,
   Image, ImageBackground, TouchableOpacity,
 } from 'react-native';
-// import { Navigation } from 'react-navigation';
 import { Feather } from '@expo/vector-icons';
 import Colors from '../../constants/colors';
-import SignupScreen from './SignupScreen';
 
 const Device = require('react-native-device-detection');
 
 class LoginScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Login',
+    header: null,
+  };
   stackNav = () => {
     this.props.navigation.navigate('DrawerOpen');
   }
   btnPressed = () => {
-    console.warn('button pressed');
-  }
-  _toSignUp = () => {
-    this.props.navigation.navigate('SignupScreen');
+    console.log('button pressed');
   }
 
   render() {
+    const { navigate } = this.props.navigation;
     if (Device.isIphoneX) {
       Object.assign(styles, {
         logo: {
@@ -67,7 +67,7 @@ class LoginScreen extends React.Component {
           />
         </View>
         <TouchableOpacity>
-          <Text style={styles.forgot}>Forgot?</Text>
+          <Text style={styles.forgot} onPress={() => navigate('RestorePwd')}>Forgot?</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.btn, styles.signinBtn]} onPress={this.btnPressed}>
@@ -76,7 +76,7 @@ class LoginScreen extends React.Component {
 
         <Text style={styles.caption}>Don't have account yet?</Text>
 
-        <TouchableOpacity style={[styles.btn, styles.signupBtn]} onPress={this._toSignUp}>
+        <TouchableOpacity style={[styles.btn, styles.signupBtn]} onPress={() => navigate('Signup')}>
           <Text style={styles.btnText}>Sign up</Text>
         </TouchableOpacity>
 

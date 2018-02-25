@@ -10,12 +10,16 @@ import Colors from '../../constants/colors';
 
 const Device = require('react-native-device-detection');
 
-class LoginScreen extends React.Component {
+class SignupScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Signup',
+    header: null,
+  };
   stackNav = () => {
     this.props.navigation.goBack(null);
   }
   btnPressed = () => {
-    console.warn('button pressed');
+    console.log('button pressed');
   }
 
   render() {
@@ -141,4 +145,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default SignupScreen;

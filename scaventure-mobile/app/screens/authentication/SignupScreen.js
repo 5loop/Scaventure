@@ -1,5 +1,7 @@
 // Login screen
 import React from 'react';
+import { bindActionCreators } from 'redux';  
+import { connect } from 'react-redux';  
 
 import {
   Text, TextInput, View, StyleSheet,
@@ -7,6 +9,7 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Colors from '../../constants/colors';
+import * as sessionActions from '../../actions/sessionActions';
 
 const Device = require('react-native-device-detection');
 
@@ -19,7 +22,21 @@ class SignupScreen extends React.Component {
     this.props.navigation.goBack(null);
   }
   btnPressed = () => {
-    console.log('button pressed');
+    // TODO @Yalong -> Validate input, set error & return if not valid
+    // TODO @Yalong -> Set Loader (some status indicating that HTTP call is in progress)
+
+    this.props.actions.registerUser(
+      { email: this.state.email, password: this.state.password, username: this.state.username }
+    ).then(() => { 
+      console.log('Logged in');
+      // TODO @Yalong -> Navigate to 'We Sent you verification email screen'
+      // this.props.navigation.navigate('PublicQuests');
+    }).catch((e) => { 
+      // TODO @Yalong -> display error that could not login
+      console.log(e); 
+    }).then(() => {
+      // TODO @Yalong -> Release Loader (HTTP call has ended)
+    });
   }
 
   render() {
@@ -51,7 +68,7 @@ class SignupScreen extends React.Component {
           <TextInput
             style={styles.textIpt}
             placeholder='Email'
-            onChangeText={(text) => this.setState({ text })}
+            onChangeText={(email) => this.setState({ email })}
           />
         </View>
 
@@ -60,7 +77,7 @@ class SignupScreen extends React.Component {
           <TextInput
             style={styles.textIpt}
             placeholder='Username'
-            onChangeText={(text) => this.setState({ text })}
+            onChangeText={(username) => this.setState({ username })}
           />
         </View>
 
@@ -68,7 +85,7 @@ class SignupScreen extends React.Component {
           <Feather name="lock" color={Colors.black} size={28} />
           <TextInput
             style={styles.textIpt}
-            onChangeText={(text) => this.setState({ text })}
+            onChangeText={(password) => this.setState({ password })}
             placeholder='Password'
           />
         </View>
@@ -145,4 +162,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignupScreen;
+/* -> Redux Setup */
+function mapDispatchToProps(dispatch) {  
+  return {
+    actions: bindActionCreators(sessionActions, dispatch),
+  };
+}
+
+export default connect(null, mapDispatchToProps)(SignupScreen);

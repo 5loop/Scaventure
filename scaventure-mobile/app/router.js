@@ -125,7 +125,6 @@ const CompletedQuestsStack = screenToStack(ToBeImplemented, 'CompletedQuests', '
 const SettingsStack = screenToStack(SettingsScreen, 'Settings', 'Settings');
 
 export default DrawerNavigator({
-
   Login: {
     screen: AuthNavigation,
   },

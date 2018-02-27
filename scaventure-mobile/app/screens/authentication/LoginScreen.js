@@ -1,12 +1,17 @@
 // Login screen
 import React from 'react';
+import { bindActionCreators } from 'redux';  
+import { connect } from 'react-redux';  
 
 import {
   Text, TextInput, View, StyleSheet,
   Image, ImageBackground, TouchableOpacity,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+
+// Local Imports
 import Colors from '../../constants/colors';
+import * as sessionActions from '../../actions/sessionActions';
 
 const Device = require('react-native-device-detection');
 
@@ -18,8 +23,20 @@ class LoginScreen extends React.Component {
   stackNav = () => {
     this.props.navigation.navigate('DrawerOpen');
   }
+
   btnPressed = () => {
-    console.log('button pressed');
+    // TODO @Yalong -> Validate input, set error & return if not valid
+    // TODO @Yalong -> Set Loader (some status indicating that HTTP call is in progress)
+
+    this.props.actions.loginUser({ email: this.state.user, password: this.state.password }).then(() => { 
+      console.log('Logged in');
+      this.props.navigation.navigate('PublicQuests');
+    }).catch((e) => { 
+      // TODO @Yalong -> display error that could not login
+      console.log(e); 
+    }).then(() => {
+      // TODO @Yalong -> Release Loader (HTTP call has ended)
+    });
   }
 
   render() {
@@ -53,7 +70,7 @@ class LoginScreen extends React.Component {
             underlineColorAndroid='transparent'
             style={styles.textIpt}
             placeholder='Username'
-            onChangeText={(text) => this.setState({ text })}
+            onChangeText={(user) => this.setState({ user })}
           />
         </View>
 
@@ -61,7 +78,7 @@ class LoginScreen extends React.Component {
           <Feather name="lock" color={Colors.black} size={28} />
           <TextInput
             style={styles.textIpt}
-            onChangeText={(text) => this.setState({ text })}
+            onChangeText={(password) => this.setState({ password })}
             placeholder='Password'
             secureTextEntry
           />
@@ -158,4 +175,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+/* -> Redux Setup */
+function mapDispatchToProps(dispatch) {  
+  return {
+    actions: bindActionCreators(sessionActions, dispatch),
+  };
+}
+
+export default connect(null, mapDispatchToProps)(LoginScreen);

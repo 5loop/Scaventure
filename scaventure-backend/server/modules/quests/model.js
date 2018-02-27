@@ -220,9 +220,5 @@ questSchema.pre('remove', function (next) {
   next();
 });
 
-
-
-export { Quest, Feedback };
-
-export { Quest, Link, Step, QAStep, QRStep, GPSStep, Hint };
+export { Quest, Feedback, Link, Step, QAStep, QRStep, GPSStep, Hint };
 

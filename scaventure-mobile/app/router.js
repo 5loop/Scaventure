@@ -57,6 +57,18 @@ class ToBeImplemented extends React.Component {
   }
 }
 
+const AuthNavigation = StackNavigator({
+  Login: {
+    screen: LoginScreen,
+  },
+  Signup: {
+    screen: SignupScreen,
+  },
+  RestorePwd: {
+    screen: RestorePwdScreen,
+  },
+});
+
 // Stack appears on top of the screen
 const PublicQuestsStack = StackNavigator({
   PublicQuests: {
@@ -115,13 +127,7 @@ const SettingsStack = screenToStack(SettingsScreen, 'Settings', 'Settings');
 export default DrawerNavigator({
 
   Login: {
-    screen: LoginScreen,
-  },
-  Signup: {
-    screen: SignupScreen,
-  },
-  RestorePwd: {
-    screen: RestorePwdScreen,
+    screen: AuthNavigation,
   },
   PublicQuests: {
     screen: PublicQuestsStack,

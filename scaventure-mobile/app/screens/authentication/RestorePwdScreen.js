@@ -2,7 +2,7 @@
 import React from 'react';
 
 import {
-  Text, TextInput, View, StyleSheet, Button,
+  Text, TextInput, View, StyleSheet,
   Image, ImageBackground, TouchableOpacity,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
@@ -10,12 +10,16 @@ import Colors from '../../constants/colors';
 
 const Device = require('react-native-device-detection');
 
-class LoginScreen extends React.Component {
+class RestorePwdScreen extends React.Component {
+  static navigationOptions = {
+    title: 'RestorePwd',
+    header: null,
+  };
   stackNav = () => {
     this.props.navigation.goBack(null);
   }
   btnPressed = () => {
-    console.warn('button pressed');
+    console.log('button pressed');
   }
 
   render() {
@@ -69,13 +73,17 @@ class LoginScreen extends React.Component {
           />
         </View>
 
-        <View style={[styles.btn, styles.confirmBtn]}>
+        <TouchableOpacity style={[styles.btn, styles.confirmBtn]} onPress={this.btnPressed}>
+          <Text style={styles.btnText}>Confirm</Text>
+        </TouchableOpacity>
+
+        {/* <View style={[styles.btn, styles.confirmBtn]}>
           <Button
             title="Confirm"
             color="white"
             onPress={this.btnPressed}
           />
-        </View>
+        </View> */}
       </ImageBackground>
     );
   }
@@ -121,6 +129,12 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: 19,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnText: {
+    color: Colors.white,
+    fontSize: 16,
   },
   confirmBtn: {
     backgroundColor: Colors.primaryColor,
@@ -131,4 +145,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default RestorePwdScreen;

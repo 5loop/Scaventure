@@ -2,7 +2,7 @@
 import React from 'react';
 
 import {
-  Text, TextInput, View, StyleSheet, Button,
+  Text, TextInput, View, StyleSheet,
   Image, ImageBackground, TouchableOpacity,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
@@ -11,14 +11,19 @@ import Colors from '../../constants/colors';
 const Device = require('react-native-device-detection');
 
 class LoginScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Login',
+    header: null,
+  };
   stackNav = () => {
     this.props.navigation.navigate('DrawerOpen');
   }
   btnPressed = () => {
-    console.warn('button pressed');
+    console.log('button pressed');
   }
 
   render() {
+    const { navigate } = this.props.navigation;
     if (Device.isIphoneX) {
       Object.assign(styles, {
         logo: {
@@ -45,6 +50,7 @@ class LoginScreen extends React.Component {
         <View style={[styles.inputField, styles.inputMargin]}>
           <Feather name="user" color={Colors.black} size={28} />
           <TextInput
+            underlineColorAndroid='transparent'
             style={styles.textIpt}
             placeholder='Username'
             onChangeText={(text) => this.setState({ text })}
@@ -61,26 +67,19 @@ class LoginScreen extends React.Component {
           />
         </View>
         <TouchableOpacity>
-          <Text style={styles.forgot}>Forgot?</Text>
+          <Text style={styles.forgot} onPress={() => navigate('RestorePwd')}>Forgot?</Text>
         </TouchableOpacity>
 
-        <View style={[styles.btn, styles.signinBtn]}>
-          <Button
-            title="Sign in"
-            color="white"
-            onPress={this.btnPressed}
-          />
-        </View>
+        <TouchableOpacity style={[styles.btn, styles.signinBtn]} onPress={this.btnPressed}>
+          <Text style={styles.btnText}>Sign in</Text>
+        </TouchableOpacity>
 
         <Text style={styles.caption}>Don't have account yet?</Text>
 
-        <View style={[styles.btn, styles.signupBtn]}>
-          <Button
-            title="Sign up"
-            color="white"
-            onPress={this.btnPressed}
-          />
-        </View>
+        <TouchableOpacity style={[styles.btn, styles.signupBtn]} onPress={() => navigate('Signup')}>
+          <Text style={styles.btnText}>Sign up</Text>
+        </TouchableOpacity>
+
       </ImageBackground>
     );
   }
@@ -111,7 +110,7 @@ const styles = StyleSheet.create({
     marginTop: 20.5,
   },
   inputMargin: {
-    marginTop: 130,
+    marginTop: 90,
   },
   textIpt: {
     marginLeft: 7.5,
@@ -131,6 +130,12 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     borderWidth: 0,
     borderRadius: 19,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnText: {
+    color: Colors.white,
+    fontSize: 16,
   },
   signinBtn: {
     backgroundColor: Colors.primaryColor,

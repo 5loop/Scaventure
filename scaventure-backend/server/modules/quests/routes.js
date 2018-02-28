@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as FeedbackController from './feedbackcontroller';
+import * as FeedbackController from './feedbackController';
 import * as QuestController from './questController';
 import * as StepController from './stepController';
 import * as InviteController from './InviteController';

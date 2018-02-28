@@ -48,11 +48,11 @@ class LoginScreen extends React.Component {
         />
 
         <View style={[styles.inputField, styles.inputMargin]}>
-          <Feather name="user" color={Colors.black} size={28} />
+          <Feather name="mail" color={Colors.black} size={28} />
           <TextInput
             underlineColorAndroid='transparent'
             style={styles.textIpt}
-            placeholder='Username'
+            placeholder='Email'
             onChangeText={(text) => this.setState({ text })}
           />
         </View>

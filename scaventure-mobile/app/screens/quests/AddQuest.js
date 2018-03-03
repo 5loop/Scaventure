@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, Button, TextInput } from 'react-native';
+import MapView from 'react-native-maps';
 
 const styles = StyleSheet.create({
   container: {
@@ -48,22 +49,51 @@ const styles = StyleSheet.create({
     borderColor:'#C0C0C0',
     backgroundColor:'rgba(61,63,111,0.3)',
     marginBottom:10,
+  },
+  map: {
+    left:4,
+    right:0,
+    
+   
+    
+    flex:1,
+    flexDirection: 'column',
+  },
+  maps:{
+    flex:1,
+    
   }
 
 });
 
-
+  
 class AddQuest extends React.Component {
+
+  
+
+ 
   render() {
     return ( 
       <View style={styles.container}>
         
-
-          <Text style={styles.inputLable}>Name </Text ><TextInput style={styles.ip} underlineColorAndroid = "rgba(0,0,0,0)" placeholder="title" />
-          
-          <Text style={styles.inputLable}>Description </Text ><TextInput style={styles.ip} placeholder="Description" placeholderTextColor="#000000" multiline={true} numberOfLines={7}/>
-          <Text style={styles.inputLable}>Location </Text ><TextInput style={styles.ip} placeholder="location" />
-          
+          <View>
+            <Text style={styles.inputLable}>Name </Text ><TextInput style={styles.ip} underlineColorAndroid = "rgba(0,0,0,0)" placeholder="title" />
+            
+            <Text style={styles.inputLable}>Description </Text ><TextInput style={styles.ip} placeholder="Description" placeholderTextColor="#000000" multiline={true} numberOfLines={7}/>
+            <Text style={styles.inputLable}>Location </Text >
+          </View>
+            <MapView
+            style={styles.map}
+            initialRegion={
+              {
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }
+            } 
+            
+            />
           <View >
             <Button title="Next" color="#7bae6dff" />
           </View>

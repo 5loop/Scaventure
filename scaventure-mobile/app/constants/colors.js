@@ -4,4 +4,5 @@ export default {
   tertiaryColor: '#7bae6dff',
   white: '#FAFAFA',
   black: '#010101',
+  yellow: '#ffe500',
 };

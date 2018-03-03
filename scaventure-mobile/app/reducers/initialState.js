@@ -3,4 +3,12 @@ export default {
     quests: [],
     loading: true,
   },
+  feedbacks: {
+    feedbacks: [],
+    loading: true,
+  },
+  steps: {
+    steps: [],
+    loading: true,
+  },
 };

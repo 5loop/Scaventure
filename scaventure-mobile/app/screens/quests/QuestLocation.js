@@ -3,7 +3,7 @@ import { MapView } from 'expo';
 
 export default class QuestLocation extends React.Component {
   render() {
-    const {params} = this.props.navigation.state;
+    const { params } = this.props.navigation.state;
    
     return (
       <MapView
@@ -16,8 +16,7 @@ export default class QuestLocation extends React.Component {
         }}
       >
         <MapView.Marker
-          coordinate={{latitude: params.latitude, longitude: params.longitude }}
-
+          coordinate={{ latitude: params.latitude, longitude: params.longitude }}
         />
       </MapView>
     );

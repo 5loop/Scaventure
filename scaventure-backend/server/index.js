@@ -2,7 +2,7 @@ import express from 'express';
 import http from 'http';
 
 // API routes import
-import { AuthRoutes, QuestRoutes } from './modules';
+import { AuthRoutes, QuestRoutes, ProgressRoutes } from './modules';
 
 import middlewareConfig from './config/middleware';
 import dbConfig from './config/db';
@@ -15,7 +15,7 @@ let server = http.createServer(app);
 dbConfig();
 middlewareConfig(app);
 
-app.use('/api', [ AuthRoutes, QuestRoutes ]);
+app.use('/api', [ AuthRoutes, QuestRoutes, ProgressRoutes ]);
 
 const PORT = process.env.PORT || 4100;
 

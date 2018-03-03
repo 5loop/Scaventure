@@ -4,8 +4,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';  
 
 import {
-  Text, TextInput, View, StyleSheet,
-  Image, ImageBackground, TouchableOpacity,
+  Text, TextInput, View, StyleSheet, ActivityIndicator,
+  Image, ImageBackground, TouchableOpacity, Alert,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Colors from '../../constants/colors';
@@ -18,25 +18,47 @@ class SignupScreen extends React.Component {
     title: 'Signup',
     header: null,
   };
+  constructor() {
+    super();
+    this.state = {
+      textStatus: true,
+    };
+  }
   stackNav = () => {
     this.props.navigation.goBack(null);
   }
   btnPressed = () => {
-    // TODO @Yalong -> Validate input, set error & return if not valid
-    // TODO @Yalong -> Set Loader (some status indicating that HTTP call is in progress)
+    // Validate input, set error & return if not valid
+    const email = this.state.email;
+    const passwd = this.state.password;
+    const cmPasswd = this.state.cmpassword;
+    const emailREGEX = /\S+@\S+\.\S+/;
 
-    this.props.actions.registerUser(
-      { email: this.state.email, password: this.state.password, username: this.state.username }
-    ).then(() => { 
-      console.log('Logged in');
-      // TODO @Yalong -> Navigate to 'We Sent you verification email screen'
-      // this.props.navigation.navigate('PublicQuests');
-    }).catch((e) => { 
-      // TODO @Yalong -> display error that could not login
-      console.log(e); 
-    }).then(() => {
-      // TODO @Yalong -> Release Loader (HTTP call has ended)
-    });
+    if (emailREGEX.test(String(email).toLowerCase()) === false) {
+      Alert.alert('Email is not valid.');
+    } else if (!passwd || passwd.length < 6) {
+      Alert.alert('Password must have at least 6 characters/numbers.');
+    } else if (passwd !== cmPasswd) {
+      Alert.alert('Password does not match.');
+    } else {
+      // Set Loader (some status indicating that HTTP call is in progress)
+      this.setState({ textStatus: false });
+      this.props.actions.registerUser(
+        { email: this.state.email, password: this.state.password }
+      ).then(() => { 
+        console.log('Logged in');
+        Alert.alert('Verification email sent. Please login to your email account and click link to confirm.');
+        // TODO @Yalong -> Navigate to 'We Sent you verification email screen'
+        this.props.navigation.navigate('PublicQuests');
+      }).catch((e) => { 
+        // display error that could not login
+        Alert.alert('Something went wrong!');
+        console.log(e); 
+      }).then(() => {
+        // Release Loader (HTTP call has ended)
+        this.setState({ textStatus: true });
+      });
+    }
   }
 
   render() {
@@ -73,11 +95,12 @@ class SignupScreen extends React.Component {
         </View>
 
         <View style={styles.inputField}>
-          <Feather name="user" color={Colors.black} size={28} />
+          <Feather name="lock" color={Colors.black} size={28} />
           <TextInput
             style={styles.textIpt}
-            placeholder='Username'
-            onChangeText={(username) => this.setState({ username })}
+            placeholder='Password'
+            secureTextEntry
+            onChangeText={(password) => this.setState({ password })}
           />
         </View>
 
@@ -85,22 +108,18 @@ class SignupScreen extends React.Component {
           <Feather name="lock" color={Colors.black} size={28} />
           <TextInput
             style={styles.textIpt}
-            onChangeText={(password) => this.setState({ password })}
-            placeholder='Password'
+            onChangeText={(cmpassword) => this.setState({ cmpassword })}
+            placeholder='Confirm Password'
+            secureTextEntry
           />
         </View>
 
         <TouchableOpacity style={[styles.btn, styles.signupBtn]} onPress={this.btnPressed}>
-          <Text style={styles.btnText}>Confirm</Text>
+          { this.state.textStatus 
+            ? <Text style={styles.btnText}>Confirm</Text>
+            : <ActivityIndicator style={styles.loading} size="small" color="#00ff00" /> }
         </TouchableOpacity>
 
-        {/* <View style={[styles.btn, styles.signupBtn]}>
-          <Button
-            title="Sign up"
-            color="white"
-            onPress={this.btnPressed}
-          />
-        </View> */}
       </ImageBackground>
     );
   }
@@ -142,6 +161,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     textAlign: 'center',
   },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   btn: {
     borderColor: 'transparent',
     borderWidth: 0,
@@ -152,6 +180,9 @@ const styles = StyleSheet.create({
   btnText: {
     color: Colors.white,
     fontSize: 16,
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   signupBtn: {
     backgroundColor: Colors.primaryColor,

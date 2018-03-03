@@ -16,6 +16,7 @@ import LoginScreen from './screens/authentication/LoginScreen';
 import SignupScreen from './screens/authentication/SignupScreen';
 import RestorePwdScreen from './screens/authentication/RestorePwdScreen';
 import FeedbackForm from './screens/quests/FeedbackForm';
+import MyQuestScreen from './screens/quests/MyQuestScreen';
 
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
@@ -118,9 +119,15 @@ const PublicQuestsStack = StackNavigator({
   },
 });
 
+const myQuestStack = StackNavigator({
+  myQuest: {
+    screen: MyQuestScreen,
+  },
+});
+
 // screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
 const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
-const MyQuestsStack = screenToStack(ToBeImplemented, 'MyQuests', 'My Quests');
+const MyQuestsStack = screenToStack(myQuestStack, 'MyQuests', 'My Quests');
 const CompletedQuestsStack = screenToStack(ToBeImplemented, 'CompletedQuests', 'Completed Quests');
 const SettingsStack = screenToStack(SettingsScreen, 'Settings', 'Settings');
 

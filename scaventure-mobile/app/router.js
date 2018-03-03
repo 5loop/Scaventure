@@ -119,15 +119,21 @@ const PublicQuestsStack = StackNavigator({
   },
 });
 
-const myQuestStack = StackNavigator({
+const MyQuestsStack = StackNavigator({
   myQuest: {
     screen: MyQuestScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'My Quests',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <Hamburger navigation={navigation} />,
+    }),
   },
 });
 
 // screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
 const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
-const MyQuestsStack = screenToStack(myQuestStack, 'MyQuests', 'My Quests');
+// const MyQuestsStack = screenToStack(myQuestStack, 'MyQuests', 'My Quests');
 const CompletedQuestsStack = screenToStack(ToBeImplemented, 'CompletedQuests', 'Completed Quests');
 const SettingsStack = screenToStack(SettingsScreen, 'Settings', 'Settings');
 

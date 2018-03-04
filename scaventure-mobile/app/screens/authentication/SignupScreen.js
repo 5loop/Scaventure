@@ -35,11 +35,11 @@ class SignupScreen extends React.Component {
     const emailREGEX = /\S+@\S+\.\S+/;
 
     if (emailREGEX.test(String(email).toLowerCase()) === false) {
-      Alert.alert('Email is not valid.');
+      Alert.alert('Alert', 'Email is not valid.');
     } else if (!passwd || passwd.length < 6) {
-      Alert.alert('Password must have at least 6 characters/numbers.');
+      Alert.alert('Alert', 'Password must have at least 6 characters/numbers.');
     } else if (passwd !== cmPasswd) {
-      Alert.alert('Password does not match.');
+      Alert.alert('Alert', 'Password does not match.');
     } else {
       // Set Loader (some status indicating that HTTP call is in progress)
       this.setState({ textStatus: false });
@@ -47,12 +47,12 @@ class SignupScreen extends React.Component {
         { email: this.state.email, password: this.state.password }
       ).then(() => { 
         console.log('Logged in');
-        Alert.alert('Verification email sent. Please login to your email account and click link to confirm.');
+        Alert.alert('Info.', 'Verification email sent. Please login to your email account and click link to confirm.');
         // TODO @Yalong -> Navigate to 'We Sent you verification email screen'
         this.props.navigation.navigate('PublicQuests');
       }).catch((e) => { 
         // display error that could not login
-        Alert.alert('Something went wrong!');
+        Alert.alert('Error', 'Something went wrong!');
         console.log(e); 
       }).then(() => {
         // Release Loader (HTTP call has ended)

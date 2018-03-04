@@ -36,18 +36,18 @@ class LoginScreen extends React.Component {
     const emailREGEX = /\S+@\S+\.\S+/;
 
     if (emailREGEX.test(String(email).toLowerCase()) === false) {
-      Alert.alert('Email is not valid.');
+      Alert.alert('Alert', 'Email is not valid.');
     } else if (!passwd || passwd.length < 6) {
-      Alert.alert('Password must have at least 6 characters/numbers.');
+      Alert.alert('Alert', 'Password must have at least 6 characters/numbers.');
     } else {
       // Set Loader (some status indicating that HTTP call is in progress)
       this.setState({ textStatus: false });
       this.props.actions.loginUser({ email: this.state.email, password: this.state.password }).then(() => { 
         console.log('Logged in');
-        this.props.navigation.navigate('PublicQuests');
+        this.props.navigation.navigate('MyQuests');
       }).catch((e) => { 
         // display error that could not login
-        Alert.alert('Something went wrong!');
+        Alert.alert('Error', 'Something went wrong!');
         console.log(e); 
       }).then(() => {
         // Release Loader (HTTP call has ended)

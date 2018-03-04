@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, ListView, TouchableHighlight } from 'react-native';
+import { Text, View, StyleSheet, ListView, TouchableHighlight, Alert } from 'react-native';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -32,7 +32,15 @@ class MyQuestScreen extends React.Component {
   }
 
   onDeleteBtnPress() {
-    console.warn('on delete btn press');
+    Alert.alert(
+      'Warning!',
+      'Delete this quest?',
+      [
+        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ],
+      { cancelable: true }
+    );
   }
 
   onStepBtnPress() {

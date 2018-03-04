@@ -49,7 +49,7 @@ class SignupScreen extends React.Component {
         console.log('Logged in');
         Alert.alert('Info.', 'Verification email sent. Please login to your email account and click link to confirm.');
         // TODO @Yalong -> Navigate to 'We Sent you verification email screen'
-        this.props.navigation.navigate('PublicQuests');
+        this.props.navigation.navigate('Login');
       }).catch((e) => { 
         // display error that could not login
         Alert.alert('Error', 'Something went wrong!');
@@ -76,7 +76,7 @@ class SignupScreen extends React.Component {
         source={require('../../../assets/images/bg.png')}
       >
         <View style={styles.topRow}>
-          <Feather name="arrow-left" color={Colors.black} size={28} onPress={this.stackNav} />
+          <Feather name="arrow-left" color={Colors.black} size={28} onPress={this.stackNav} /> 
           <Text style={styles.title}>Sign Up</Text>
         </View>
 

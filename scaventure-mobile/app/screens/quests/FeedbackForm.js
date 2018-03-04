@@ -149,9 +149,9 @@ class FeedbackForm extends React.Component {
           ?
           <ActivityIndicator size="large" color={Colors.primaryColor} /> 
           : 
-          <TouchableHighlight style={styles.button}>
+          <TouchableHighlight style={styles.button} onPress={this.addFeedback.bind(this)}>
             <View>
-              <Text style={styles.buttonText} onPress={this.addFeedback.bind(this)}>Add New </Text>
+              <Text style={styles.buttonText}>Add New </Text>
             </View>
           </TouchableHighlight>
         }

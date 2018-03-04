@@ -114,7 +114,7 @@ class QuestRow extends React.Component {
               title="DELETE" 
               color="#FF9C59" 
               style={styles.moreButton}
-              onPress={() => this.props.onDeleteBtnPress(this.props.quest)}
+              onPress={() => this.props.onDeleteBtnPress(this.props.quest._id)}
             />
           </View>
           

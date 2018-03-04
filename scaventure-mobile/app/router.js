@@ -1,6 +1,7 @@
-import { DrawerNavigator, StackNavigator } from 'react-navigation';
+import { DrawerNavigator, StackNavigator, DrawerItems } from 'react-navigation';
+
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, SafeAreaView, Button, AsyncStorage } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 // STYLING //
@@ -8,16 +9,14 @@ import Colors from '../app/constants/colors';
 
 // //// SCREENS ////////
 import QuestScreen from './screens/quests/QuestScreen';
-import SettingsScreen from './screens/SettingsScreen';
 import QuestInfo from './screens/quests/QuestInfo';
 import QuestLocation from './screens/quests/QuestLocation';
 import AddQuest from './screens/quests/AddQuest';
-import LoginScreen from './screens/authentication/LoginScreen';
-import SignupScreen from './screens/authentication/SignupScreen';
-import RestorePwdScreen from './screens/authentication/RestorePwdScreen';
+
 import FeedbackForm from './screens/quests/FeedbackForm';
 import MyQuestScreen from './screens/quests/MyQuestScreen';
 import QuestStartLocation from './screens/gameplay/QuestStartLocation';
+import LogoutNavOption from './logout';
 
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
@@ -59,17 +58,55 @@ class ToBeImplemented extends React.Component {
   }
 }
 
-const AuthNavigation = StackNavigator({
-  Login: {
-    screen: LoginScreen,
-  },
-  Signup: {
-    screen: SignupScreen,
-  },
-  RestorePwd: {
-    screen: RestorePwdScreen,
-  },
-});
+const AddQuestStack = {
+  screen: AddQuest,
+  navigationOptions: ({ navigation }) => ({
+    title: 'Add Quest',
+    headerStyle,
+    headerTitleStyle,
+    headerLeft: <GoBack navigation={navigation} />,
+  }),
+};
+
+const QuestInfoStack = {
+  screen: QuestInfo,
+  navigationOptions: ({ navigation }) => ({
+    title: 'Quest Information',
+    headerStyle,
+    headerTitleStyle,
+    headerLeft: <GoBack navigation={navigation} />,
+  }),
+};
+
+const QuestLocationStack = {
+  screen: QuestLocation,
+  navigationOptions: ({ navigation }) => ({
+    title: 'Quest Location',
+    headerStyle,
+    headerTitleStyle,
+    headerLeft: <GoBack navigation={navigation} />,
+  }),
+};
+
+const FeedbackFormStack = {
+  screen: FeedbackForm,
+  navigationOptions: ({ navigation }) => ({
+    title: 'Add Feedback',
+    headerStyle,
+    headerTitleStyle,
+    headerLeft: <GoBack navigation={navigation} />,
+  }),
+};
+
+const QuestStartLocationStack = {
+  screen: QuestStartLocation,
+  navigationOptions: ({ navigation }) => ({
+    title: 'Quest Start Location',
+    headerStyle,
+    headerTitleStyle,
+    headerLeft: <GoBack navigation={navigation} />,
+  }),
+};
 
 // Stack appears on top of the screen
 const PublicQuestsStack = StackNavigator({
@@ -82,51 +119,11 @@ const PublicQuestsStack = StackNavigator({
       headerLeft: <Hamburger navigation={navigation} />,
     }),
   },
-  AddQuest: {
-    screen: AddQuest,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Add Quest',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
-  QuestInfo: {
-    screen: QuestInfo,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Quest Information',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
-  QuestLocation: {
-    screen: QuestLocation,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Quest Location',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
-  FeedbackForm: {
-    screen: FeedbackForm,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Add Feedback',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
-  QuestStartLocation: {
-    screen: QuestStartLocation,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Quest Start Location',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
+  AddQuest: AddQuestStack,
+  QuestInfo: QuestInfoStack,
+  QuestLocation: QuestLocationStack,
+  FeedbackForm: FeedbackFormStack,
+  QuestStartLocation: QuestStartLocationStack,
 });
 
 const MyQuestsStack = StackNavigator({
@@ -139,15 +136,11 @@ const MyQuestsStack = StackNavigator({
       headerLeft: <Hamburger navigation={navigation} />,
     }),
   },
-  QuestInfo: {
-    screen: QuestInfo,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Quest Information',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
+  AddQuest: AddQuestStack,
+  QuestInfo: QuestInfoStack,
+  QuestLocation: QuestLocationStack,
+  FeedbackForm: FeedbackFormStack,
+  QuestStartLocation: QuestStartLocationStack,
 });
 
 // screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
@@ -156,9 +149,6 @@ const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Priv
 const CompletedQuestsStack = screenToStack(ToBeImplemented, 'CompletedQuests', 'Completed Quests');
 
 export default DrawerNavigator({
-  Login: {
-    screen: AuthNavigation,
-  },
   PublicQuests: {
     screen: PublicQuestsStack,
   },
@@ -170,7 +160,23 @@ export default DrawerNavigator({
     activeTintColor: Colors.primaryColor,
     style: {
       flex: 1,
-      paddingTop: 15,
+      paddingTop: 30,
     },
   },
-});
+  contentComponent: (props) => (
+    <LogoutNavOption drawer={props} />
+  ),
+  drawerOpenRoute: 'DrawerOpen',
+  drawerCloseRoute: 'DrawerClose',
+  drawerToggleRoute: 'DrawerToggle',
+}
+);
+
+    /*
+    <View style={{ flex:1, paddingTop: 15 }}>
+      <SafeAreaView>
+        <DrawerItems {...props} />
+        <Button title="Logout" onPress={() => AsyncStorage.removeItem('@app:token') } />
+      </SafeAreaView>
+    </View>
+    */

@@ -48,10 +48,11 @@ class LoginScreen extends React.Component {
       }).catch((e) => { 
         // display error that could not login
         Alert.alert('Error', 'Something went wrong!');
+        this.setState({ textStatus: true });
         console.log(e); 
       }).then(() => {
         // Release Loader (HTTP call has ended)
-        this.setState({ textStatus: true });
+        // this.setState({ textStatus: true });
       });
     }
   }
@@ -72,8 +73,7 @@ class LoginScreen extends React.Component {
         source={require('../../../assets/images/bg.png')}
       >
         <View style={styles.topRow}>
-          <Feather name="menu" color={Colors.black} size={28} onPress={this.stackNav} />
-          <Text style={styles.title}>Login</Text>
+          {/* <Feather name="menu" color={Colors.black} size={28} onPress={this.stackNav} /> */}
         </View>
 
         <Image

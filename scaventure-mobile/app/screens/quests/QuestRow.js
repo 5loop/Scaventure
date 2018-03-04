@@ -88,7 +88,7 @@ class QuestRow extends React.Component {
         
         <View style={styles.contentRow}>
             <View style={styles.icon}>
-            
+
             </View>
             <View style={styles.description}>
               <Text numberOfLines={3} >{this.props.quest.description} </Text>
@@ -110,7 +110,7 @@ class QuestRow extends React.Component {
               title="Play Quest" 
               color="#7bae6dff" 
               style={styles.playButton}
-              onPress={() => console.log('To be implemented!')}
+              onPress={() => this.props.onPlayBttnPress(this.props.quest)}
             />
           </View>
         

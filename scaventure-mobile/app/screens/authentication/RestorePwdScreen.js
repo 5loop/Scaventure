@@ -43,7 +43,7 @@ class RestorePwdScreen extends React.Component {
         source={require('../../../assets/images/bg.png')}
       >
         <View style={styles.topRow}>
-          <Feather name="arrow-left" color={Colors.black} size={28} onPress={this.stackNav} />
+          <Feather name="arrow-left" color={Colors.black} size={28} onPress={this.stackNav} /> 
           <Text style={styles.title}>Reset Password</Text>
         </View>
 

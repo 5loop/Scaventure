@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import QuestRow from './MyQuestRow';
 import Colors from '../../constants/colors';
-import { getMyQuests } from '../../actions/questActions';
+import { getMyQuests, deleteQuest } from '../../actions/questActions';
 
 class MyQuestScreen extends React.Component {
   constructor(props, context) {
@@ -31,13 +31,13 @@ class MyQuestScreen extends React.Component {
     console.warn('to be implemented');
   }
 
-  onDeleteBtnPress() {
+  onDeleteBtnPress(questId) {
     Alert.alert(
       'Warning!',
       'Delete this quest?',
       [
         { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
+        { text: 'OK', onPress: () => this.props.deleteQuest(questId) },
       ],
       { cancelable: true }
     );
@@ -106,7 +106,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getMyQuests }, dispatch);
+  return bindActionCreators({ getMyQuests, deleteQuest }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyQuestScreen);

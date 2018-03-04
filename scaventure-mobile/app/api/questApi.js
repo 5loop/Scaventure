@@ -10,6 +10,10 @@ class QuestApi {
     return axios.get(`${apiUrl}/api/quests?type=user`);
   }
 
+  static deleteQuest(questId) {
+    return axios.delete(`${apiUrl}/api/quests/${questId}`);
+  }
+
   static getFeedbacks(questId) {
     return axios.get(`${apiUrl}/api/quests/${questId}/feedbacks`);
   }

@@ -56,9 +56,17 @@ class QuestScreen extends React.Component {
     this.props.navigation.navigate('QuestInfo', { quest });
   }
 
+  onPlayBttnPress(quest) {
+    this.props.navigation.navigate('QuestStartLocation', { quest });
+  }
+
   renderRow(quest) {
     return (
-      <QuestRow quest={quest} onInfoBttnPress={this.onInfoBttnPress.bind(this)} />
+      <QuestRow 
+        quest={quest} 
+        onInfoBttnPress={this.onInfoBttnPress.bind(this)} 
+        onPlayBttnPress={this.onPlayBttnPress.bind(this)}
+      />
     );
   }
 

@@ -13,10 +13,11 @@ export function loginUser({ email, password }) {
     new Promise((resolve, reject) => {
       AuthApi.login({ email, password }).then(response => {
         // localStorage.setItem('token', response.data.token);
-        AsyncStorage.setItem('@app:token', response.data.token);
-        dispatch({ type: AUTH_USER });
-        axios.defaults.headers.common.Authorization = response.data.token;
-        resolve();
+        AsyncStorage.setItem('@app:token', response.data.token).then(()=> {
+          axios.defaults.headers.common.Authorization = response.data.token;
+          dispatch({ type: AUTH_USER });
+          resolve();  
+        });
 
         // AsyncStorage.getItem('@app:token').then(token => {
         //   console.log(token);
@@ -34,10 +35,11 @@ export function updateUser({ email, password }) {
     new Promise((resolve, reject) => {
       AuthApi.update({ email, password }).then(response => {
         // localStorage.setItem('token', response.data.token);
-        AsyncStorage.setItem('@app:token', response.data.token);
-        dispatch({ type: AUTH_USER });
-        axios.defaults.headers.common.Authorization = response.data.token;
-        resolve();   
+        AsyncStorage.setItem('@app:token', response.data.token).then(()=> {
+          axios.defaults.headers.common.Authorization = response.data.token;
+          dispatch({ type: AUTH_USER });
+          resolve();  
+        });
       }).catch((error) => {
         reject(error);
       });
@@ -48,10 +50,7 @@ export function registerUser({ email, password, username }) {
   return dispatch => 
     new Promise((resolve, reject) => {
       AuthApi.register({ email, password, username }).then(response => {
-        AsyncStorage.setItem('@app:token', response.data.token);
-        dispatch({ type: AUTH_USER });
-        axios.defaults.headers.common.Authorization = response.data.token;
-        resolve();
+        resolve(); 
       }).catch((error) => {
         reject(error);
       });
@@ -61,7 +60,7 @@ export function registerUser({ email, password, username }) {
 export function logoutUser() {
   return function (dispatch) {
     return new Promise((resolve) => {
-      AsyncStorage.clear('@app:token');
+      AsyncStorage.removeItem('@app:token');
       dispatch({ type: UNAUTH_USER });
       resolve();
     });

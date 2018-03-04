@@ -1,12 +1,13 @@
 import QuestApi from '../api/questApi';
 import * as types from '../constants/actionTypes';
+import { ajaxCallError } from './ajaxStatusActions';
 
 export function getQuests() {
   return dispatch => 
     QuestApi.getQuests().then(res => {
       dispatch({ type: types.LOAD_QUESTS_SUCCESS, quests: res.data.quests });
     }).catch(e => {
-      console.log(e);
+      dispatch(ajaxCallError(e));
     });
 }
 
@@ -16,6 +17,16 @@ export function getMyQuests() {
       dispatch({ type: types.LOAD_QUESTS_SUCCESS, quests: res.data.quests });
     }).catch(e => {
       console.log(e); 
+    });
+}
+
+export function deleteQuest(questId) {
+  return dispatch =>
+    QuestApi.deleteQuest(questId).then(res => {
+      dispatch({ type: types.DELETE_QUEST_SUCCESS });
+      dispatch(getMyQuests());
+    }).catch(e => {
+      dispatch(ajaxCallError(e)); 
     });
 }
 

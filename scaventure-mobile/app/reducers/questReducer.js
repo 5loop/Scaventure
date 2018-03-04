@@ -11,6 +11,19 @@ export function questReducer(state = initialState.quests, action) {
   }
 }
 
+export function authenticated(state = { authenticated: false }, action) {
+  switch (action.type) {
+    case types.UNAUTH_USER:
+      state = Object.assign({}, state, { authenticated: false });
+      return state;
+    case types.AUTH_USER:
+      state = Object.assign({}, state, { authenticated: true });
+      return state;
+    default:
+      return state;
+  }
+}
+
 export function feedbackReducer(state = initialState.feedbacks, action) {
   switch (action.type) {
     case types.LOAD_FEEDBACKS_SUCCESS:

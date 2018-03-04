@@ -24,3 +24,17 @@ export function getOneQuest(id) {
     }, 2000);
   };
 }
+
+export function addQuest(data) {
+  return dispatch => {
+    return QuestApi.addQuest(data).then(res => {
+      dispatch(getQuests());
+    }).catch(e => {
+      console.log(e);
+    });
+    // setTimeout(() => {
+    //   const quests = Data.quests;
+    //   dispatch({ type: LOAD_QUESTS_SUCCESS, quests });
+    // }, 2000);
+  };
+}

@@ -55,6 +55,8 @@ export const addQuest = async (req, res) => {
 
   // id of the logged-in user
   const userId = req.user._id;
+  console.log(req.body);
+
   try {
 
     // get body of the request
@@ -67,6 +69,7 @@ export const addQuest = async (req, res) => {
 
     return res.status(200).json({ error: false, quest: await quest.save()});
   } catch (e) {
+    console.log(e);
     return res.status(500).json({ error: true, message: 'Error occured while adding new quest' });
   }
 }

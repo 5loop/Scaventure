@@ -6,6 +6,10 @@ class QuestApi {
     return axios.get(`${apiUrl}/api/quests?type=public`);
   }
 
+  static getMyQuests() {
+    return axios.get(`${apiUrl}/api/quests?type=user`);
+  }
+
   static getFeedbacks(questId) {
     return axios.get(`${apiUrl}/api/quests/${questId}/feedbacks`);
   }

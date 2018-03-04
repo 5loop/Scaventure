@@ -16,6 +16,7 @@ import LoginScreen from './screens/authentication/LoginScreen';
 import SignupScreen from './screens/authentication/SignupScreen';
 import RestorePwdScreen from './screens/authentication/RestorePwdScreen';
 import FeedbackForm from './screens/quests/FeedbackForm';
+import MyQuestScreen from './screens/quests/MyQuestScreen';
 import QuestStartLocation from './screens/gameplay/QuestStartLocation';
 
 // The drawer top-icon 
@@ -128,9 +129,30 @@ const PublicQuestsStack = StackNavigator({
   },
 });
 
+const MyQuestsStack = StackNavigator({
+  myQuest: {
+    screen: MyQuestScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'My Quests',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <Hamburger navigation={navigation} />,
+    }),
+  },
+  QuestInfo: {
+    screen: QuestInfo,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Quest Information',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+});
+
 // screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
 const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
-const MyQuestsStack = screenToStack(ToBeImplemented, 'MyQuests', 'My Quests');
+// const MyQuestsStack = screenToStack(myQuestStack, 'MyQuests', 'My Quests');
 const CompletedQuestsStack = screenToStack(ToBeImplemented, 'CompletedQuests', 'Completed Quests');
 
 export default DrawerNavigator({

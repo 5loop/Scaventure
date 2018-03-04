@@ -10,6 +10,15 @@ export function getQuests() {
     });
 }
 
+export function getMyQuests() {
+  return dispatch =>
+    QuestApi.getMyQuests().then(res => {
+      dispatch({ type: types.LOAD_QUESTS_SUCCESS, quests: res.data.quests });
+    }).catch(e => {
+      console.log(e); 
+    });
+}
+
 export function getFeedbacks(questId) {
   return dispatch => 
     QuestApi.getFeedbacks(questId).then(res => {

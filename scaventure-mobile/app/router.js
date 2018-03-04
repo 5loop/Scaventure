@@ -139,6 +139,15 @@ const MyQuestsStack = StackNavigator({
       headerLeft: <Hamburger navigation={navigation} />,
     }),
   },
+  QuestInfo: {
+    screen: QuestInfo,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Quest Information',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
 });
 
 // screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');

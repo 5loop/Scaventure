@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { addQuest } from '../../actions/questActions';
 
 
+
 const SCREEN_HEIGHT = height
 const SCREEN_WIDTH = width
 const ASPECT_RATIO = width/height

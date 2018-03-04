@@ -1,7 +1,7 @@
-import { DrawerNavigator, StackNavigator, DrawerItems } from 'react-navigation';
+import { DrawerNavigator, StackNavigator } from 'react-navigation';
 
 import React from 'react';
-import { Text, View, SafeAreaView, Button, AsyncStorage } from 'react-native';
+import { Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 // STYLING //
@@ -17,6 +17,8 @@ import FeedbackForm from './screens/quests/FeedbackForm';
 import MyQuestScreen from './screens/quests/MyQuestScreen';
 import QuestStartLocation from './screens/gameplay/QuestStartLocation';
 import LogoutNavOption from './logout';
+import QuestStepList from './screens/questSteps/QuestStepList';
+import EditStep from './screens/questSteps/EditStep';
 
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
@@ -141,6 +143,24 @@ const MyQuestsStack = StackNavigator({
   QuestLocation: QuestLocationStack,
   FeedbackForm: FeedbackFormStack,
   QuestStartLocation: QuestStartLocationStack,
+  QuestStepList: {
+    screen: QuestStepList,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Step List',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  EditStep: {
+    screen: EditStep,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Edit Step',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
 });
 
 // screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
@@ -151,7 +171,7 @@ const CompletedQuestsStack = screenToStack(ToBeImplemented, 'CompletedQuests', '
 export default DrawerNavigator({
   PublicQuests: {
     screen: PublicQuestsStack,
-  },
+  },  
   MyQuests: {
     screen: MyQuestsStack,
   },
@@ -171,12 +191,3 @@ export default DrawerNavigator({
   drawerToggleRoute: 'DrawerToggle',
 }
 );
-
-    /*
-    <View style={{ flex:1, paddingTop: 15 }}>
-      <SafeAreaView>
-        <DrawerItems {...props} />
-        <Button title="Logout" onPress={() => AsyncStorage.removeItem('@app:token') } />
-      </SafeAreaView>
-    </View>
-    */

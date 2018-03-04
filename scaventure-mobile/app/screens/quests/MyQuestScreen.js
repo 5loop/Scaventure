@@ -28,7 +28,7 @@ class MyQuestScreen extends React.Component {
   }
 
   onEditBtnPress() {
-    console.warn('on edit btn press');
+    console.warn('to be implemented');
   }
 
   onDeleteBtnPress(questId) {
@@ -43,8 +43,8 @@ class MyQuestScreen extends React.Component {
     );
   }
 
-  onStepBtnPress() {
-    console.warn('on step btn press');
+  onStepBtnPress(quest) {
+    this.props.navigation.navigate('QuestStepList', { quest });
   }
 
   renderRow(quest) {

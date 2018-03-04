@@ -4,8 +4,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';  
 
 import {
-  Text, TextInput, View, StyleSheet,
-  Image, ImageBackground, TouchableOpacity,
+  Text, TextInput, View, StyleSheet, ActivityIndicator,
+  Image, ImageBackground, TouchableOpacity, Alert,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
@@ -20,23 +20,40 @@ class LoginScreen extends React.Component {
     title: 'Login',
     header: null,
   };
+  constructor() {
+    super();
+    this.state = {
+      textStatus: true,
+    };
+  }
   stackNav = () => {
     this.props.navigation.navigate('DrawerOpen');
   }
-
   btnPressed = () => {
-    // TODO @Yalong -> Validate input, set error & return if not valid
-    // TODO @Yalong -> Set Loader (some status indicating that HTTP call is in progress)
+    // Validate input, set error & return if not valid
+    const email = this.state.email;
+    const passwd = this.state.password;
+    const emailREGEX = /\S+@\S+\.\S+/;
 
-    this.props.actions.loginUser({ email: this.state.user, password: this.state.password }).then(() => { 
-      console.log('Logged in');
-      this.props.navigation.navigate('PublicQuests');
-    }).catch((e) => { 
-      // TODO @Yalong -> display error that could not login
-      console.log(e); 
-    }).then(() => {
-      // TODO @Yalong -> Release Loader (HTTP call has ended)
-    });
+    if (emailREGEX.test(String(email).toLowerCase()) === false) {
+      Alert.alert('Alert', 'Email is not valid.');
+    } else if (!passwd || passwd.length < 6) {
+      Alert.alert('Alert', 'Password must have at least 6 characters/numbers.');
+    } else {
+      // Set Loader (some status indicating that HTTP call is in progress)
+      this.setState({ textStatus: false });
+      this.props.actions.loginUser({ email: this.state.email, password: this.state.password }).then(() => { 
+        console.log('Logged in');
+        this.props.navigation.navigate('MyQuests');
+      }).catch((e) => { 
+        // display error that could not login
+        Alert.alert('Error', 'Something went wrong!');
+        console.log(e); 
+      }).then(() => {
+        // Release Loader (HTTP call has ended)
+        this.setState({ textStatus: true });
+      });
+    }
   }
 
   render() {
@@ -65,12 +82,12 @@ class LoginScreen extends React.Component {
         />
 
         <View style={[styles.inputField, styles.inputMargin]}>
-          <Feather name="user" color={Colors.black} size={28} />
+          <Feather name="mail" color={Colors.black} size={28} />
           <TextInput
             underlineColorAndroid='transparent'
             style={styles.textIpt}
-            placeholder='Username'
-            onChangeText={(user) => this.setState({ user })}
+            placeholder='Email'
+            onChangeText={(email) => this.setState({ email })}
           />
         </View>
 
@@ -87,8 +104,10 @@ class LoginScreen extends React.Component {
           <Text style={styles.forgot} onPress={() => navigate('RestorePwd')}>Forgot?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.btn, styles.signinBtn]} onPress={this.btnPressed}>
-          <Text style={styles.btnText}>Sign in</Text>
+        <TouchableOpacity style={[styles.btn, styles.signinBtn]} onPress={this.btnPressed.bind(this)}>
+          { this.state.textStatus 
+            ? <Text style={styles.btnText}>Sign in</Text> 
+            : <ActivityIndicator style={styles.loading} size="small" color="#00ff00" /> }
         </TouchableOpacity>
 
         <Text style={styles.caption}>Don't have account yet?</Text>
@@ -153,6 +172,18 @@ const styles = StyleSheet.create({
   btnText: {
     color: Colors.white,
     fontSize: 16,
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   signinBtn: {
     backgroundColor: Colors.primaryColor,

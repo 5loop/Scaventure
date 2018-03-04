@@ -9,6 +9,11 @@ import { loginUser } from './app/actions/sessionActions';
 
 store.dispatch(loginUser({ email: 'scaventure@scv.com', password: 'testtest' }));
 
+// for debug
+// import { loginUser } from './app/actions/sessionActions';
+
+// store.dispatch(loginUser({ email: 'scaventure@scv.com', password: 'testtest' }));
+
 // global axios settings
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 

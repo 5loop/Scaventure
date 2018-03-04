@@ -45,7 +45,8 @@ class QuestStepList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getSteps('5a9b036cd0710833383daedc'); 
+    const { quest } = this.props.navigation.state.params;
+    this.props.getSteps(quest._id); 
   }
 
   onBttnPress() {
@@ -67,6 +68,7 @@ class QuestStepList extends React.Component {
   }
 
   render() {
+    //const { steps } = this.props.navigation.state.params;
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>

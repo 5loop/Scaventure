@@ -150,28 +150,26 @@ const MyQuestsStack = StackNavigator({
       headerLeft: <GoBack navigation={navigation} />,
     }),
   },
+  QuestStepList: {
+    screen: QuestStepList,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Step List',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  EditStep: {
+    screen: EditStep,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Edit Step',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
 });
 
-const StepStack = StackNavigator({
-QuestStep: {
-  screen: QuestStepList,
-  navigationOptions: ({ navigation }) => ({
-    title: 'Step List',
-    headerStyle,
-    headerTitleStyle,
-    headerLeft: <Hamburger navigation={navigation} />,
-  }),
-},
-EditStep: {
-  screen: EditStep,
-  navigationOptions: ({ navigation }) => ({
-    title: 'Edit Step',
-    headerStyle,
-    headerTitleStyle,
-    headerLeft: <GoBack navigation={navigation} />,
-  }),
-},
-});
 
 // screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
 const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
@@ -184,10 +182,7 @@ export default DrawerNavigator({
   },
   PublicQuests: {
     screen: PublicQuestsStack,
-  },
-  StepList: {
-    screen: StepStack,
-  },
+  },  
   MyQuests: {
     screen: MyQuestsStack,
   },

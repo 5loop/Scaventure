@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginLeft: 20,
     marginRight: 20,
-    height:175,
+    height:100,
   },
   label: {
     fontSize: 20,
@@ -78,39 +78,31 @@ const styles = StyleSheet.create({
     backgroundColor:'#EAEAEA',
   },
 });
-class QuestRow extends React.Component {
+class StepRow extends React.Component {
 
   render() {
     return ( 
       <View style={styles.container}>
       
-        <Text style={styles.label}> {this.props.quest.title} </Text>
+        <Text style={styles.label}> {this.props.step.description} </Text>       
         
-        <View style={styles.contentRow}>
-            <View style={styles.icon}>
-
-            </View>
-            <View style={styles.description}>
-              <Text numberOfLines={3} >{this.props.quest.description} </Text>
-            </View>
-        </View>
         <View style={styles.buttonRow}>
           
           <View style={styles.buttonItem}>
             <Button 
-              title="More info" 
+              title="Edit step" 
               color="#FF9C59" 
               style={styles.moreButton}
-              onPress={() => this.props.onInfoBttnPress(this.props.quest)}
+              onPress={() => this.props.onEditBttnPress(this.props.step)}
             />
           </View>
           
           <View style={styles.buttonItem}>
             <Button 
-              title="Play Quest" 
+              title="Delete Step" 
               color="#7bae6dff" 
               style={styles.playButton}
-              onPress={() => this.props.onPlayBttnPress(this.props.quest)}
+              onPress={() => console.log('To be implemented!')}
             />
           </View>
         
@@ -121,4 +113,4 @@ class QuestRow extends React.Component {
   }
 }
 
-export default QuestRow;
+export default StepRow;

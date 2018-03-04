@@ -6,10 +6,10 @@ import { connect } from 'react-redux';
 
 /* -- Local imports -- */
 /* ------------------- */
-import QuestRow from './QuestRow';
+import StepRow from './StepRow';
 import Colors from '../../constants/colors';
 /* -- Actions */
-import { getQuests } from '../../actions/questActions';
+import { getSteps } from '../../actions/questActions';
 
 const styles = StyleSheet.create({
   container: {
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class QuestScreen extends React.Component {
+class QuestStepList extends React.Component {
   constructor(props, context) {
     super(props, context);
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
@@ -45,43 +45,41 @@ class QuestScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getQuests(); 
+    const { quest } = this.props.navigation.state.params;
+    this.props.getSteps(quest._id); 
   }
 
   onBttnPress() {
-    this.props.navigation.navigate('AddQuest');
+    this.props.navigation.navigate('AddStep');
   }
 
-  onInfoBttnPress(quest) {
-    this.props.navigation.navigate('QuestInfo', { quest });
+  onEditBttnPress(step) {
+    this.props.navigation.navigate('EditStep', { step });
   }
 
-  onPlayBttnPress(quest) {
-    this.props.navigation.navigate('QuestStartLocation', { quest });
+  onDelBttnPress(step) {
+    this.props.navigation.navigate('DeleteStep', { step });
   }
 
-  renderRow(quest) {
+  renderRow(step) {
     return (
-      <QuestRow 
-        quest={quest} 
-        onInfoBttnPress={this.onInfoBttnPress.bind(this)} 
-        onPlayBttnPress={this.onPlayBttnPress.bind(this)}
-      />
+      <StepRow step={step} onEditBttnPress={this.onEditBttnPress.bind(this)} />
     );
   }
 
   render() {
+    //const { steps } = this.props.navigation.state.params;
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <ListView
           enableEmptySections
-          dataSource={this.state.ds.cloneWithRows(this.props.quests)}
-          key={this.props.quests}
+          dataSource={this.state.ds.cloneWithRows(this.props.steps)}
+          key={this.props.steps}
           renderRow={this.renderRow.bind(this)}
         />
-        <TouchableHighlight style={styles.button} onPress={this.onBttnPress.bind(this)}>
-          <Text style={styles.buttonText}>Add New</Text>
+        <TouchableHighlight style={styles.button}>
+          <Text style={styles.buttonText} onPress={this.onBttnPress.bind(this)}>Add New</Text>
         </TouchableHighlight>
       </View>
     );
@@ -90,13 +88,13 @@ class QuestScreen extends React.Component {
 
 function mapStateToProps(state, props) {
   return {
-    quests: state.quests.quests,
-    questsLoading: state.quests.loading,
+    steps: state.steps.steps,
+    stepsLoading: state.steps.loading,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getQuests }, dispatch);
+  return bindActionCreators({ getSteps }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(QuestScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(QuestStepList);

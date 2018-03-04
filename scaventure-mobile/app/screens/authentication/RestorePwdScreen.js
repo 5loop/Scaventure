@@ -15,6 +15,12 @@ class RestorePwdScreen extends React.Component {
     title: 'RestorePwd',
     header: null,
   };
+  constructor() {
+    super();
+    this.state = {
+      fieldsStatus: false,
+    };
+  }
   stackNav = () => {
     this.props.navigation.goBack(null);
   }
@@ -74,7 +80,7 @@ class RestorePwdScreen extends React.Component {
         </View>
 
         <TouchableOpacity style={[styles.btn, styles.confirmBtn]} onPress={this.btnPressed}>
-          <Text style={styles.btnText}>Confirm</Text>
+          <Text style={styles.btnText}>Send Code</Text>
         </TouchableOpacity>
 
         {/* <View style={[styles.btn, styles.confirmBtn]}>

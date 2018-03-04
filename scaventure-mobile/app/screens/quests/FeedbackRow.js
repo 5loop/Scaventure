@@ -3,7 +3,6 @@ import { Text, View, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Colors from '../../constants/colors';
 
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
@@ -17,12 +16,11 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   description: {
-    padding: 20,
+    padding: 15,
   },
   separator: {
     backgroundColor: Colors.tertiaryColor,
-    height: 20,
-    padding: 15,
+    padding: 6,
     justifyContent: 'center',
   },
   title: {
@@ -41,13 +39,13 @@ class FeedbackRow extends React.Component {
     return ( 
       <View style={styles.container}>
         <View style={styles.separator}>
-          <Text style={styles.title}> {this.props.feedback.title} {' '}
+          <Text style={styles.title}>{this.props.feedback.title} {' '}
             {[...Array(this.props.feedback.numStars)].map((e, i) => <Feather name="star" color={Colors.white} size={17} key={i} />)}
           </Text>
           
         </View>
         <View style={styles.description}>
-          <Text style={styles.descriptionText}> {this.props.feedback.description} </Text>
+          <Text style={styles.descriptionText}>{this.props.feedback.description} </Text>
         </View>
       </View>
     );

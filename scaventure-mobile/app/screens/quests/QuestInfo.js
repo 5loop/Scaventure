@@ -1,9 +1,14 @@
 import React from 'react';
 import { ImageBackground, View, ScrollView, Text, ListView, TouchableHighlight, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
 // Local Imports
 import Colors from '../../constants/colors';
 import FeedbackRow from './FeedbackRow';
+import { getFeedbacks } from '../../actions/questActions';
 
 const styles = StyleSheet.create({
   container: {
@@ -57,19 +62,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const feedbacks = [
-  {
-    title: 'This quest is meh',
-    description: 'Really Mediocre',
-    numStars: 2,
-  },
-  {
-    title: 'Could be worse',
-    description: 'Needs more qr codes and better description, I cannot read latin!',
-    numStars: 4,
-  },
-];
-
 class QuestInfo extends React.Component {
 
   constructor(props, context) {
@@ -79,17 +71,28 @@ class QuestInfo extends React.Component {
       ds,
     };
   }
+
+  componentDidMount() {
+    const { quest } = this.props.navigation.state.params;
+    this.props.getFeedbacks(quest._id); 
+  }
   
   showMap() {
     const { quest } = this.props.navigation.state.params;
     this.props.navigation.navigate('QuestLocation', { longitude: quest.loc.coordinates[1], latitude: quest.loc.coordinates[0] });
   }
   
+  startGame() {
+    const { quest } = this.props.navigation.state.params;
+    this.props.navigation.navigate('QuestStartLocation', { quest });
+  }
+
   renderFeedbackRow(feedback) {
     return (
       <FeedbackRow feedback={feedback} />
     );
   }
+
   render() {
     const { quest } = this.props.navigation.state.params;
     return ( 
@@ -103,12 +106,12 @@ class QuestInfo extends React.Component {
               style={styles.roundButton}
               underlayColor='#fff'
             >
-              <Feather name="play" color={Colors.white} size={20} />
+              <Feather name="play" color={Colors.white} size={20} onPress={this.startGame.bind(this)} />
             </TouchableHighlight>
             <TouchableHighlight
               style={styles.roundButton}
               underlayColor='#fff'
-              onPress={() => this.props.navigation.navigate('FeedbackForm')}
+              onPress={() => this.props.navigation.navigate('FeedbackForm', { questId: quest._id })}
             >
               <Feather name="message-circle" color={Colors.white} size={20} />       
             </TouchableHighlight>
@@ -131,8 +134,8 @@ class QuestInfo extends React.Component {
         </View>
         <ListView
           enableEmptySections
-          dataSource={this.state.ds.cloneWithRows(feedbacks)}
-          key={feedbacks}
+          dataSource={this.state.ds.cloneWithRows(this.props.feedbacks)}
+          key={this.props.feedbacks}
           renderRow={this.renderFeedbackRow.bind(this)}
         />
       </ScrollView>
@@ -140,4 +143,18 @@ class QuestInfo extends React.Component {
   }
 }
 
-export default QuestInfo;
+// export default QuestInfo;
+
+function mapStateToProps(state, props) {
+
+  return {
+    feedbacks: state.feedbacks.feedbacks,
+    feedbacksLoading: state.feedbacks.loading,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ getFeedbacks }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuestInfo);

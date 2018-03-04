@@ -72,8 +72,8 @@ class QuestScreen extends React.Component {
           key={this.props.quests}
           renderRow={this.renderRow.bind(this)}
         />
-        <TouchableHighlight style={styles.button}>
-          <Text style={styles.buttonText} onPress={this.onBttnPress.bind(this)}>Add New</Text>
+        <TouchableHighlight style={styles.button} onPress={this.onBttnPress.bind(this)}>
+          <Text style={styles.buttonText}>Add New</Text>
         </TouchableHighlight>
       </View>
     );

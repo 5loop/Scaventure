@@ -7,7 +7,15 @@ import Router from './app/router';
 import store from './app/store';
 import { loginUser } from './app/actions/sessionActions';
 
+<<<<<<< HEAD
 store.dispatch(loginUser({ email: 'scaventure@scv.com', password: 'testtest' }));
+=======
+// for debug
+// import { loginUser } from './app/actions/sessionActions';
+
+// store.dispatch(loginUser({ email: 'scaventure@scv.com', password: 'testtest' }));
+
+>>>>>>> b25ce627ee2ab6325eb8ac53bea761f6451212eb
 // global axios settings
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 

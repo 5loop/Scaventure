@@ -26,7 +26,7 @@ export function deleteQuest(questId) {
       dispatch({ type: types.DELETE_QUEST_SUCCESS });
       dispatch(getMyQuests());
     }).catch(e => {
-      dispatch(ajaxCallError(e)); 
+      console.log(e); 
     });
 }
 

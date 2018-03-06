@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 
 import axios from 'axios';
 import store from './app/store';
+import Layout from './app/layout';
+
 //import { loginUser } from './app/actions/sessionActions';
 
 //store.dispatch(loginUser({ email: 'parth95.patel@gmail.com', password: 'testtest123' }));

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import * as FeedbackController from './feedbackController';
 import * as QuestController from './questController';
 import * as StepController from './stepController';
-import * as InviteController from './InviteController';
+import * as InviteController from './inviteController';
 import * as HintController from './hintController';
 //  import * as FeedbackController from './feedbackController';
 //  import * as InvitationController from './invitationController';

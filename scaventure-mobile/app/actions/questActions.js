@@ -26,7 +26,7 @@ export function deleteQuest(questId) {
       dispatch({ type: types.DELETE_QUEST_SUCCESS });
       dispatch(getMyQuests());
     }).catch(e => {
-      dispatch(ajaxCallError(e)); 
+      console.log(e); 
     });
 }
 
@@ -56,4 +56,18 @@ export function getSteps(questId) {
     }).catch(e => {
       console.log(e);
     });
+}
+
+export function addQuest(data) {
+  return dispatch => {
+    return QuestApi.addQuest(data).then(res => {
+      dispatch(getQuests());
+    }).catch(e => {
+      console.log(e);
+    });
+    // setTimeout(() => {
+    //   const quests = Data.quests;
+    //   dispatch({ type: LOAD_QUESTS_SUCCESS, quests });
+    // }, 2000);
+  };
 }

@@ -4,16 +4,11 @@ import { Provider } from 'react-redux';
 
 import axios from 'axios';
 import store from './app/store';
-import { loginUser } from './app/actions/sessionActions';
 import Layout from './app/layout';
 
-// store.dispatch(loginUser({ email: 'scaventure@scv.com', password: 'testtest' }));
+//import { loginUser } from './app/actions/sessionActions';
 
-// for debug
-// import { loginUser } from './app/actions/sessionActions';
-
-// store.dispatch(loginUser({ email: 'scaventure@scv.com', password: 'testtest' }));
-
+//store.dispatch(loginUser({ email: 'parth95.patel@gmail.com', password: 'testtest123' }));
 // global axios settings
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 

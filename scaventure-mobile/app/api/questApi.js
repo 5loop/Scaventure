@@ -6,6 +6,10 @@ class QuestApi {
     return axios.get(`${apiUrl}/api/quests?type=public`);
   }
 
+  static addQuest(data) {
+    return axios.post(`${apiUrl}/api/quests`, data);
+  }
+  
   static getMyQuests() {
     return axios.get(`${apiUrl}/api/quests?type=user`);
   }

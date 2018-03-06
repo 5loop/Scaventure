@@ -14,6 +14,7 @@ import QuestLocation from './screens/quests/QuestLocation';
 import AddQuest from './screens/quests/AddQuest';
 
 import FeedbackForm from './screens/quests/FeedbackForm';
+import AddQAStep from './screens/quests/AddQAStep';
 import MyQuestScreen from './screens/quests/MyQuestScreen';
 import QuestStartLocation from './screens/gameplay/QuestStartLocation';
 import LogoutNavOption from './logout';
@@ -121,6 +122,61 @@ const PublicQuestsStack = StackNavigator({
       headerLeft: <Hamburger navigation={navigation} />,
     }),
   },
+
+  AddQuest: {
+    screen: AddQuest,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Add Quest',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  QuestInfo: {
+    screen: QuestInfo,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Quest Information',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  QuestLocation: {
+    screen: QuestLocation,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Quest Location',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  FeedbackForm: {
+    screen: FeedbackForm,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Add Feedback',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  AddQAStep: {
+    screen: AddQAStep,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Add QA Step',  
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  QuestStartLocation: {
+    screen: QuestStartLocation,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Quest Start Location',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
   AddQuest: AddQuestStack,
   QuestInfo: QuestInfoStack,
   QuestLocation: QuestLocationStack,
@@ -137,12 +193,7 @@ const MyQuestsStack = StackNavigator({
       headerTitleStyle,
       headerLeft: <Hamburger navigation={navigation} />,
     }),
-  },
-  AddQuest: AddQuestStack,
-  QuestInfo: QuestInfoStack,
-  QuestLocation: QuestLocationStack,
-  FeedbackForm: FeedbackFormStack,
-  QuestStartLocation: QuestStartLocationStack,
+  },  
   QuestStepList: {
     screen: QuestStepList,
     navigationOptions: ({ navigation }) => ({
@@ -167,6 +218,7 @@ const MyQuestsStack = StackNavigator({
 const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
 // const MyQuestsStack = screenToStack(myQuestStack, 'MyQuests', 'My Quests');
 const CompletedQuestsStack = screenToStack(ToBeImplemented, 'CompletedQuests', 'Completed Quests');
+
 
 export default DrawerNavigator({
   PublicQuests: {

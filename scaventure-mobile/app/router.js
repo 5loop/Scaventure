@@ -111,6 +111,16 @@ const QuestStartLocationStack = {
   }),
 };
 
+const AddQAStepStack = {
+  screen: AddQAStep,
+  navigationOptions: ({ navigation }) => ({
+    title: 'Add QA Step',  
+    headerStyle,
+    headerTitleStyle,
+    headerLeft: <GoBack navigation={navigation} />,
+  }),
+}
+
 // Stack appears on top of the screen
 const PublicQuestsStack = StackNavigator({
   PublicQuests: {
@@ -122,61 +132,7 @@ const PublicQuestsStack = StackNavigator({
       headerLeft: <Hamburger navigation={navigation} />,
     }),
   },
-
-  AddQuest: {
-    screen: AddQuest,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Add Quest',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
-  QuestInfo: {
-    screen: QuestInfo,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Quest Information',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
-  QuestLocation: {
-    screen: QuestLocation,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Quest Location',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
-  FeedbackForm: {
-    screen: FeedbackForm,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Add Feedback',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
-  AddQAStep: {
-    screen: AddQAStep,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Add QA Step',  
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
-  QuestStartLocation: {
-    screen: QuestStartLocation,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Quest Start Location',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
+  AddQAStep: AddQAStepStack,
   AddQuest: AddQuestStack,
   QuestInfo: QuestInfoStack,
   QuestLocation: QuestLocationStack,
@@ -212,6 +168,12 @@ const MyQuestsStack = StackNavigator({
       headerLeft: <GoBack navigation={navigation} />,
     }),
   },
+  AddQAStep: AddQAStepStack,
+  AddQuest: AddQuestStack,
+  QuestInfo: QuestInfoStack,
+  QuestLocation: QuestLocationStack,
+  FeedbackForm: FeedbackFormStack,
+  QuestStartLocation: QuestStartLocationStack,
 });
 
 // screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');

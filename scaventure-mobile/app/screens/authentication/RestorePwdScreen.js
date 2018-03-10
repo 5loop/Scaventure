@@ -109,6 +109,7 @@ class RestorePwdScreen extends React.Component {
               style={styles.textIpt}
               placeholder='Email'
               onChangeText={(email) => this.setState({ email })}
+              keyboardType='email-address'
             />
           </View>
 
@@ -119,6 +120,7 @@ class RestorePwdScreen extends React.Component {
                 style={styles.textIpt}
                 placeholder='Confirmation code'
                 onChangeText={(code) => this.setState({ code })}
+                keyboardType='numeric'
               />
             )}
           </View>

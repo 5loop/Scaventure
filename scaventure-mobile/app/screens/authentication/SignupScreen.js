@@ -92,6 +92,7 @@ class SignupScreen extends React.Component {
               style={styles.textIpt}
               placeholder='Email'
               onChangeText={(email) => this.setState({ email })}
+              keyboardType='email-address'
             />
           </View>
 

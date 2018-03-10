@@ -3,6 +3,6 @@
   "plugins": ["render-if"],
   "rules": {
     "react/jsx-no-bind" : "off",
-    "no-param-reassign" : "off",
+    "no-param-reassign" : "off"
   }
 }

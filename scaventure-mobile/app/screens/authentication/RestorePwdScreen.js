@@ -1,12 +1,15 @@
 // reset pwd
 import React from 'react';
+import { bindActionCreators } from 'redux';  
+import { connect } from 'react-redux';  
 
 import {
-  Text, TextInput, View, StyleSheet, Alert,
-  Image, ImageBackground, TouchableOpacity,
+  Text, TextInput, View, StyleSheet, ActivityIndicator,
+  Image, ImageBackground, TouchableOpacity, Alert,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Colors from '../../constants/colors';
+import * as sessionActions from '../../actions/sessionActions';
 
 const renderIf = require('render-if');
 const Device = require('react-native-device-detection');
@@ -19,6 +22,7 @@ class RestorePwdScreen extends React.Component {
   constructor() {
     super();
     this.state = {
+      textStatus: true,
       fieldsStatus: false,
       myText: 'Send Code',
     };
@@ -34,7 +38,9 @@ class RestorePwdScreen extends React.Component {
       if (emailREGEX.test(String(email).toLowerCase()) === false) {
         Alert.alert('Alert', 'Email is not valid.');
       } else {
-        Alert.alert('Alert', 'Confirmation code sent. Please check your email inbox.');
+        // TODO - implement send code
+        Alert.alert('Info.', 'Send code needs to be implemented.');
+        // Alert.alert('Alert', 'Confirmation code sent. Please check your email inbox.');
         this.setState({ fieldsStatus: true, myText: 'Confirm' });
       }
     } else if (this.state.myText === 'Confirm') {
@@ -49,7 +55,22 @@ class RestorePwdScreen extends React.Component {
       } else if (!passwd || passwd.length < 6) {
         Alert.alert('Alert', 'Password must have at least 6 characters/numbers.');
       } else {
-        console.warn('imp');
+        // Set Loader (some status indicating that HTTP call is in progress)
+        this.setState({ textStatus: false });
+        // implement change password
+        this.props.actions.updateUser(
+          { email: this.state.email, password: this.state.password }
+        ).then(() => {
+          console.log('Updated password');
+          Alert.alert('Info.', 'You password has been updated.');
+          this.props.navigation.navigate('Login');
+        }).catch((e) => {
+          // display error
+          console.log(e);
+          Alert.alert('Error', 'Something went wrong!');
+        }).then(() => {
+          this.setState({ textStatus: true });
+        });
       }
     } else {
       Alert.alert('Alert', 'Something went wrong.');
@@ -114,7 +135,9 @@ class RestorePwdScreen extends React.Component {
         </View>
 
         <TouchableOpacity style={[styles.btn, styles.confirmBtn]} onPress={this.btnPressed.bind(this)}>
-          <Text style={styles.btnText}>{this.state.myText}</Text>
+          { this.state.textStatus
+            ? <Text style={styles.btnText}>{this.state.myText}</Text>
+            : <ActivityIndicator style={styles.loading} size="small" color="#00ff00" /> }
         </TouchableOpacity>
 
       </ImageBackground>
@@ -158,6 +181,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     textAlign: 'center',
   },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   btn: {
     borderColor: 'transparent',
     borderWidth: 0,
@@ -168,6 +200,9 @@ const styles = StyleSheet.create({
   btnText: {
     color: Colors.white,
     fontSize: 16,
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   confirmBtn: {
     backgroundColor: Colors.primaryColor,
@@ -178,4 +213,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RestorePwdScreen;
+/* -> Redux Setup */
+function mapDispatchToProps(dispatch) {  
+  return {
+    actions: bindActionCreators(sessionActions, dispatch),
+  };
+}
+
+export default connect(null, mapDispatchToProps)(RestorePwdScreen);

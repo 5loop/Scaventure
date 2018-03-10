@@ -1,4 +1,4 @@
-// Login screen
+// Signup screen
 import React from 'react';
 import { bindActionCreators } from 'redux';  
 import { connect } from 'react-redux';  

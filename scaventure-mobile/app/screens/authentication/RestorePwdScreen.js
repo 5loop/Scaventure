@@ -1,13 +1,14 @@
-// Login screen
+// reset pwd
 import React from 'react';
 
 import {
-  Text, TextInput, View, StyleSheet,
+  Text, TextInput, View, StyleSheet, Alert,
   Image, ImageBackground, TouchableOpacity,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Colors from '../../constants/colors';
 
+const renderIf = require('render-if');
 const Device = require('react-native-device-detection');
 
 class RestorePwdScreen extends React.Component {
@@ -19,16 +20,44 @@ class RestorePwdScreen extends React.Component {
     super();
     this.state = {
       fieldsStatus: false,
+      myText: 'Send Code',
     };
   }
   stackNav = () => {
     this.props.navigation.goBack(null);
   }
   btnPressed = () => {
-    console.log('button pressed');
+    const email = this.state.email;
+    const emailREGEX = /\S+@\S+\.\S+/;
+
+    if (this.state.myText === 'Send Code') {
+      if (emailREGEX.test(String(email).toLowerCase()) === false) {
+        Alert.alert('Alert', 'Email is not valid.');
+      } else {
+        Alert.alert('Alert', 'Confirmation code sent. Please check your email inbox.');
+        this.setState({ fieldsStatus: true, myText: 'Confirm' });
+      }
+    } else if (this.state.myText === 'Confirm') {
+      // Validate input, set error & return if not valid
+      const code = this.state.code;
+      const passwd = this.state.password;
+      
+      if (emailREGEX.test(String(email).toLowerCase()) === false) {
+        Alert.alert('Alert', 'Email is not valid.');
+      } else if (!code || code.length !== 6) {
+        Alert.alert('Alert', 'Code is not correct.');
+      } else if (!passwd || passwd.length < 6) {
+        Alert.alert('Alert', 'Password must have at least 6 characters/numbers.');
+      } else {
+        console.warn('imp');
+      }
+    } else {
+      Alert.alert('Alert', 'Something went wrong.');
+    }
   }
 
   render() {
+    const ifFieldStatusOK = renderIf(this.state.fieldsStatus);
     if (Device.isIphoneX) {
       Object.assign(styles, {
         logo: {
@@ -57,39 +86,37 @@ class RestorePwdScreen extends React.Component {
           <TextInput
             style={styles.textIpt}
             placeholder='Email'
-            onChangeText={(text) => this.setState({ text })}
+            onChangeText={(email) => this.setState({ email })}
           />
         </View>
 
         <View style={styles.inputField}>
-          <Feather name="hash" color={Colors.black} size={28} />
-          <TextInput
-            style={styles.textIpt}
-            placeholder='Confirmation code'
-            onChangeText={(text) => this.setState({ text })}
-          />
+          {ifFieldStatusOK(<Feather name="hash" color={Colors.black} size={28} />)}
+          {ifFieldStatusOK(
+            <TextInput
+              style={styles.textIpt}
+              placeholder='Confirmation code'
+              onChangeText={(code) => this.setState({ code })}
+            />
+          )}
         </View>
 
         <View style={styles.inputField}>
-          <Feather name="lock" color={Colors.black} size={28} />
-          <TextInput
-            style={styles.textIpt}
-            onChangeText={(text) => this.setState({ text })}
-            placeholder='New password'
-          />
+          {ifFieldStatusOK(<Feather name="lock" color={Colors.black} size={28} />)}
+          {ifFieldStatusOK(
+            <TextInput
+              style={styles.textIpt}
+              onChangeText={(password) => this.setState({ password })}
+              placeholder='New password'
+              secureTextEntry
+            />
+          )}
         </View>
 
-        <TouchableOpacity style={[styles.btn, styles.confirmBtn]} onPress={this.btnPressed}>
-          <Text style={styles.btnText}>Send Code</Text>
+        <TouchableOpacity style={[styles.btn, styles.confirmBtn]} onPress={this.btnPressed.bind(this)}>
+          <Text style={styles.btnText}>{this.state.myText}</Text>
         </TouchableOpacity>
 
-        {/* <View style={[styles.btn, styles.confirmBtn]}>
-          <Button
-            title="Confirm"
-            color="white"
-            onPress={this.btnPressed}
-          />
-        </View> */}
       </ImageBackground>
     );
   }

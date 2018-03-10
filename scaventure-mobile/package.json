@@ -20,10 +20,12 @@
     "react-navigation": "^1.0.0-beta.28",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "render-if": "^0.1.1"
   },
   "devDependencies": {
     "eslint": "^4.17.0",
-    "eslint-config-equimper": "^2.2.2"
+    "eslint-config-equimper": "^2.2.2",
+    "eslint-plugin-render-if": "^0.1.0"
   }
 }

@@ -4,8 +4,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';  
 
 import {
-  Text, TextInput, View, StyleSheet, ActivityIndicator,
-  Image, ImageBackground, TouchableOpacity, Alert,
+  Text, TextInput, View, StyleSheet, ActivityIndicator, Keyboard,
+  Image, ImageBackground, TouchableOpacity, Alert, TouchableWithoutFeedback,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Colors from '../../constants/colors';
@@ -88,59 +88,61 @@ class RestorePwdScreen extends React.Component {
       });
     }
     return (
-      <ImageBackground
-        style={styles.bg}
-        source={require('../../../assets/images/bg.png')}
-      >
-        <View style={styles.topRow}>
-          <Feather name="arrow-left" color={Colors.black} size={28} onPress={this.stackNav} /> 
-          <Text style={styles.title}>Reset Password</Text>
-        </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <ImageBackground
+          style={styles.bg}
+          source={require('../../../assets/images/bg.png')}
+        >
+          <View style={styles.topRow}>
+            <Feather name="arrow-left" color={Colors.black} size={28} onPress={this.stackNav} /> 
+            <Text style={styles.title}>Reset Password</Text>
+          </View>
 
-        <Image
-          style={styles.logo}
-          source={require('../../../assets/images/Scaventure.png')}
-        />
-
-        <View style={[styles.inputField, styles.inputMargin]}>
-          <Feather name="mail" color={Colors.black} size={28} />
-          <TextInput
-            style={styles.textIpt}
-            placeholder='Email'
-            onChangeText={(email) => this.setState({ email })}
+          <Image
+            style={styles.logo}
+            source={require('../../../assets/images/Scaventure.png')}
           />
-        </View>
 
-        <View style={styles.inputField}>
-          {ifFieldStatusOK(<Feather name="hash" color={Colors.black} size={28} />)}
-          {ifFieldStatusOK(
+          <View style={[styles.inputField, styles.inputMargin]}>
+            <Feather name="mail" color={Colors.black} size={28} />
             <TextInput
               style={styles.textIpt}
-              placeholder='Confirmation code'
-              onChangeText={(code) => this.setState({ code })}
+              placeholder='Email'
+              onChangeText={(email) => this.setState({ email })}
             />
-          )}
-        </View>
+          </View>
 
-        <View style={styles.inputField}>
-          {ifFieldStatusOK(<Feather name="lock" color={Colors.black} size={28} />)}
-          {ifFieldStatusOK(
-            <TextInput
-              style={styles.textIpt}
-              onChangeText={(password) => this.setState({ password })}
-              placeholder='New password'
-              secureTextEntry
-            />
-          )}
-        </View>
+          <View style={styles.inputField}>
+            {ifFieldStatusOK(<Feather name="hash" color={Colors.black} size={28} />)}
+            {ifFieldStatusOK(
+              <TextInput
+                style={styles.textIpt}
+                placeholder='Confirmation code'
+                onChangeText={(code) => this.setState({ code })}
+              />
+            )}
+          </View>
 
-        <TouchableOpacity style={[styles.btn, styles.confirmBtn]} onPress={this.btnPressed.bind(this)}>
-          { this.state.textStatus
-            ? <Text style={styles.btnText}>{this.state.myText}</Text>
-            : <ActivityIndicator style={styles.loading} size="small" color="#00ff00" /> }
-        </TouchableOpacity>
+          <View style={styles.inputField}>
+            {ifFieldStatusOK(<Feather name="lock" color={Colors.black} size={28} />)}
+            {ifFieldStatusOK(
+              <TextInput
+                style={styles.textIpt}
+                onChangeText={(password) => this.setState({ password })}
+                placeholder='New password'
+                secureTextEntry
+              />
+            )}
+          </View>
 
-      </ImageBackground>
+          <TouchableOpacity style={[styles.btn, styles.confirmBtn]} onPress={this.btnPressed.bind(this)}>
+            { this.state.textStatus
+              ? <Text style={styles.btnText}>{this.state.myText}</Text>
+              : <ActivityIndicator style={styles.loading} size="small" color="#00ff00" /> }
+          </TouchableOpacity>
+
+        </ImageBackground>
+      </TouchableWithoutFeedback>
     );
   }
 }

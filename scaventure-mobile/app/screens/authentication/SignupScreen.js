@@ -44,7 +44,7 @@ class SignupScreen extends React.Component {
       // Set Loader (some status indicating that HTTP call is in progress)
       this.setState({ textStatus: false });
       this.props.actions.registerUser(
-        { email: this.state.email, password: this.state.password }
+        { email: this.state.email.toLowerCase(), password: this.state.password }
       ).then(() => { 
         console.log('Logged in');
         Alert.alert('Info.', 'Verification email sent. Please login to your email account and click link to confirm.');

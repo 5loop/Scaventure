@@ -59,7 +59,7 @@ class RestorePwdScreen extends React.Component {
         this.setState({ textStatus: false });
         // implement change password
         this.props.actions.updateUser(
-          { email: this.state.email, password: this.state.password }
+          { email: this.state.email.toLowerCase(), password: this.state.password }
         ).then(() => {
           console.log('Updated password');
           Alert.alert('Info.', 'You password has been updated.');

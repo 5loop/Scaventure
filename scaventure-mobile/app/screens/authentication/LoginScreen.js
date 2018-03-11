@@ -45,7 +45,7 @@ class LoginScreen extends React.Component {
     } else {
       // Set Loader (some status indicating that HTTP call is in progress)
       this.setState({ textStatus: false });
-      this.props.actions.loginUser({ email: this.state.email, password: this.state.password }).then(() => { 
+      this.props.actions.loginUser({ email: this.state.email.toLowerCase(), password: this.state.password }).then(() => { 
         console.log('Logged in');
         this.props.navigation.navigate('MyQuests');
       }).catch((e) => { 

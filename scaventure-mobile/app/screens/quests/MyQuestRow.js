@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
+import Colors from '../../constants/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -62,11 +63,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-
   },
 
   buttonItem: {
-    width: '22%',
+    width: '23%',
+    // backgroundColor: Colors.primaryColor,
   },
 
   icon: {
@@ -91,9 +92,10 @@ class QuestRow extends React.Component {
         </View>
 
         <View style={styles.buttonRow}>
+
           <View style={styles.buttonItem}>
             <Button 
-              title="INFO" 
+              title="Info" 
               color="#FF9C59" 
               style={styles.moreButton}
               onPress={() => this.props.onInfoBttnPress(this.props.quest)}
@@ -102,7 +104,7 @@ class QuestRow extends React.Component {
 
           <View style={styles.buttonItem}>
             <Button 
-              title="EDIT" 
+              title="Edit" 
               color="#FF9C59" 
               style={styles.moreButton}
               onPress={() => this.props.onEditBtnPress(this.props.quest)}
@@ -111,7 +113,7 @@ class QuestRow extends React.Component {
 
           <View style={styles.buttonItem}>
             <Button 
-              title="DELETE" 
+              title="Delete" 
               color="#FF9C59" 
               style={styles.moreButton}
               onPress={() => this.props.onDeleteBtnPress(this.props.quest._id)}
@@ -120,7 +122,7 @@ class QuestRow extends React.Component {
           
           <View style={styles.buttonItem}>
             <Button 
-              title="STEPS" 
+              title="Steps" 
               color="#7bae6dff" 
               style={styles.playButton}
               onPress={() => this.props.onStepBtnPress(this.props.quest)}

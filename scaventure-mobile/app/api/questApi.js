@@ -29,6 +29,10 @@ class QuestApi {
   static getSteps(questId) {
     return axios.get(`${apiUrl}/api/quests/${questId}/steps`);
   }
+
+  static deleteStep(questId, stepId) {
+    return axios.delete(`${apiUrl}/api/quests/${questId}/steps/${stepId}`);
+  }
 }
 
 export default QuestApi;

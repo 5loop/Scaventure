@@ -95,14 +95,14 @@ class StepRow extends React.Component {
               style={styles.moreButton}
               onPress={() => this.props.onEditBttnPress(this.props.step)}
             />
-          </View>
-          
+          </View>          
+         
           <View style={styles.buttonItem}>
             <Button 
               title="Delete Step" 
               color="#7bae6dff" 
               style={styles.playButton}
-              onPress={() => console.log('To be implemented!')}
+              onPress={() => this.props.onDelBttnPress(this.props.step._id)}
             />
           </View>
         

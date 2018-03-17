@@ -11,11 +11,16 @@ import Colors from '../../constants/colors';
 import { getMyQuests, deleteQuest } from '../../actions/questActions';
 import AnnotatedButton from '../common/AnnotatedButton';
 
+const renderIf = require('render-if');
+
 class MyQuestScreen extends React.Component {
   constructor(props, context) {
     super(props, context);
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    this.state = { ds };
+    this.state = { 
+      ds,
+      action: 'closed',
+    };
   }
 
   componentDidMount() {
@@ -63,14 +68,19 @@ class MyQuestScreen extends React.Component {
   }
 
   render() {
+    const ifEmptyQuest = renderIf(this.props.quests.length === 0);
+    const ifNotEmptyQuest = renderIf(this.props.quests.length !== 0);
     return (
       <View style={styles.container}>
-        <ListView
-          enableEmptySections
-          dataSource={this.state.ds.cloneWithRows(this.props.quests)}
-          renderRow={this.renderRow.bind(this)}
-          key={this.props.quests}
-        />
+        {ifEmptyQuest(<Text style={styles.emptText}>Your quest is empty!</Text>)}
+        {ifNotEmptyQuest(
+          <ListView
+            enableEmptySections
+            dataSource={this.state.ds.cloneWithRows(this.props.quests)}
+            renderRow={this.renderRow.bind(this)}
+            key={this.props.quests}
+          />
+        )}
         <AnnotatedButton onPress={this.onBttnPress.bind(this)} buttonText={'Add New Quest!'} />
       </View>
     );
@@ -84,6 +94,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#FAFAFA',
     flex: 1,
     justifyContent: 'flex-start',
+  },
+  button: {
+    height: 60,
+    borderColor: Colors.secondaryColor,
+    borderWidth: 2,
+    backgroundColor: Colors.primaryColor,
+    margin: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnText: {
+    color: Colors.white,
+    fontSize: 20,
+  },
+  emptText: {
+    textAlign: 'center',
+    fontSize: 22,
+    marginBottom: 30,
   },
 });
 

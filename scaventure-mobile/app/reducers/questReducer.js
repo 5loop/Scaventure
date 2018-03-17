@@ -44,4 +44,17 @@ export function stepReducer(state = initialState.steps, action) {
   }
 }
 
+export function newQuest(state = initialState.newQuest, action) {
+
+  switch (action.type) {
+    case types.ADD_QUEST_SUCCESS:
+      state = Object.assign({}, state, { newQuest: action.newQuest, loading: false });
+      return state;
+    default:
+      return state;
+  }
+}
+
+
+
 

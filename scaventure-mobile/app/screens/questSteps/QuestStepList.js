@@ -38,7 +38,8 @@ class QuestStepList extends React.Component {
   }
 
   onBttnPress() {
-    this.props.navigation.navigate('AddStep');
+    const { quest } = this.props.navigation.state.params;
+    this.props.navigation.navigate('AddQAStep', {quest});
   }
 
   onEditBttnPress(step) {

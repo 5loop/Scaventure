@@ -145,7 +145,7 @@ const QAStep = Step.discriminator('QAStep',
       required: true
     },
     answer: {
-      type: String,
+      type: Number,
       required: true
     },
     options: {

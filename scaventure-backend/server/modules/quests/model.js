@@ -100,7 +100,7 @@ const options = { discriminatorKey: 'type' };
 const stepSchema = new Schema({
   description: {
     type: String,
-    required: true
+    required: true,
   },
   startLocation: { // where challenge begins
     type: {type: String, default: 'Point'},
@@ -145,7 +145,7 @@ const QAStep = Step.discriminator('QAStep',
       required: true
     },
     answer: {
-      type: String,
+      type: Number,
       required: true
     },
     options: {

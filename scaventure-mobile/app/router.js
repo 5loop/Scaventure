@@ -23,11 +23,22 @@ import EditStep from './screens/questSteps/EditStep';
 
 // testing qr scanner
 import QRScanScreen from './screens/gameplay/QRScanScreen';
+import PlayStepScreen from './screens/gameplay/PlayStepScreen';
 
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
 
 const GoBack = ({ navigation }) => <Feather name="arrow-left" color={Colors.white} size={28} onPress={() => navigation.goBack()} />;
+const CloseQuest = ({ navigation }) => {
+  return (
+    <Feather 
+      name="x" 
+      color={Colors.white} 
+      size={28} 
+      onPress={() => navigation.navigate('PublicQuests')} 
+    />
+  );
+};
 
 const headerStyle = {
   backgroundColor: Colors.primaryColor,
@@ -122,7 +133,17 @@ const AddQAStepStack = {
     headerTitleStyle,
     headerLeft: <GoBack navigation={navigation} />,
   }),
-}
+};
+
+const PlayStepScreenStack = {
+  screen: PlayStepScreen,
+  navigationOptions: ({ navigation }) => ({
+    title: 'Gameplay', 
+    headerStyle, 
+    headerTitleStyle,
+    headerLeft: <CloseQuest navigation={navigation} />,
+  }),
+};
 
 // QR scanner
 const QRscanner = {
@@ -152,6 +173,7 @@ const PublicQuestsStack = StackNavigator({
   QuestLocation: QuestLocationStack,
   FeedbackForm: FeedbackFormStack,
   QuestStartLocation: QuestStartLocationStack,
+  PlayStep: PlayStepScreenStack,
 });
 
 const MyQuestsStack = StackNavigator({
@@ -188,13 +210,13 @@ const MyQuestsStack = StackNavigator({
   QuestLocation: QuestLocationStack,
   FeedbackForm: FeedbackFormStack,
   QuestStartLocation: QuestStartLocationStack,
+  PlayStep: PlayStepScreenStack,
 });
 
 // screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
 const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
 // const MyQuestsStack = screenToStack(myQuestStack, 'MyQuests', 'My Quests');
 const CompletedQuestsStack = screenToStack(ToBeImplemented, 'CompletedQuests', 'Completed Quests');
-
 
 export default DrawerNavigator({
   PublicQuests: {

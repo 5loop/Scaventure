@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, ListView, TouchableHighlight } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -7,29 +8,17 @@ import { connect } from 'react-redux';
 /* -- Local imports -- */
 /* ------------------- */
 import QuestRow from './QuestRow';
-import Colors from '../../constants/colors';
+import AnnotatedButton from '../common/AnnotatedButton';
 /* -- Actions */
 import { getQuests } from '../../actions/questActions';
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 40,
+    paddingTop: 30,
+    paddingBottom: 70,
     backgroundColor: '#FAFAFA',
     flex: 1,
     justifyContent: 'flex-start',
-  },
-  button: {
-    height: 60,
-    borderColor: '#05A5D1',
-    borderWidth: 2,
-    backgroundColor: '#333',
-    margin: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#FAFAFA',
-    fontSize: 20,
   },
 });
 
@@ -41,14 +30,14 @@ class QuestScreen extends React.Component {
       ds,
     };
 
-    this.onBttnPress = this.onBttnPress.bind(this);
+    this.onAddQuestBttnPress = this.onAddQuestBttnPress.bind(this);
   }
 
   componentDidMount() {
     this.props.getQuests(); 
   }
 
-  onBttnPress() {
+  onAddQuestBttnPress() {
     this.props.navigation.navigate('AddQuest');
   }
 
@@ -69,9 +58,8 @@ class QuestScreen extends React.Component {
       />
     );
   }
-
+ 
   render() {
-    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <ListView
@@ -80,9 +68,7 @@ class QuestScreen extends React.Component {
           key={this.props.quests}
           renderRow={this.renderRow.bind(this)}
         />
-        <TouchableHighlight style={styles.button} onPress={this.onBttnPress.bind(this)}>
-          <Text style={styles.buttonText}>Add New</Text>
-        </TouchableHighlight>
+        <AnnotatedButton onPress={this.onAddQuestBttnPress} buttonText={'Add New Quest!'} />
       </View>
     );
   }

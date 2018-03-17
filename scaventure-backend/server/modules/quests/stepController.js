@@ -120,6 +120,7 @@ export const addStep = async (req, res) => {
 
       return res.status(200).json({ error: false, step, type });
     } catch (e) {
+      console.log(e);
       return res.status(500).json({ error: true, message: 'Error occured while adding new step to a quest' });
     }
   });

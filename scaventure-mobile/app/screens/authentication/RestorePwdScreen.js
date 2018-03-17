@@ -1,13 +1,17 @@
-// Login screen
+// reset pwd
 import React from 'react';
+import { bindActionCreators } from 'redux';  
+import { connect } from 'react-redux';  
 
 import {
-  Text, TextInput, View, StyleSheet,
-  Image, ImageBackground, TouchableOpacity,
+  Text, TextInput, View, StyleSheet, ActivityIndicator, Keyboard,
+  Image, ImageBackground, TouchableOpacity, Alert, TouchableWithoutFeedback,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Colors from '../../constants/colors';
+import * as sessionActions from '../../actions/sessionActions';
 
+const renderIf = require('render-if');
 const Device = require('react-native-device-detection');
 
 class RestorePwdScreen extends React.Component {
@@ -18,17 +22,63 @@ class RestorePwdScreen extends React.Component {
   constructor() {
     super();
     this.state = {
+      textStatus: true,
       fieldsStatus: false,
+      myText: 'Send Code',
     };
   }
   stackNav = () => {
     this.props.navigation.goBack(null);
   }
   btnPressed = () => {
-    console.log('button pressed');
+    const email = this.state.email;
+    const emailREGEX = /\S+@\S+\.\S+/;
+
+    if (this.state.myText === 'Send Code') {
+      if (emailREGEX.test(String(email).toLowerCase()) === false) {
+        Alert.alert('Alert', 'Email is not valid.');
+      } else {
+        // TODO - implement send code
+        Alert.alert('Info.', 'Send code needs to be implemented.');
+        // Alert.alert('Alert', 'Confirmation code sent. Please check your email inbox.');
+        this.setState({ fieldsStatus: true, myText: 'Confirm' });
+      }
+    } else if (this.state.myText === 'Confirm') {
+      // Validate input, set error & return if not valid
+      const code = this.state.code;
+      const passwd = this.state.password;
+      
+      if (emailREGEX.test(String(email).toLowerCase()) === false) {
+        Alert.alert('Alert', 'Email is not valid.');
+      } else if (!code || code.length !== 6) {
+        Alert.alert('Alert', 'Code is not correct.');
+      } else if (!passwd || passwd.length < 6) {
+        Alert.alert('Alert', 'Password must have at least 6 characters/numbers.');
+      } else {
+        // Set Loader (some status indicating that HTTP call is in progress)
+        this.setState({ textStatus: false });
+        // implement change password
+        this.props.actions.updateUser(
+          { email: this.state.email.toLowerCase(), password: this.state.password }
+        ).then(() => {
+          console.log('Updated password');
+          Alert.alert('Info.', 'You password has been updated.');
+          this.props.navigation.navigate('Login');
+        }).catch((e) => {
+          // display error
+          console.log(e);
+          Alert.alert('Error', 'Something went wrong!');
+        }).then(() => {
+          this.setState({ textStatus: true });
+        });
+      }
+    } else {
+      Alert.alert('Alert', 'Something went wrong.');
+    }
   }
 
   render() {
+    const ifFieldStatusOK = renderIf(this.state.fieldsStatus);
     if (Device.isIphoneX) {
       Object.assign(styles, {
         logo: {
@@ -38,59 +88,63 @@ class RestorePwdScreen extends React.Component {
       });
     }
     return (
-      <ImageBackground
-        style={styles.bg}
-        source={require('../../../assets/images/bg.png')}
-      >
-        <View style={styles.topRow}>
-          <Feather name="arrow-left" color={Colors.black} size={28} onPress={this.stackNav} /> 
-          <Text style={styles.title}>Reset Password</Text>
-        </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <ImageBackground
+          style={styles.bg}
+          source={require('../../../assets/images/bg.png')}
+        >
+          <View style={styles.topRow}>
+            <Feather name="arrow-left" color={Colors.black} size={28} onPress={this.stackNav} /> 
+            <Text style={styles.title}>Reset Password</Text>
+          </View>
 
-        <Image
-          style={styles.logo}
-          source={require('../../../assets/images/Scaventure.png')}
-        />
-
-        <View style={[styles.inputField, styles.inputMargin]}>
-          <Feather name="mail" color={Colors.black} size={28} />
-          <TextInput
-            style={styles.textIpt}
-            placeholder='Email'
-            onChangeText={(text) => this.setState({ text })}
+          <Image
+            style={styles.logo}
+            source={require('../../../assets/images/Scaventure.png')}
           />
-        </View>
 
-        <View style={styles.inputField}>
-          <Feather name="hash" color={Colors.black} size={28} />
-          <TextInput
-            style={styles.textIpt}
-            placeholder='Confirmation code'
-            onChangeText={(text) => this.setState({ text })}
-          />
-        </View>
+          <View style={[styles.inputField, styles.inputMargin]}>
+            <Feather name="mail" color={Colors.black} size={28} />
+            <TextInput
+              style={styles.textIpt}
+              placeholder='Email'
+              onChangeText={(email) => this.setState({ email })}
+              keyboardType='email-address'
+            />
+          </View>
 
-        <View style={styles.inputField}>
-          <Feather name="lock" color={Colors.black} size={28} />
-          <TextInput
-            style={styles.textIpt}
-            onChangeText={(text) => this.setState({ text })}
-            placeholder='New password'
-          />
-        </View>
+          <View style={styles.inputField}>
+            {ifFieldStatusOK(<Feather name="hash" color={Colors.black} size={28} />)}
+            {ifFieldStatusOK(
+              <TextInput
+                style={styles.textIpt}
+                placeholder='Confirmation code'
+                onChangeText={(code) => this.setState({ code })}
+                keyboardType='numeric'
+              />
+            )}
+          </View>
 
-        <TouchableOpacity style={[styles.btn, styles.confirmBtn]} onPress={this.btnPressed}>
-          <Text style={styles.btnText}>Send Code</Text>
-        </TouchableOpacity>
+          <View style={styles.inputField}>
+            {ifFieldStatusOK(<Feather name="lock" color={Colors.black} size={28} />)}
+            {ifFieldStatusOK(
+              <TextInput
+                style={styles.textIpt}
+                onChangeText={(password) => this.setState({ password })}
+                placeholder='New password'
+                secureTextEntry
+              />
+            )}
+          </View>
 
-        {/* <View style={[styles.btn, styles.confirmBtn]}>
-          <Button
-            title="Confirm"
-            color="white"
-            onPress={this.btnPressed}
-          />
-        </View> */}
-      </ImageBackground>
+          <TouchableOpacity style={[styles.btn, styles.confirmBtn]} onPress={this.btnPressed.bind(this)}>
+            { this.state.textStatus
+              ? <Text style={styles.btnText}>{this.state.myText}</Text>
+              : <ActivityIndicator style={styles.loading} size="small" color="#00ff00" /> }
+          </TouchableOpacity>
+
+        </ImageBackground>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -131,6 +185,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     textAlign: 'center',
   },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   btn: {
     borderColor: 'transparent',
     borderWidth: 0,
@@ -141,6 +204,9 @@ const styles = StyleSheet.create({
   btnText: {
     color: Colors.white,
     fontSize: 16,
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   confirmBtn: {
     backgroundColor: Colors.primaryColor,
@@ -151,4 +217,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RestorePwdScreen;
+/* -> Redux Setup */
+function mapDispatchToProps(dispatch) {  
+  return {
+    actions: bindActionCreators(sessionActions, dispatch),
+  };
+}
+
+export default connect(null, mapDispatchToProps)(RestorePwdScreen);

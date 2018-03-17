@@ -4,8 +4,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';  
 
 import {
-  Text, TextInput, View, StyleSheet, ActivityIndicator,
-  Image, ImageBackground, TouchableOpacity, Alert,
+  Text, TextInput, View, StyleSheet, ActivityIndicator, Keyboard,
+  Image, ImageBackground, TouchableOpacity, Alert, TouchableWithoutFeedback,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
@@ -29,6 +29,9 @@ class LoginScreen extends React.Component {
   stackNav = () => {
     this.props.navigation.navigate('DrawerOpen');
   }
+  bgClicked = () => {
+    console.warn('background clicked');
+  }
   btnPressed = () => {
     // Validate input, set error & return if not valid
     const email = this.state.email;
@@ -42,7 +45,7 @@ class LoginScreen extends React.Component {
     } else {
       // Set Loader (some status indicating that HTTP call is in progress)
       this.setState({ textStatus: false });
-      this.props.actions.loginUser({ email: this.state.email, password: this.state.password }).then(() => { 
+      this.props.actions.loginUser({ email: this.state.email.toLowerCase(), password: this.state.password }).then(() => { 
         console.log('Logged in');
         this.props.navigation.navigate('MyQuests');
       }).catch((e) => { 
@@ -68,55 +71,58 @@ class LoginScreen extends React.Component {
       });
     }
     return (
-      <ImageBackground
-        style={styles.bg}
-        source={require('../../../assets/images/bg.png')}
-      >
-        <View style={styles.topRow}>
-          {/* <Feather name="menu" color={Colors.black} size={28} onPress={this.stackNav} /> */}
-        </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <ImageBackground
+          style={styles.bg}
+          source={require('../../../assets/images/bg.png')}
+        >
+          <View style={styles.topRow}>
+            {/* <Feather name="menu" color={Colors.black} size={28} onPress={this.stackNav} /> */}
+          </View>
 
-        <Image
-          style={styles.logo}
-          source={require('../../../assets/images/Scaventure.png')}
-        />
-
-        <View style={[styles.inputField, styles.inputMargin]}>
-          <Feather name="mail" color={Colors.black} size={28} />
-          <TextInput
-            underlineColorAndroid='transparent'
-            style={styles.textIpt}
-            placeholder='Email'
-            onChangeText={(email) => this.setState({ email })}
+          <Image
+            style={styles.logo}
+            source={require('../../../assets/images/Scaventure.png')}
           />
-        </View>
 
-        <View style={styles.inputField}>
-          <Feather name="lock" color={Colors.black} size={28} />
-          <TextInput
-            style={styles.textIpt}
-            onChangeText={(password) => this.setState({ password })}
-            placeholder='Password'
-            secureTextEntry
-          />
-        </View>
-        <TouchableOpacity>
-          <Text style={styles.forgot} onPress={() => navigate('RestorePwd')}>Forgot?</Text>
-        </TouchableOpacity>
+          <View style={[styles.inputField, styles.inputMargin]}>
+            <Feather name="mail" color={Colors.black} size={28} />
+            <TextInput
+              underlineColorAndroid='transparent'
+              style={styles.textIpt}
+              placeholder='Email'
+              onChangeText={(email) => this.setState({ email })}
+              keyboardType='email-address'
+            />
+          </View>
 
-        <TouchableOpacity style={[styles.btn, styles.signinBtn]} onPress={this.btnPressed.bind(this)}>
-          { this.state.textStatus 
-            ? <Text style={styles.btnText}>Sign in</Text> 
-            : <ActivityIndicator style={styles.loading} size="small" color="#00ff00" /> }
-        </TouchableOpacity>
+          <View style={styles.inputField}>
+            <Feather name="lock" color={Colors.black} size={28} />
+            <TextInput
+              style={styles.textIpt}
+              onChangeText={(password) => this.setState({ password })}
+              placeholder='Password'
+              secureTextEntry
+            />
+          </View>
+          <TouchableOpacity>
+            <Text style={styles.forgot} onPress={() => navigate('RestorePwd')}>Forgot?</Text>
+          </TouchableOpacity>
 
-        <Text style={styles.caption}>Don't have account yet?</Text>
+          <TouchableOpacity style={[styles.btn, styles.signinBtn]} onPress={this.btnPressed.bind(this)}>
+            { this.state.textStatus 
+              ? <Text style={styles.btnText}>Sign in</Text> 
+              : <ActivityIndicator style={styles.loading} size="small" color="#00ff00" /> }
+          </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.btn, styles.signupBtn]} onPress={() => navigate('Signup')}>
-          <Text style={styles.btnText}>Sign up</Text>
-        </TouchableOpacity>
+          <Text style={styles.caption}>Don't have account yet?</Text>
 
-      </ImageBackground>
+          <TouchableOpacity style={[styles.btn, styles.signupBtn]} onPress={() => navigate('Signup')}>
+            <Text style={styles.btnText}>Sign up</Text>
+          </TouchableOpacity>
+
+        </ImageBackground>
+      </TouchableWithoutFeedback>
     );
   }
 }

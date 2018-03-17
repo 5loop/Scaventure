@@ -10,7 +10,6 @@ import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button';
 import { width, height, totalSize } from 'react-native-dimension';
 import MapView from 'react-native-maps';
 import { addStep } from '../../actions/questActions';
-import NumericInput from 'react-numeric-input';
 
 
 

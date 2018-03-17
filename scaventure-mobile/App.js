@@ -6,14 +6,11 @@ import axios from 'axios';
 import store from './app/store';
 import Layout from './app/layout';
 
-import { loginUser } from './app/actions/sessionActions';
-store.dispatch(loginUser({ email: 'scaventure@scv.com', password: 'testtest' }));
-
 // global axios settings
 
-import { loginUser } from './app/actions/sessionActions';
+//import { loginUser } from './app/actions/sessionActions';
 
-store.dispatch(loginUser({ email: 'scaventure@scv.com', password: 'testtest' }));
+//store.dispatch(loginUser({ email: 'scaventure@scv.com', password: 'testtest' }));
 
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';

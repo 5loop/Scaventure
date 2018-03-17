@@ -21,10 +21,22 @@ import LogoutNavOption from './logout';
 import QuestStepList from './screens/questSteps/QuestStepList';
 import EditStep from './screens/questSteps/EditStep';
 
+import PlayStepScreen from './screens/gameplay/PlayStepScreen';
+
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
 
 const GoBack = ({ navigation }) => <Feather name="arrow-left" color={Colors.white} size={28} onPress={() => navigation.goBack()} />;
+const CloseQuest = ({ navigation }) => {
+  return (
+    <Feather 
+      name="x" 
+      color={Colors.white} 
+      size={28} 
+      onPress={() => navigation.navigate('PublicQuests')} 
+    />
+  );
+};
 
 const headerStyle = {
   backgroundColor: Colors.primaryColor,
@@ -111,6 +123,26 @@ const QuestStartLocationStack = {
   }),
 };
 
+const AddQAStepStack = {
+  screen: AddQAStep,
+  navigationOptions: ({ navigation }) => ({
+    title: 'Add QA Step',  
+    headerStyle,
+    headerTitleStyle,
+    headerLeft: <GoBack navigation={navigation} />,
+  }),
+};
+
+const PlayStepScreenStack = {
+  screen: PlayStepScreen,
+  navigationOptions: ({ navigation }) => ({
+    title: 'Gameplay', 
+    headerStyle, 
+    headerTitleStyle,
+    headerLeft: <CloseQuest navigation={navigation} />,
+  }),
+};
+
 // Stack appears on top of the screen
 const PublicQuestsStack = StackNavigator({
   PublicQuests: {
@@ -122,66 +154,13 @@ const PublicQuestsStack = StackNavigator({
       headerLeft: <Hamburger navigation={navigation} />,
     }),
   },
-
-  AddQuest: {
-    screen: AddQuest,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Add Quest',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
-  QuestInfo: {
-    screen: QuestInfo,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Quest Information',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
-  QuestLocation: {
-    screen: QuestLocation,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Quest Location',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
-  FeedbackForm: {
-    screen: FeedbackForm,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Add Feedback',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
-  AddQAStep: {
-    screen: AddQAStep,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Add QA Step',  
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
-  QuestStartLocation: {
-    screen: QuestStartLocation,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Quest Start Location',
-      headerStyle,
-      headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
-    }),
-  },
+  AddQAStep: AddQAStepStack,
   AddQuest: AddQuestStack,
   QuestInfo: QuestInfoStack,
   QuestLocation: QuestLocationStack,
   FeedbackForm: FeedbackFormStack,
   QuestStartLocation: QuestStartLocationStack,
+  PlayStep: PlayStepScreenStack,
 });
 
 const MyQuestsStack = StackNavigator({
@@ -212,13 +191,19 @@ const MyQuestsStack = StackNavigator({
       headerLeft: <GoBack navigation={navigation} />,
     }),
   },
+  AddQAStep: AddQAStepStack,
+  AddQuest: AddQuestStack,
+  QuestInfo: QuestInfoStack,
+  QuestLocation: QuestLocationStack,
+  FeedbackForm: FeedbackFormStack,
+  QuestStartLocation: QuestStartLocationStack,
+  PlayStep: PlayStepScreenStack,
 });
 
 // screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
 const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
 // const MyQuestsStack = screenToStack(myQuestStack, 'MyQuests', 'My Quests');
 const CompletedQuestsStack = screenToStack(ToBeImplemented, 'CompletedQuests', 'Completed Quests');
-
 
 export default DrawerNavigator({
   PublicQuests: {

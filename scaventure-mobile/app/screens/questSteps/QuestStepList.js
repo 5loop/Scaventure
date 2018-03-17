@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 /* ------------------- */
 import StepRow from './StepRow';
 import Colors from '../../constants/colors';
+import AnnotatedButton from '../common/AnnotatedButton';
 /* -- Actions */
 import { getSteps, deleteStep } from '../../actions/questActions';
 const renderIf = require('render-if');
@@ -61,7 +62,8 @@ class QuestStepList extends React.Component {
   }
 
   onBttnPress() {
-    this.props.navigation.navigate('AddStep');
+    const { quest } = this.props.navigation.state.params;
+    this.props.navigation.navigate('AddQAStep', {quest});
   }
 
   onEditBttnPress(step) {
@@ -113,9 +115,7 @@ class QuestStepList extends React.Component {
         renderRow={this.renderRow.bind(this)}
         />
         )}              
-        <TouchableHighlight style={styles.button}>
-          <Text style={styles.buttonText} onPress={this.onBttnPress.bind(this)}>Add New</Text>
-        </TouchableHighlight>
+        <AnnotatedButton onPress={this.onBttnPress.bind(this)} buttonText={'Add New Step!'} />
       </View>
     );
   }

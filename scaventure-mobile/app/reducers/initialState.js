@@ -11,4 +11,8 @@ export default {
     steps: [],
     loading: true,
   },
+  newQuest:{
+    newQuest: {},
+    loading: true,
+  }
 };

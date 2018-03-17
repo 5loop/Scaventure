@@ -1,5 +1,7 @@
 import React from 'react';
-import { ImageBackground, View, ScrollView, Text, ListView, TouchableHighlight, StyleSheet } from 'react-native';
+import { ImageBackground, View, ScrollView, 
+  Text, Keyboard, 
+  ListView, TouchableHighlight, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 import { bindActionCreators } from 'redux';
@@ -9,6 +11,8 @@ import { connect } from 'react-redux';
 import Colors from '../../constants/colors';
 import FeedbackRow from './FeedbackRow';
 import { getFeedbacks } from '../../actions/questActions';
+import EmptyListScreen from '../common/EmptyListScreen';
+import AnnotatedButton from '../common/AnnotatedButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,11 +29,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   description: {
-    height: 200,
+    minHeight: 160,
     backgroundColor: Colors.white,
     borderBottomColor: Colors.secondaryColor,
     borderBottomWidth: 20,
-    padding: 20,
+    padding: 30,
   },
   h1: {
     fontSize: 22,
@@ -39,7 +43,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontSize: 16,
-    color: Colors.black,
+    color: Colors.darkSecondary,
   },
   buttonGroup: {
     flex: 1,
@@ -96,49 +100,59 @@ class QuestInfo extends React.Component {
   render() {
     const { quest } = this.props.navigation.state.params;
     return ( 
-      <ScrollView style={styles.container} bounces={false}>
-        <ImageBackground
-          source={{ uri: 'https://blog.spoongraphics.co.uk/wp-content/uploads/2015/09/thumbnail.jpg' }}
-          style={styles.imageBackground}
-        >
-          <View style={styles.buttonGroup}>
-            <TouchableHighlight 
-              style={styles.roundButton}
-              underlayColor='#fff'
-            >
-              <Feather name="play" color={Colors.white} size={20} onPress={this.startGame.bind(this)} />
-            </TouchableHighlight>
-            <TouchableHighlight
-              style={styles.roundButton}
-              underlayColor='#fff'
-              onPress={() => this.props.navigation.navigate('FeedbackForm', { questId: quest._id })}
-            >
-              <Feather name="message-circle" color={Colors.white} size={20} />       
-            </TouchableHighlight>
-            <TouchableHighlight
-              style={styles.roundButton}
-              underlayColor='#fff'
-              onPress={this.showMap.bind(this)}
-            >
-              <Feather name="map" color={Colors.white} size={20} />       
-            </TouchableHighlight>
+      <View style={styles.container}>
+
+        <ScrollView bounces={false}>
+          <ImageBackground
+            source={{ uri: 'https://blog.spoongraphics.co.uk/wp-content/uploads/2015/09/thumbnail.jpg' }}
+            style={styles.imageBackground}
+          >
+            <View style={styles.buttonGroup}>
+              <TouchableHighlight
+                style={styles.roundButton}
+                underlayColor='#fff'
+                onPress={() => this.props.navigation.navigate('FeedbackForm', { questId: quest._id })}
+              >
+                <Feather name="message-circle" color={Colors.white} size={20} />       
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={styles.roundButton}
+                underlayColor='#fff'
+                onPress={this.showMap.bind(this)}
+              >
+                <Feather name="map" color={Colors.white} size={20} />       
+              </TouchableHighlight>
+            </View>
+          </ImageBackground>
+          {/* Quest Title */}
+          <View style={styles.separator}><Text style={styles.h1}> {quest.title} </Text></View>
+          {/* Quest Description */}
+          <View style={styles.description}>
+            <Text style={styles.descriptionText}> 
+              {quest.description}
+            </Text>
           </View>
-        </ImageBackground>
-        {/* Quest Title */}
-        <View style={styles.separator}><Text style={styles.h1}> {quest.title} </Text></View>
-        {/* Quest Description */}
-        <View style={styles.description}>
-          <Text style={styles.descriptionText}> 
-            {quest.description}
-          </Text>
-        </View>
-        <ListView
-          enableEmptySections
-          dataSource={this.state.ds.cloneWithRows(this.props.feedbacks)}
-          key={this.props.feedbacks}
-          renderRow={this.renderFeedbackRow.bind(this)}
-        />
-      </ScrollView>
+          {this.props.feedbacks.length === 0 
+            ?
+            <View style={{ marginBottom: 40 }}>
+              <EmptyListScreen 
+                title={'Be the first Player to Rate this Quest!'}
+                icon={'message-circle'} 
+                description={'Let other people know how you feel about this challenge!'}
+              />
+            </View>
+            :  
+            <ListView
+              style={{ marginBottom: 70 }}
+              enableEmptySections
+              dataSource={this.state.ds.cloneWithRows(this.props.feedbacks)}
+              key={this.props.feedbacks}
+              renderRow={this.renderFeedbackRow.bind(this)}
+            />
+          }
+        </ScrollView>
+        <AnnotatedButton buttonText="Play!" icon="chevron-right" onPress={this.startGame.bind(this)} />
+      </View>
     );
   }
 }

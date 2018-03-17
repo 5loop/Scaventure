@@ -21,6 +21,9 @@ import LogoutNavOption from './logout';
 import QuestStepList from './screens/questSteps/QuestStepList';
 import EditStep from './screens/questSteps/EditStep';
 
+// testing qr scanner
+import QRScanScreen from './screens/gameplay/QRScanScreen';
+
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
 
@@ -115,6 +118,17 @@ const AddQAStepStack = {
   screen: AddQAStep,
   navigationOptions: ({ navigation }) => ({
     title: 'Add QA Step',  
+    headerStyle,
+    headerTitleStyle,
+    headerLeft: <GoBack navigation={navigation} />,
+  }),
+}
+
+// QR scanner
+const QRscanner = {
+  screen: QRScanScreen,
+  navigationOptions: ({ navigation }) => ({
+    title: 'QR scanner',
     headerStyle,
     headerTitleStyle,
     headerLeft: <GoBack navigation={navigation} />,

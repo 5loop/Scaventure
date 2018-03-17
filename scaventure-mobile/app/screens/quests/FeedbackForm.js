@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, TouchableHighlight, Text, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, TouchableHighlight, 
+  Text, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -109,53 +110,55 @@ class FeedbackForm extends React.Component {
 
   render() {
     return ( 
-      <View style={styles.container}>
-        <TextField
-          label='Title'
-          baseColor={Colors.secondaryColor}
-          tintColor={Colors.primaryColor}
-          onChangeText={(title) => this.setState({ title })}
-          error={this.state.errors.title}
-          onBlur={() => this.checkTitle()}
-          onFocus={() => this.onFocusTitle()}
-          characterRestriction={40}
-          maxLength={40}
-        />
-        <TextField
-          label='Description'
-          baseColor={Colors.secondaryColor}
-          tintColor={Colors.primaryColor}
-          onChangeText={(description) => this.setState({ description })}
-          multiline
-          error={this.state.errors.description}
-          onBlur={() => this.checkDescription()}
-          onFocus={() => this.onFocusDescription()}
-          characterRestriction={300}
-          maxLength={300}
-        />
-        <View style={styles.stars}>
-          {[...Array(5)].map((e, i) => 
-            (<Feather 
-              name="star" 
-              color={i + 1 > this.state.numStars ? '#f2ede1' : Colors.yellow} 
-              size={27} 
-              key={i} 
-              onPress={() => this.updateStars(i)} 
-            />)
-          )}
-        </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.container}>
+          <TextField
+            label='Title'
+            baseColor={Colors.secondaryColor}
+            tintColor={Colors.primaryColor}
+            onChangeText={(title) => this.setState({ title })}
+            error={this.state.errors.title}
+            onBlur={() => this.checkTitle()}
+            onFocus={() => this.onFocusTitle()}
+            characterRestriction={40}
+            maxLength={40}
+          />
+          <TextField
+            label='Description'
+            baseColor={Colors.secondaryColor}
+            tintColor={Colors.primaryColor}
+            onChangeText={(description) => this.setState({ description })}
+            multiline
+            error={this.state.errors.description}
+            onBlur={() => this.checkDescription()}
+            onFocus={() => this.onFocusDescription()}
+            characterRestriction={300}
+            maxLength={300}
+          />
+          <View style={styles.stars}>
+            {[...Array(5)].map((e, i) => 
+              (<Feather 
+                name="star" 
+                color={i + 1 > this.state.numStars ? '#f2ede1' : Colors.yellow} 
+                size={27} 
+                key={i} 
+                onPress={() => this.updateStars(i)} 
+              />)
+            )}
+          </View>
 
-        {this.state.addingFeedback 
-          ?
-          <ActivityIndicator size="large" color={Colors.primaryColor} /> 
-          : 
-          <TouchableHighlight style={styles.button} onPress={this.addFeedback.bind(this)}>
-            <View>
-              <Text style={styles.buttonText}>Add New </Text>
-            </View>
-          </TouchableHighlight>
-        }
-      </View>
+          {this.state.addingFeedback 
+            ?
+            <ActivityIndicator size="large" color={Colors.primaryColor} /> 
+            : 
+            <TouchableHighlight style={styles.button} onPress={this.addFeedback.bind(this)}>
+              <View>
+                <Text style={styles.buttonText}>Add New </Text>
+              </View>
+            </TouchableHighlight>
+          }
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

@@ -61,6 +61,7 @@ export function getSteps(questId) {
 export function addQuest(data) {
   return dispatch => {
     return QuestApi.addQuest(data).then(res => {
+      dispatch({ type: types.ADD_QUEST_SUCCESS, newQuest: res.data.quest });
       dispatch(getQuests());
     }).catch(e => {
       console.log(e);

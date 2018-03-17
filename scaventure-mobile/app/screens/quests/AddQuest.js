@@ -73,9 +73,6 @@ const styles = StyleSheet.create({
     
     left:4,
     right:0,
-    
-   
-    
     flex:1,
     flexDirection: 'column',
   },
@@ -117,7 +114,6 @@ class AddQuest extends React.Component {
       }
       this.setState({initialPosition: initialRegion})
       this.setState({markerPosition: initialRegion})
-
       
     }, (error)=> alert(JSON.stringify(error)),
     {enableHighAccuracy: false, timeout: 20000, maximumAge:1000})
@@ -128,9 +124,12 @@ class AddQuest extends React.Component {
   }
 
   onPress(){
-
-    if(this.state.x.latitude == undefined) {
+    console.log(this.state.x);
+   
+    if(this.state.x == undefined) {
       
+      
+
       const data = {
         title: this.state.title,
         description: this.state.description,
@@ -140,8 +139,15 @@ class AddQuest extends React.Component {
           coordinates: [this.state.initialPosition.latitude, this.state.initialPosition.longitude]
         }
       }
+      this.props.addQuest(data).then(() => {
+        console.log(this.props.newQuest);
+        this.props.navigation.navigate('QuestStepList', {quest: this.props.newQuest});
+      })
+
+
     }else{
-    
+      console.log("in the else");
+
       const data = {
         title: this.state.title,
         description: this.state.description,
@@ -152,10 +158,12 @@ class AddQuest extends React.Component {
         }
       }
       this.props.addQuest(data).then(() => {
-        console.log("Add Quest");
+        console.log(this.props.newQuest);
+
+        this.props.navigation.navigate('QuestStepList', {quest: this.props.newQuest});
       })
 
-      this.props.navigation.navigate('AddQAStep');
+      
   }
 
   }
@@ -183,12 +191,12 @@ class AddQuest extends React.Component {
 
         />
           </View>
-            <MapView
+          <MapView
             style={styles.map}
             region={this.state.initialPosition}
             
             initialRegion = {this.state.initialPosition}
-            
+            onMapReady={this.onMapReady}
             
            >
             <MapView.Marker draggable
@@ -197,13 +205,16 @@ class AddQuest extends React.Component {
               
               onDragEnd={(e) => {
                 
-                this.setState({ x: e.nativeEvent.coordinate, initialPosition: e.nativeEvent.coordinate})
-                  }
-              }
-              region={this.state.coordinate}
-            
+                this.setState({ x: e.nativeEvent.coordinate,
+                               });
+                
+                  
               
-            />
+                
+                  
+              }
+              }
+              />
 
            </MapView>
           <TouchableHighlight style={styles.button}>
@@ -214,10 +225,15 @@ class AddQuest extends React.Component {
   }
 }
 
-
+function mapStateToProps(state){
+  console.log(state)
+  return{
+    newQuest: state.newQuest.newQuest,
+  }
+}
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ addQuest }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(AddQuest);
+export default connect(mapStateToProps, mapDispatchToProps)(AddQuest);

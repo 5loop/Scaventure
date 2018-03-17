@@ -6,7 +6,10 @@ import { connect } from 'react-redux';
 
 import QuestRow from './MyQuestRow';
 import Colors from '../../constants/colors';
+
+// Local Imports
 import { getMyQuests, deleteQuest } from '../../actions/questActions';
+import AnnotatedButton from '../common/AnnotatedButton';
 
 const renderIf = require('render-if');
 
@@ -78,9 +81,7 @@ class MyQuestScreen extends React.Component {
             key={this.props.quests}
           />
         )}
-        <TouchableHighlight style={styles.button} onPress={this.onBttnPress.bind(this)}>
-          <Text style={styles.btnText}>Add New</Text>
-        </TouchableHighlight>
+        <AnnotatedButton onPress={this.onBttnPress.bind(this)} buttonText={'Add New Quest!'} />
       </View>
     );
   }
@@ -88,7 +89,8 @@ class MyQuestScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 40,
+    paddingTop: 30,
+    paddingBottom: 70,
     backgroundColor: '#FAFAFA',
     flex: 1,
     justifyContent: 'flex-start',

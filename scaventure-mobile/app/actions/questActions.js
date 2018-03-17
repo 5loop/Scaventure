@@ -61,7 +61,22 @@ export function getSteps(questId) {
 export function addQuest(data) {
   return dispatch => {
     return QuestApi.addQuest(data).then(res => {
+      dispatch({type: types.ADD_QUEST_SUCCESS, newQuest: res.data.quest})
       dispatch(getQuests());
+    }).catch(e => {
+      console.log(e);
+    });
+    // setTimeout(() => {
+    //   const quests = Data.quests;
+    //   dispatch({ type: LOAD_QUESTS_SUCCESS, quests });
+    // }, 2000);
+  };
+}
+
+export function addStep(type, questId, data) {
+  return dispatch => {
+    return QuestApi.addStep(type, questId, data).then(res => {
+      dispatch(getSteps());
     }).catch(e => {
       console.log(e);
     });

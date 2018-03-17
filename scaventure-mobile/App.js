@@ -10,6 +10,12 @@ import Layout from './app/layout';
 
 //store.dispatch(loginUser({ email: 'parth95.patel@gmail.com', password: 'testtest123' }));
 // global axios settings
+
+import { loginUser } from './app/actions/sessionActions';
+
+store.dispatch(loginUser({ email: 'scaventure@scv.com', password: 'testtest' }));
+
+
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 export default class AppDrawer extends Component {

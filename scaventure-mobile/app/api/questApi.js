@@ -9,6 +9,7 @@ class QuestApi {
   static addQuest(data) {
     return axios.post(`${apiUrl}/api/quests`, data);
   }
+
   
   static getMyQuests() {
     return axios.get(`${apiUrl}/api/quests?type=user`);
@@ -28,6 +29,9 @@ class QuestApi {
 
   static getSteps(questId) {
     return axios.get(`${apiUrl}/api/quests/${questId}/steps`);
+  }
+  static addStep(type, questId, data) {
+    return axios.post(`${apiUrl}/api/quests/${questId}/steps/${type}`, data);
   }
 }
 

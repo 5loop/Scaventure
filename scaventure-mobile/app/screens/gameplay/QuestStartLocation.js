@@ -52,8 +52,7 @@ class QuestStartLocation extends React.Component {
         ],
         { cancelable: true }
       );
-    }
-    
+    } 
   }
 
   _setContent() {

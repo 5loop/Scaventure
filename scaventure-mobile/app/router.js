@@ -22,6 +22,7 @@ import QuestStepList from './screens/questSteps/QuestStepList';
 import EditStep from './screens/questSteps/EditStep';
 
 import PlayStepScreen from './screens/gameplay/PlayStepScreen';
+import GameOverScreen from './screens/gameplay/GameOverScreen';
 
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
@@ -143,6 +144,16 @@ const PlayStepScreenStack = {
   }),
 };
 
+const GameOverScreenStack = {
+  screen: GameOverScreen,
+  navigationOptions: ({ navigation }) => ({
+    title: 'Game Over!', 
+    headerStyle, 
+    headerTitleStyle,
+    headerLeft: <CloseQuest navigation={navigation} />,
+  }),
+};
+
 // Stack appears on top of the screen
 const PublicQuestsStack = StackNavigator({
   PublicQuests: {
@@ -161,6 +172,7 @@ const PublicQuestsStack = StackNavigator({
   FeedbackForm: FeedbackFormStack,
   QuestStartLocation: QuestStartLocationStack,
   PlayStep: PlayStepScreenStack,
+  GameOver: GameOverScreenStack,
 });
 
 const MyQuestsStack = StackNavigator({
@@ -198,6 +210,7 @@ const MyQuestsStack = StackNavigator({
   FeedbackForm: FeedbackFormStack,
   QuestStartLocation: QuestStartLocationStack,
   PlayStep: PlayStepScreenStack,
+  GameOver: GameOverScreenStack,
 });
 
 // screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');

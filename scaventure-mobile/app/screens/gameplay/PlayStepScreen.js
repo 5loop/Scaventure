@@ -10,6 +10,7 @@ import StepLocation from './StepLocation';
 import QAStep from './QAStep';
 import QRStep from './QRStep';
 import GPSStep from './GPSStep';
+import QRScanScreen from './QRScanScreen';
 import Timer from './Timer';
 
 class PlayStep extends React.Component { 
@@ -24,8 +25,10 @@ class PlayStep extends React.Component {
       hintsUsed: 0, // 
       displayOverlay: false, // display 'check answer' overlay
       displayMap: true, 
+      displayCamera: false,
       answerCorrect: false,
       start: Date.now(),
+      index: 0,
     };
   }
 
@@ -63,6 +66,32 @@ class PlayStep extends React.Component {
     this.setState({ displayMap: true });
   }
 
+  deductPoints() {
+    let newScore = this.state.points;
+
+    const pointsDeducted = Math.round(this.state.initialStepPoints / 4);
+    if ((newScore - pointsDeducted) >= 0) {
+      newScore -= pointsDeducted;
+    } else {
+      newScore = 0;
+    }
+    return newScore;
+  }
+
+  checkQr(scannedCode) {
+    const { steps, stepIndex } = this.props.navigation.state.params;
+    let answerCorrect = false;
+    let newScore = this.state.points;
+
+    if (steps[stepIndex].qrCode === scannedCode) { 
+      answerCorrect = true;
+    } else {
+      newScore = this.deductPoints();
+    }
+
+    this.setState({ displayCamera: false, displayOverlay: true, answerCorrect, points: newScore });
+  }
+
   /**
    *  Specify logic for checking answer (QA, QR, GPS)
    */
@@ -75,20 +104,15 @@ class PlayStep extends React.Component {
       if (this.state.index === steps[stepIndex].answer) {
         answerCorrect = true;
       } else {
-        const pointsDeducted = Math.round(this.state.initialStepPoints / 4);
-        if ((newScore - pointsDeducted) >= 0) {
-          newScore -= pointsDeducted;
-        } else {
-          newScore = 0;
-        }
+        newScore = this.deductPoints();
       }
+
+      this.setState({ displayOverlay: true, answerCorrect, points: newScore });
     } else if (steps[stepIndex].type === 'QRStep') {
-      console.warn("Logic for QR  -> To be Implemented");
+      this.setState({ displayCamera: true });
     } else if (steps[stepIndex].type === 'GPSStep') {
       console.warn("Logic for GPS -> To Be Impelemtned");
     }
-
-    this.setState({ displayOverlay: true, answerCorrect, points: newScore });
   }
   
   render() {
@@ -137,6 +161,13 @@ class PlayStep extends React.Component {
         { this.state.displayMap &&
           <View style={styles.overlay}> 
             <StepLocation closeMap={this.closeMap.bind(this)} step={steps[stepIndex]} /> 
+          </View>
+        }
+
+        {/* QR Overlay */}
+        { (steps[stepIndex].type === 'QRStep' && this.state.displayCamera) &&
+          <View style={styles.overlay}> 
+            <QRScanScreen checkQr={this.checkQr.bind(this)} /> 
           </View>
         }
 

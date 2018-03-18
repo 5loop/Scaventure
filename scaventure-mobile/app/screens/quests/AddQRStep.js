@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import QRCode from 'react-native-qrcode';
-import Colors from '../../constants/colors';
 import { TextField } from 'react-native-material-textfield';
+import MapView from 'react-native-maps';
+import { Feather } from '@expo/vector-icons';
 
 import {
   Alert,
@@ -13,28 +14,68 @@ import {
   View,
   TouchableWithoutFeedback,
   Keyboard,
+  TouchableHighlight,
 } from 'react-native';
 
+/** -- Local Imports */
+import Colors from '../../constants/colors';
 import { addStep } from '../../actions/questActions';
  
 class QRsteps extends Component {
   state = {
     text: 'default_text',
+    displayMap: false,
+    initialPosition: {
+      latitude: 0,
+      longitude: 0,
+      latitudeDelta: 0,
+      longitudeDelta: 0,
+    },
   };
+
+  componentDidMount() {    
+    navigator.geolocation.getCurrentPosition((position) => {
+      let lat = parseFloat(position.coords.latitude);
+      let long = parseFloat(position.coords.longitude);
+
+      const initialRegion = {
+        latitude: lat,
+        longitude: long,
+        latitudeDelta: 0.09,
+        longitudeDelta: 0.09,
+      };
+
+      this.setState({ initialPosition: initialRegion });
+      this.setState({ markerPosition: initialRegion });
+      
+    }, (error) => alert(JSON.stringify(error)),
+    { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 });
+
+    this.watchID  
+  }
 
   btnPressed = () => {
     const { quest } = this.props.navigation.state.params;
     const { text, description } = this.state;
-    
+
     if (!text || (text && text.trim() === '')) {
       Alert.alert('Alert', 'Your answer cannot be empty.');
     } else if (!description || (description && description.trim() === '')) {
       Alert.alert('Alert', 'Description cannot be empty.');
     } else {
-      const startLocation = {       
-        type: 'Point', 
-        coordinates: [42, 42],
-      };
+      let startLocation = {};
+
+      if (this.state.x === undefined) {
+        startLocation = {       
+          type: 'Point', 
+          coordinates: [this.state.initialPosition.latitude, this.state.initialPosition.longitude],
+        };
+      } else {
+        startLocation = {       
+          type: 'Point', 
+          coordinates: [this.state.x.latitude, this.state.x.longitude],
+        };
+      }
 
       const data = {
         description,
@@ -49,6 +90,16 @@ class QRsteps extends Component {
         this.props.navigation.goBack();
       });
     }
+  }
+
+  // Map Overlay - close
+  closeMap() {
+    this.setState({ displayMap: false });
+  }
+
+  // Map Overlay - open
+  openMap() {
+    this.setState({ displayMap: true });
   }
  
   render() {
@@ -81,12 +132,43 @@ class QRsteps extends Component {
               bgColor='purple'
               fgColor='white'
             />
-            <Button
-              title="Confirm"
-              color={Colors.primaryColor}
-              onPress={this.btnPressed.bind(this)}
-            />
           </View>
+          <View>
+            <TouchableHighlight style={styles.button}>
+              <Text style={styles.buttonText} onPress={this.btnPressed.bind(this)}>Add New</Text>
+            </TouchableHighlight>
+          </View>
+          {/* Button to open-up a map */}       
+          <View>
+            <Text style={styles.h1}>Map</Text>
+            <TouchableHighlight onPress={this.openMap.bind(this)}>
+              <Feather name="map-pin" size={35} color={Colors.black} />
+            </TouchableHighlight>
+          </View>
+
+          {/* Map Overlay */}
+          { this.state.displayMap &&
+            <View style={styles.overlay}> 
+              <MapView
+                closeMap={this.closeMap.bind(this)}
+                style={styles.map}
+                region={this.state.initialPosition}
+                initialRegion={this.state.initialPosition}
+              >
+                <MapView.Marker
+                  draggable
+                  coordinate={this.state.initialPosition}
+                  onDragEnd={(e) => {
+                    this.setState({ x: e.nativeEvent.coordinate });
+                  }}
+                  region={this.state.coordinate}
+                />
+              </MapView>
+              <TouchableHighlight> 
+                <Text style={styles.buttonText} onPress={this.closeMap.bind(this)}>Close Map</Text> 
+              </TouchableHighlight> 
+            </View>
+          }
         </View>
       </TouchableWithoutFeedback>
     );
@@ -100,6 +182,48 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   qrStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
+  },
+  button: {
+    height: 38,
+    borderRadius: 18,
+    backgroundColor: Colors.tertiaryColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#FAFAFA',
+    fontSize: 20,
+  },
+  map: {
+    minWidth: 300, 
+    minHeight: 500,
+    flex:1,
+    flexDirection: 'column',
+    
+  },
+  mapIcon: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginLeft: 20,
+    bottom: 0,
+    left: 0,
+    padding: 8,
+  },
+  overlay: {
+    flex: 1,
+    position: 'absolute',
+    alignSelf: 'stretch',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: Colors.darkPrimary,
+    opacity: 0.9,
     justifyContent: 'center',
     alignItems: 'center',
   },

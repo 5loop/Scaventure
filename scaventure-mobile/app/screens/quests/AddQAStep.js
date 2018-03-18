@@ -121,7 +121,7 @@ class AddQAStep extends React.Component {
   
   onSelect(index, value){
     this.setState({
-      value
+      index
       
     })
   }
@@ -133,6 +133,11 @@ class AddQAStep extends React.Component {
       console.log(this.state.value);
       const data = {
         question: this.state.question,
+        startLocation: {
+          type: "Point",
+          coordinates: [this.state.initialPosition.latitude, this.state.initialPosition.longitude]
+        
+        },
         stepLocation: {
           type: "Point",
           coordinates: [this.state.initialPosition.latitude, this.state.initialPosition.longitude]
@@ -141,7 +146,7 @@ class AddQAStep extends React.Component {
           stepNumber: 1,
           description: this.state.question,
           options: [this.state.option1, this.state.option2, this.state.option3, this.state.option4],
-          answer: this.state.value,
+          answer: this.state.index,
           points: 10,
       }
       this.props.addStep('qa', quest._id, data).then(() => {
@@ -153,15 +158,20 @@ class AddQAStep extends React.Component {
     }else{
       const data = {
         question: this.state.question,
+        startLocation: {
+          type: "Point",
+          coordinates: [this.state.x.latitude, this.state.x.longitude]
+        
+        },
         stepLocation: {
           type: "Point",
-          coordinates: [this.state.coordinate.latitude, this.state.coordinate.longitude]
+          coordinates: [this.state.x.latitude, this.state.x.longitude]
         
         },
           stepNumber: 1,
           description: this.state.question,
           options: [this.state.option1, this.state.option2, this.state.option3, this.state.option4],
-          answer: this.state.value,
+          answer: this.state.index,
           points: 10,
       }
       this.props.addStep('qa', quest._id, data).then(() => {
@@ -187,6 +197,7 @@ class AddQAStep extends React.Component {
         />
         <RadioGroup
         onSelect = {(index, value) => this.onSelect(index, value)}>
+        
         <RadioButton value={'item1'} >
         <TextInput
             underlineColorAndroid='transparent'

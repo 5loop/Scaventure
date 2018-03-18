@@ -74,7 +74,7 @@ class LoginScreen extends React.Component {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <ImageBackground
           style={styles.bg}
-          source={require('../../../assets/images/bg.png')}
+          source={require('../../../assets/images/bg1.jpg')}
         >
           <View style={styles.topRow}>
             {/* <Feather name="menu" color={Colors.black} size={28} onPress={this.stackNav} /> */}
@@ -82,7 +82,7 @@ class LoginScreen extends React.Component {
 
           <Image
             style={styles.logo}
-            source={require('../../../assets/images/Scaventure.png')}
+            source={require('../../../assets/images/Scaventure1.png')}
           />
 
           <View style={[styles.inputField, styles.inputMargin]}>

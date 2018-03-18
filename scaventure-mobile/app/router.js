@@ -137,6 +137,15 @@ const AddQAStepStack = {
     headerLeft: <GoBack navigation={navigation} />,
   }),
 };
+const AddQRStepStack = {
+  screen: AddQRStepScreen,
+  navigationOptions: ({ navigation }) => ({
+    title: 'Add QR Step',  
+    headerStyle,
+    headerTitleStyle,
+    headerLeft: <GoBack navigation={navigation} />,
+  }),
+};
 
 const PlayStepScreenStack = {
   screen: PlayStepScreen,
@@ -168,17 +177,6 @@ const QRscanner = {
   }),
 };
 
-// QR code
-const QRcode = {
-  screen: AddQRStepScreen,
-  navigationOptions: ({ navigation }) => ({
-    title: 'QR code',
-    headerStyle,
-    headerTitleStyle,
-    headerLeft: <GoBack navigation={navigation} />,
-  }),
-};
-
 // testing stacks
 // const QRscannerStack = StackNavigator({
 //   QRscanner: QRscanner,
@@ -199,6 +197,7 @@ const PublicQuestsStack = StackNavigator({
     }),
   },
   AddQAStep: AddQAStepStack,
+  AddQRStep: AddQRStepStack,
   AddQuest: AddQuestStack,
   QuestInfo: QuestInfoStack,
   QuestLocation: QuestLocationStack,
@@ -237,6 +236,7 @@ const MyQuestsStack = StackNavigator({
     }),
   },
   AddQAStep: AddQAStepStack,
+  AddQRStep: AddQRStepStack,
   AddQuest: AddQuestStack,
   QuestInfo: QuestInfoStack,
   QuestLocation: QuestLocationStack,

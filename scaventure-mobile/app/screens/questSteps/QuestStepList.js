@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 /* ------------------- */
 import StepRow from './StepRow';
 import Colors from '../../constants/colors';
-import AnnotatedButton from '../common/AnnotatedButton';
+import AnnotatedDropdown from '../common/AnnotatedDropdown';
 /* -- Actions */
 import { getSteps, deleteStep } from '../../actions/questActions';
 const renderIf = require('render-if');
@@ -16,6 +16,7 @@ const renderIf = require('render-if');
 const styles = StyleSheet.create({
   container: {
     paddingTop: 40,
+    paddingBottom: 40,
     backgroundColor: '#FAFAFA',
     flex: 1,
     justifyContent: 'flex-start',
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
     color: '#FAFAFA',
     fontSize: 20,
   },
-descriptionText: {
+  descriptionText: {
     fontSize: 16,
     padding: 20,
     color: Colors.black,
@@ -48,12 +49,12 @@ class QuestStepList extends React.Component {
       ds,
     };
 
-    this.onBttnPress = this.onBttnPress.bind(this);
+    this.onQABttnPress = this.onQABttnPress.bind(this);
   }
 
-  componentWillReceiveProps(){
-    const { quest } = this.props.navigation.state.params;
-    this.setState = ({ ds : this.props.getSteps(quest._id) });
+  componentWillReceiveProps(props) {
+    const ds = this.state.ds.cloneWithRows(props.steps);
+    this.setState({ ds });
   }
 
   componentDidMount() {
@@ -61,9 +62,14 @@ class QuestStepList extends React.Component {
     this.props.getSteps(quest._id); 
   }
 
-  onBttnPress() {
+  onQABttnPress() {
     const { quest } = this.props.navigation.state.params;
-    this.props.navigation.navigate('AddQAStep', {quest});
+    this.props.navigation.navigate('AddQAStep', { quest });
+  }
+
+  onQRBttnPress() {
+    const { quest } = this.props.navigation.state.params;
+    this.props.navigation.navigate('AddQRStep', { quest });
   }
 
   onEditBttnPress(step) {
@@ -108,14 +114,19 @@ class QuestStepList extends React.Component {
         {ifStepsEmpty(this.renderElement())}      
         {/* {this.props.steps.length === 0 ? this.renderElement() : */}
         {ifStepsNotEmpty(
-        <ListView               
-        enableEmptySections
-        dataSource={this.state.ds.cloneWithRows(this.props.steps)}
-        key={this.props.steps}
-        renderRow={this.renderRow.bind(this)}
-        />
+          <ListView               
+            enableEmptySections
+            dataSource={this.state.ds.cloneWithRows(this.props.steps)}
+            key={this.props.steps}
+            renderRow={this.renderRow.bind(this)}
+          />
         )}              
-        <AnnotatedButton onPress={this.onBttnPress.bind(this)} buttonText={'Add New Step!'} />
+        <AnnotatedDropdown 
+          onPress={this.onQABttnPress.bind(this)} 
+          buttonText={'Add New Step!'} 
+          options={['Q/A Step', 'QR Step']} 
+          optionFunctions={[this.onQABttnPress.bind(this), this.onQRBttnPress.bind(this)]}
+        />
       </View>
     );
   }

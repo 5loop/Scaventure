@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, TextInput, TouchableHighlight } from 'react-native';
+import { Text, View, StyleSheet, Button, TextInput, TouchableHighlight, Alert, ScrollView } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 import Colors from '../../constants/colors';
 import { bindActionCreators } from 'redux';
@@ -10,6 +10,8 @@ import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button';
 import { width, height, totalSize } from 'react-native-dimension';
 import MapView from 'react-native-maps';
 import { addStep } from '../../actions/questActions';
+import { Feather } from '@expo/vector-icons';
+
 
 
 
@@ -30,7 +32,6 @@ const styles = StyleSheet.create({
     height: 38,
     borderRadius: 18,
     backgroundColor: Colors.tertiaryColor,
-    margin: 48,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -61,8 +62,8 @@ const styles = StyleSheet.create({
     
   },
   map: {
-    left:4,
-    right:0,
+    minWidth: 300, 
+    minHeight: 500 ,
     flex:1,
     flexDirection: 'column',
     
@@ -70,7 +71,30 @@ const styles = StyleSheet.create({
   maps:{
     flex:1,
     
-  }
+  },
+  mapIcon: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginLeft: 20,
+    bottom: 0,
+    left: 0,
+    padding: 8,
+  },
+  overlay: {
+    flex: 1,
+    position: 'absolute',
+    alignSelf: 'stretch',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: Colors.darkPrimary,
+    opacity: 0.9,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
 
 
@@ -88,9 +112,104 @@ class AddQAStep extends React.Component {
         longitude:0,
         latitudeDelta:0,
         longitudeDelta:0,
-      }
+      },
+
+      question: '',
+      option1: '',
+      option2: '',
+      option3: '',
+      option4: '',
+      item1: '',
+      item2: '',
+      item3: '',
+      item4: '',
+      Points: 0,
+      addingFeedback: false,
+      errors: { Points: null , question: null, option1: null, option2: null, option3: null, option4: null,item1: null, item2: null, item3: null, item4: null },
     }
+
+
   }
+
+validateField(fieldname) {
+    const value = this.state[fieldname];
+    let error = '';
+
+    if (fieldname === 'question') {
+      error = (!value || value.trim() === '') ? 'question cannot be empty!' : null;
+    } else if (fieldname === 'item1' || fieldname === 'item2' || fieldname === 'item3' || fieldname === 'item4') {
+      error = (!value || value.trim() === '') ? 'You must select an answer to this question!' : null;
+    }else if(fieldname === 'option1' || fieldname === 'option2'  ||fieldname === 'option3'  ||fieldname === 'option4' ){
+      error = (!value || value.trim() === '') ? 'You must provide an option in all fields!' : null;
+
+    }
+
+    return error;
+  }
+
+  checkPoint() {
+    const error = this.validateField('Points');
+    this.setState({ errors: { question: error, Points: this.state.errors.Points } }); 
+  }
+
+  checkQuestion() {
+    const error = this.validateField('question');
+    this.setState({ errors: { question: error, option1: this.state.errors.option1 } }); 
+  }
+
+  CheckOption1() {
+    const error = this.validateField('option1');
+    this.setState({ errors: { question: this.state.errors.title, 
+                              item1: this.state.errors.item1,
+                              item2: this.state.errors.item2,
+                              item3: this.state.errors.item3,
+                              item4: this.state.errors.item4,
+                              option2: this.state.errors.title,
+                              option3: this.state.errors.title,
+                              option4: this.state.errors.title,
+                              option1: error } });  
+  }
+
+  CheckOption2() {
+    const error = this.validateField('option1');
+    this.setState({ errors: { question: this.state.errors.title, 
+                              item1: this.state.errors.item1,
+                              item2: this.state.errors.item2,
+                              item3: this.state.errors.item3,
+                              item4: this.state.errors.item4,
+                              option1: this.state.errors.option1,
+                              option3: this.state.errors.option3,
+                              option4: this.state.errors.option4,
+                              option2: error } });  
+  }
+
+  CheckOption3() {
+    const error = this.validateField('option1');
+    this.setState({ errors: { question: this.state.errors.title, 
+                              item1: this.state.errors.item1,
+                              item2: this.state.errors.item2,
+                              item3: this.state.errors.item3,
+                              item4: this.state.errors.item4,
+                              option1: this.state.errors.option1,
+                              option2: this.state.errors.option2,
+                              option4: this.state.errors.option4,
+                              option3: error } });  
+  }
+
+  CheckOption4() {
+    const error = this.validateField('option1');
+    this.setState({ errors: { question: this.state.errors.title, 
+                              item1: this.state.errors.item1,
+                              item2: this.state.errors.item2,
+                              item3: this.state.errors.item3,
+                              item4: this.state.errors.item4,
+                              option1: this.state.errors.option1,
+                              option2: this.state.errors.option2,
+                              option3: this.state.errors.option4,
+                              option4: error } });  
+  }
+
+
 
   
 
@@ -119,6 +238,7 @@ class AddQAStep extends React.Component {
 
   
   
+  
   onSelect(index, value){
     this.setState({
       index
@@ -126,8 +246,35 @@ class AddQAStep extends React.Component {
     })
   }
 
+    // Map Overlay - close
+    closeMap() {
+      this.setState({ displayMap: false });
+    }
+  
+    // Map Overlay - open
+    openMap() {
+      this.setState({ displayMap: true });
+    }
+
   onPress(){
     const { quest } = this.props.navigation.state.params;
+
+    const errorTitle = this.validateField('question');
+    const errOption1 = this.validateField('option1');
+    const errOption2 = this.validateField('option2');
+    const errOption3 = this.validateField('option3');
+    const errOption4 = this.validateField('option4');
+
+    
+
+    if (errorTitle || errOption1 ||errOption2 || errOption3 || errOption4  || !this.state.question || !this.state.option1 || !this.state.option2 || !this.state.option3 || !this.state.option4|| !this.state.Points) {
+      this.setState({ errors: { title: errorTitle, description: errOption1 } });
+      Alert.alert('Alert', 'Please Fill in all the required fields!');
+      return;
+    }
+
+    this.setState({ addingFeedback: true });
+
 
     if(this.state.x == undefined) {
       console.log(this.state.value);
@@ -185,15 +332,17 @@ class AddQAStep extends React.Component {
 
   render() {    
     return (
-      
-
       <View style={styles.container}>
+            
+
           <View>
           <TextField
           label='Question'
           baseColor={Colors.secondaryColor}
           tintColor={Colors.primaryColor}
           onChangeText={(question)=> this.setState({question})}
+          error={this.state.errors.question}
+          onBlur={() => this.checkQuestion()}
         />
         <RadioGroup
         onSelect = {(index, value) => this.onSelect(index, value)}>
@@ -204,6 +353,8 @@ class AddQAStep extends React.Component {
             style={styles.textIpt}
             placeholder='Option 1'
             onChangeText={(option1) => this.setState({ option1 })}
+            error={this.state.errors.option1}
+            onBlur={() => this.CheckOption1()}
           />
         </RadioButton>
  
@@ -213,6 +364,8 @@ class AddQAStep extends React.Component {
             style={styles.textIpt}
             placeholder='Option 2'
             onChangeText={(option2) => this.setState({ option2 })}
+            error={this.state.errors.option2}
+            onBlur={() => this.CheckOption2()}
           />
         </RadioButton>
  
@@ -222,6 +375,8 @@ class AddQAStep extends React.Component {
             style={styles.textIpt}
             placeholder='Option 3'
             onChangeText={(option3) => this.setState({ option3 })}
+            error={this.state.errors.option3}
+            onBlur={() => this.CheckOption3()}
           />
         </RadioButton>
         <RadioButton value={'item4'}>
@@ -230,6 +385,8 @@ class AddQAStep extends React.Component {
             style={styles.textIpt}
             placeholder='Option 4'
             onChangeText={(option4) => this.setState({ option4 })}
+            error={this.state.errors.option4}
+            onBlur={() => this.CheckOption4()}
           />
         </RadioButton>
       </RadioGroup>
@@ -239,9 +396,31 @@ class AddQAStep extends React.Component {
           baseColor={Colors.secondaryColor}
           tintColor={Colors.primaryColor}
           onChangeText={(Points)=> this.setState({Points})}
+          error={this.state.errors.Points}
+          onBlur={() => this.CheckOption4()}
         />
       </View> 
-      <MapView
+      {/* Button to open-up a map */}       
+      <View>
+          <Text style={styles.h1}>Map</Text>
+          <TouchableHighlight onPress={this.openMap.bind(this)}>
+            <Feather name="map-pin" size={35} color={Colors.black} />
+          </TouchableHighlight>
+      </View>
+      
+      
+      <View>
+        <TouchableHighlight style={styles.button}>
+            <Text style={styles.buttonText} onPress={this.onPress.bind(this)}>Add New</Text>
+          </TouchableHighlight>
+      </View>
+      
+
+        {/* Map Overlay */}
+        { this.state.displayMap &&
+          <View style={styles.overlay}> 
+            <MapView
+            closeMap={this.closeMap.bind(this)}
             style={styles.map}
             region={this.state.initialPosition}
             
@@ -261,13 +440,13 @@ class AddQAStep extends React.Component {
               
             />
 
-      </MapView>
+          </MapView>
+          <TouchableHighlight> 
+            <Text style={styles.buttonText} onPress={this.closeMap.bind(this)}>Close Map</Text> 
+            </TouchableHighlight> 
+          </View>
+        }
 
-      <TouchableHighlight style={styles.button}>
-          <Text style={styles.buttonText} onPress={this.onPress.bind(this)}>Add New</Text>
-        </TouchableHighlight>
-      
-      
       </View>
     );
   }

@@ -11,6 +11,8 @@ import Colors from '../../constants/colors';
 import AnnotatedDropdown from '../common/AnnotatedDropdown';
 /* -- Actions */
 import { getSteps, deleteStep } from '../../actions/questActions';
+import EmptyListScreen from '../common/EmptyListScreen';
+
 const renderIf = require('render-if');
 
 const styles = StyleSheet.create({
@@ -101,7 +103,11 @@ class QuestStepList extends React.Component {
   }
 
   renderElement(){
-    return <Text style={styles.descriptionText}>There are no steps for this quest. Please add some steps and then come back.</Text>;
+    return <EmptyListScreen 
+    title={'There are no steps for this quests!'}
+    icon={'alert-circle'} 
+    description={'Please add some steps and come back!'}
+  />;
    }
  
 

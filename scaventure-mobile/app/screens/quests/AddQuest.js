@@ -95,10 +95,49 @@ class AddQuest extends React.Component {
         longitude:0,
         latitudeDelta:0,
         longitudeDelta:0,
-      }
+      },
+      title: '',
+      description: '',
+      addingFeedback: false,
+      errors: { title: null, description: null },
+      
     }
   }
 
+  onFocusTitle() {
+    this.setState({ errors: { title: null, description: this.state.errors.description } }); 
+  }
+
+  onFocusDescription() {
+    this.setState({ errors: { title: this.state.errors.title, description: null } }); 
+  }
+
+  updateStars(i) {
+    this.setState({ numStars: i + 1 });
+  }
+
+  validateField(fieldname) {
+    const value = this.state[fieldname];
+    let error = '';
+
+    if (fieldname === 'title') {
+      error = (!value || value.trim() === '') ? 'Title cannot be empty!' : null;
+    } else if (fieldname === 'description') {
+      error = (!value || value.trim() === '') ? 'Description cannot be empty!' : null;
+    }
+
+    return error;
+  }
+
+  checkTitle() {
+    const error = this.validateField('title');
+    this.setState({ errors: { title: error, description: this.state.errors.description } }); 
+  }
+
+  checkDescription() {
+    const error = this.validateField('description');
+    this.setState({ errors: { title: this.state.errors.title, description: error } });  
+  }
   
 
   componentDidMount(){
@@ -123,9 +162,24 @@ class AddQuest extends React.Component {
     
   }
 
+
+
+
+
   onPress(){
     console.log(this.state.x);
-   
+    
+    const errorTitle = this.validateField('title');
+    const errorDescription = this.validateField('description');
+
+    if (errorTitle || errorDescription || !this.state.title || !this.state.description) {
+      this.setState({ errors: { title: errorTitle, description: errorDescription } });
+      return;
+    }
+
+    this.setState({ addingFeedback: true });
+
+    
     if(this.state.x == undefined) {
       
       
@@ -181,6 +235,12 @@ class AddQuest extends React.Component {
           baseColor={Colors.secondaryColor}
           tintColor={Colors.primaryColor}
           onChangeText={(title)=> this.setState({title})}
+          error={this.state.errors.title}
+          onBlur={() => this.checkTitle()}
+          onFocus={() => this.onFocusTitle()}
+          characterRestriction={40}
+          maxLength={40}
+          
         />
         <TextField
           label='Description'
@@ -188,6 +248,11 @@ class AddQuest extends React.Component {
           tintColor={Colors.primaryColor}
           multiline
           onChangeText={(description)=> this.setState({description})}
+          error={this.state.errors.description}
+          onBlur={() => this.checkDescription()}
+          onFocus={() => this.onFocusDescription()}
+          characterRestriction={300}
+          maxLength={300}
 
         />
           </View>

@@ -21,6 +21,8 @@ import LogoutNavOption from './logout';
 import QuestStepList from './screens/questSteps/QuestStepList';
 import EditStep from './screens/questSteps/EditStep';
 
+// testing qr code generator
+import AddQRStepScreen from './screens/quests/AddQRStep';
 // testing qr scanner
 import QRScanScreen from './screens/gameplay/QRScanScreen';
 import PlayStepScreen from './screens/gameplay/PlayStepScreen';
@@ -155,6 +157,25 @@ const QRscanner = {
     headerLeft: <GoBack navigation={navigation} />,
   }),
 }
+
+// QR code
+const QRcode = {
+  screen: AddQRStepScreen,
+  navigationOptions: ({ navigation }) => ({
+    title: 'QR code',
+    headerStyle,
+    headerTitleStyle,
+    headerLeft: <GoBack navigation={navigation} />,
+  }),
+}
+
+// testing stacks
+// const QRscannerStack = StackNavigator({
+//   QRscanner: QRscanner,
+// });
+// const QRcodeStack = StackNavigator({
+//   addQRcode: QRcode,
+// });
 
 // Stack appears on top of the screen
 const PublicQuestsStack = StackNavigator({

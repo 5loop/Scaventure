@@ -12,12 +12,17 @@ import {
 import { BarCodeScanner, Permissions } from 'expo';
 
 export default class QRScanScreen extends Component {
-  state = {
-    hasCameraPermission: null,
-    lastScannedUrl: null,
-    // correctBarcode: this.props.steps.qrCode // get the correct barcode from steps id
-    correctBarcode: 'exp://rk-fzf.yli40.scaventure-mobile.exp.direct:80', // for testing
-  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      hasCameraPermission: null,
+      lastScannedUrl: null,
+      // correctBarcode: this.props.steps.qrCode // get the correct barcode from steps id
+      correctBarcode: props.qrCode, // for testing
+    };
+  }
 
   componentDidMount() {
     this._requestCameraPermission();
@@ -60,19 +65,20 @@ export default class QRScanScreen extends Component {
 
   _handleBarcode = () => {
     // check if the barcode matches.
-    if (this.state.lastScannedUrl == this.state.correctBarcode) {
-      // this.props.navigation.goBack(null);
-      Alert.alert("match successful.") // for testing
-    } else {
-      Alert.alert(
-        'Barcode not matching!',
-        this.state.lastScannedUrl,
-        [
-          { text: 'Ok', onPress: () => {this.setState({ lastScannedUrl: null })} },
-        ],
-        { cancellable: false }
-      );
-    }
+    this.props.checkQr(this.state.lastScannedUrl);
+    // if (this.state.lastScannedUrl == this.state.correctBarcode) {
+    //   // this.props.navigation.goBack(null);
+    //   Alert.alert("match successful.") // for testing
+    // } else {
+    //   Alert.alert(
+    //     'Barcode not matching!',
+    //     this.state.lastScannedUrl,
+    //     [
+    //       { text: 'Ok', onPress: () => {this.setState({ lastScannedUrl: null })} },
+    //     ],
+    //     { cancellable: false }
+    //   );
+    // }
   };
 
   _maybeRenderUrl = () => {

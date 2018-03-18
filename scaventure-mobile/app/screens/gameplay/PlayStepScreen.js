@@ -1,8 +1,6 @@
 import React from 'react';
-import { MapView } from 'expo';
 import { Text, View, StyleSheet, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { RadioGroup, RadioButton } from 'react-native-flexi-radio-button';
 
 /** -- Local Imports */
 import Colors from '../../constants/colors';
@@ -12,6 +10,8 @@ import StepLocation from './StepLocation';
 import QAStep from './QAStep';
 import QRStep from './QRStep';
 import GPSStep from './GPSStep';
+import QRScanScreen from './QRScanScreen';
+import Timer from './Timer';
 
 class PlayStep extends React.Component { 
   constructor(props, context) {
@@ -25,7 +25,10 @@ class PlayStep extends React.Component {
       hintsUsed: 0, // 
       displayOverlay: false, // display 'check answer' overlay
       displayMap: true, 
+      displayCamera: false,
       answerCorrect: false,
+      start: Date.now(),
+      index: 0,
     };
   }
 
@@ -39,16 +42,17 @@ class PlayStep extends React.Component {
    */
   handleNextStep() {
     const { steps, stepIndex } = this.props.navigation.state.params;
-    let { totalScore = 0 } = this.props.navigation.state.params;
+    let { totalScore = 0, totalElapsed = 0 } = this.props.navigation.state.params;
     const { points } = this.state;
     totalScore += points;
+    totalElapsed += (new Date() - this.state.start);
 
     // Check if user completed the game
     if (steps.length !== stepIndex + 1) {
       // Navigate to the next step
-      this.props.navigation.navigate('PlayStep', { steps, stepIndex: stepIndex + 1, totalScore });
+      this.props.navigation.navigate('PlayStep', { steps, stepIndex: stepIndex + 1, totalScore, totalElapsed });
     } else {
-      console.warn("You Completed the Game!");
+      this.props.navigation.navigate('GameOver', { totalScore, totalElapsed });
     }
   }
 
@@ -60,6 +64,32 @@ class PlayStep extends React.Component {
   // Map Overlay - open
   openMap() {
     this.setState({ displayMap: true });
+  }
+
+  deductPoints() {
+    let newScore = this.state.points;
+
+    const pointsDeducted = Math.round(this.state.initialStepPoints / 4);
+    if ((newScore - pointsDeducted) >= 0) {
+      newScore -= pointsDeducted;
+    } else {
+      newScore = 0;
+    }
+    return newScore;
+  }
+
+  checkQr(scannedCode) {
+    const { steps, stepIndex } = this.props.navigation.state.params;
+    let answerCorrect = false;
+    let newScore = this.state.points;
+
+    if (steps[stepIndex].qrCode === scannedCode) { 
+      answerCorrect = true;
+    } else {
+      newScore = this.deductPoints();
+    }
+
+    this.setState({ displayCamera: false, displayOverlay: true, answerCorrect, points: newScore });
   }
 
   /**
@@ -74,20 +104,15 @@ class PlayStep extends React.Component {
       if (this.state.index === steps[stepIndex].answer) {
         answerCorrect = true;
       } else {
-        const pointsDeducted = Math.round(this.state.initialStepPoints / 4);
-        if ((newScore - pointsDeducted) >= 0) {
-          newScore -= pointsDeducted;
-        } else {
-          newScore = 0;
-        }
+        newScore = this.deductPoints();
       }
+
+      this.setState({ displayOverlay: true, answerCorrect, points: newScore });
     } else if (steps[stepIndex].type === 'QRStep') {
-      console.warn("Logic for QR  -> To be Implemented");
+      this.setState({ displayCamera: true });
     } else if (steps[stepIndex].type === 'GPSStep') {
       console.warn("Logic for GPS -> To Be Impelemtned");
     }
-
-    this.setState({ displayOverlay: true, answerCorrect, points: newScore });
   }
   
   render() {
@@ -104,8 +129,8 @@ class PlayStep extends React.Component {
     }
 
     return (
-      <View style={styles.container}> 
-        
+      <View style={styles.container}>
+
         {/* Render Specific Step-type Description/Question */}
         { Step }   
 
@@ -114,10 +139,14 @@ class PlayStep extends React.Component {
           <Text style={styles.buttonText}>Check</Text>
         </TouchableHighlight> 
         
-        {/* Display current step score */}
+        {/* Display current step score & timer */}
         <View style={styles.gameCard}>
-          <Text style={styles.scoreText}>Score</Text>
-          <Text style={styles.h1}>{this.state.points}</Text>
+          <View style={styles.gameCardElement}>
+            <Text style={styles.scoreText}>Time <Timer start={this.state.start} /></Text>
+          </View>
+          <View style={styles.gameCardElement}>
+            <Text style={styles.scoreText}>Score <Text style={styles.score}>{this.state.points}</Text></Text>
+          </View>
         </View>
 
         {/* Button to open-up a map */}       
@@ -134,6 +163,14 @@ class PlayStep extends React.Component {
             <StepLocation closeMap={this.closeMap.bind(this)} step={steps[stepIndex]} /> 
           </View>
         }
+
+        {/* QR Overlay */}
+        { (steps[stepIndex].type === 'QRStep' && this.state.displayCamera) &&
+          <View style={styles.overlay}> 
+            <QRScanScreen checkQr={this.checkQr.bind(this)} /> 
+          </View>
+        }
+
         {/* Overlay -> displayed when answer is submitted - either correct or false */}
         { this.state.displayOverlay && 
           (this.state.answerCorrect 
@@ -190,8 +227,12 @@ const styles = StyleSheet.create({
     marginRight: 20,
     bottom: 0,
     right: 0,
+    minWidth: 180,
+  },
+  gameCardElement: {
     backgroundColor: Colors.lightSecondary,
     padding: 8,
+    margin: 3,    
   },
   mapIcon: {
     position: 'absolute',
@@ -203,10 +244,14 @@ const styles = StyleSheet.create({
     left: 0,
     padding: 8,
   },
+  score: { 
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.white,
+  },
   scoreText: {
     fontSize: 22,
     fontWeight: 'bold',
-    textAlign: 'center',
     color: Colors.primaryColor,
   },
   button: {

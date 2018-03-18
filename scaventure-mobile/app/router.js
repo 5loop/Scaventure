@@ -26,6 +26,7 @@ import AddQRStepScreen from './screens/quests/AddQRStep';
 // testing qr scanner
 import QRScanScreen from './screens/gameplay/QRScanScreen';
 import PlayStepScreen from './screens/gameplay/PlayStepScreen';
+import GameOverScreen from './screens/gameplay/GameOverScreen';
 
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
@@ -136,6 +137,15 @@ const AddQAStepStack = {
     headerLeft: <GoBack navigation={navigation} />,
   }),
 };
+const AddQRStepStack = {
+  screen: AddQRStepScreen,
+  navigationOptions: ({ navigation }) => ({
+    title: 'Add QR Step',  
+    headerStyle,
+    headerTitleStyle,
+    headerLeft: <GoBack navigation={navigation} />,
+  }),
+};
 
 const PlayStepScreenStack = {
   screen: PlayStepScreen,
@@ -147,6 +157,15 @@ const PlayStepScreenStack = {
   }),
 };
 
+const GameOverScreenStack = {
+  screen: GameOverScreen,
+  navigationOptions: ({ navigation }) => ({
+    title: 'Game Over!', 
+    headerStyle, 
+    headerTitleStyle,
+    headerLeft: <CloseQuest navigation={navigation} />,
+  }),
+};
 // QR scanner
 const QRscanner = {
   screen: QRScanScreen,
@@ -156,18 +175,7 @@ const QRscanner = {
     headerTitleStyle,
     headerLeft: <GoBack navigation={navigation} />,
   }),
-}
-
-// QR code
-const QRcode = {
-  screen: AddQRStepScreen,
-  navigationOptions: ({ navigation }) => ({
-    title: 'QR code',
-    headerStyle,
-    headerTitleStyle,
-    headerLeft: <GoBack navigation={navigation} />,
-  }),
-}
+};
 
 // testing stacks
 // const QRscannerStack = StackNavigator({
@@ -189,12 +197,14 @@ const PublicQuestsStack = StackNavigator({
     }),
   },
   AddQAStep: AddQAStepStack,
+  AddQRStep: AddQRStepStack,
   AddQuest: AddQuestStack,
   QuestInfo: QuestInfoStack,
   QuestLocation: QuestLocationStack,
   FeedbackForm: FeedbackFormStack,
   QuestStartLocation: QuestStartLocationStack,
   PlayStep: PlayStepScreenStack,
+  GameOver: GameOverScreenStack,
 });
 
 const MyQuestsStack = StackNavigator({
@@ -226,12 +236,14 @@ const MyQuestsStack = StackNavigator({
     }),
   },
   AddQAStep: AddQAStepStack,
+  AddQRStep: AddQRStepStack,
   AddQuest: AddQuestStack,
   QuestInfo: QuestInfoStack,
   QuestLocation: QuestLocationStack,
   FeedbackForm: FeedbackFormStack,
   QuestStartLocation: QuestStartLocationStack,
   PlayStep: PlayStepScreenStack,
+  GameOver: GameOverScreenStack,
 });
 
 // screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');

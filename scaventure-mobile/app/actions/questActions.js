@@ -61,8 +61,8 @@ export function getSteps(questId) {
 export function deleteStep(questId, stepId) {
   return dispatch =>
     QuestApi.deleteStep(questId, stepId).then(res => {
-      dispatch({ type: types.DELETE_STEP_SUCCESS });
       dispatch(getSteps(questId));
+      dispatch({ type: types.DELETE_STEP_SUCCESS });
     }).catch(e => {
       console.log(e); 
     });
@@ -86,7 +86,7 @@ export function addQuest(data) {
 export function addStep(type, questId, data) {
   return dispatch => {
     return QuestApi.addStep(type, questId, data).then(res => {
-      dispatch(getSteps());
+      dispatch(getSteps(questId));
     }).catch(e => {
       console.log(e);
     });

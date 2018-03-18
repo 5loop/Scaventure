@@ -14,21 +14,32 @@ export default class StepLocation extends React.Component {
       latitude: null,
       longitude: null,
       error: null,
+      markers: null,
     };
-  }
 
-  viewStep() {
-    //this.props.navigation.goBack();
+    this.mapRef = null;
   }
 
   componentDidMount() {
     this.watchId = navigator.geolocation.watchPosition(
       (position) => {
+        const stepLongitude = this.props.step.startLocation.coordinates[1];
+        const stepLatitude = this.props.step.startLocation.coordinates[0];
+    
+        const arrayMarker = [
+          { latitude: stepLatitude, longitude: stepLongitude }, 
+          { latitude: position.coords.latitude, longitude: position.coords.longitude },
+        ];
+
         this.setState({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
           error: null,
         });
+
+        if (this.mapRef && arrayMarker.length === 2 && arrayMarker[0].latitude && arrayMarker[1].latitude) {
+          this.mapRef.fitToCoordinates(arrayMarker, { edgePadding: { top: 60, right: 60, bottom: 60, left: 60 }, animated: true });
+        }
       },
       (error) => this.setState({ error: error.message }),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
@@ -41,24 +52,20 @@ export default class StepLocation extends React.Component {
     // const { params } = this.props.navigation.state;
     const stepLongitude = this.props.step.startLocation.coordinates[1];
     const stepLatitude = this.props.step.startLocation.coordinates[0];
-   
+
+    const arrayMarker = [{ latitude: stepLatitude, longitude: stepLongitude }];
+    
+    if (this.state.latitude && this.state.longitude) {
+      arrayMarker.push({ latitude: this.state.latitude, longitude: this.state.longitude });
+    }
+
     return (
       <View style={{ flex: 1 }}>
         <Text style={styles.h1}>Step Start Location</Text>
         <MapView
           style={{ flex: 1, minWidth: 300, minHeight: 500 }}
-          initialRegion={{
-            latitude: stepLatitude,
-            longitude: stepLongitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
+          ref={(ref) => { this.mapRef = ref; }}
         >
-          {/*
-            <MapView.Marker
-              coordinate={{ latitude: this.state.latitude, longitude: this.state.longitude }}
-            />
-          */}
           { this.state.latitude && this.state.longitude && 
             <MapView.Marker
               pinColor={Colors.primaryColor}

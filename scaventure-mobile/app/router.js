@@ -9,6 +9,7 @@ import Colors from '../app/constants/colors';
 
 // //// SCREENS ////////
 import QuestScreen from './screens/quests/QuestScreen';
+import PrivateQuestScreen from './screens/quests/PrivateQuestScreen';
 import QuestInfo from './screens/quests/QuestInfo';
 import QuestLocation from './screens/quests/QuestLocation';
 import AddQuest from './screens/quests/AddQuest';
@@ -207,6 +208,27 @@ const PublicQuestsStack = StackNavigator({
   GameOver: GameOverScreenStack,
 });
 
+const PrivateQuestsStack = StackNavigator({
+  PrivateQuests: {
+    screen: PrivateQuestScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Private Quests',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <Hamburger navigation={navigation} />,
+    }),
+  },
+  AddQAStep: AddQAStepStack,
+  AddQRStep: AddQRStepStack,
+  AddQuest: AddQuestStack,
+  QuestInfo: QuestInfoStack,
+  QuestLocation: QuestLocationStack,
+  FeedbackForm: FeedbackFormStack,
+  QuestStartLocation: QuestStartLocationStack,
+  PlayStep: PlayStepScreenStack,
+  GameOver: GameOverScreenStack,
+});
+
 const MyQuestsStack = StackNavigator({
   myQuest: {
     screen: MyQuestScreen,
@@ -247,14 +269,17 @@ const MyQuestsStack = StackNavigator({
 });
 
 // screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
-const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
+//const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
 // const MyQuestsStack = screenToStack(myQuestStack, 'MyQuests', 'My Quests');
 const CompletedQuestsStack = screenToStack(ToBeImplemented, 'CompletedQuests', 'Completed Quests');
 
 export default DrawerNavigator({
   PublicQuests: {
     screen: PublicQuestsStack,
-  },  
+  }, 
+  PrivateQuests: {
+    screen: PrivateQuestsStack,
+  }, 
   MyQuests: {
     screen: MyQuestsStack,
   },

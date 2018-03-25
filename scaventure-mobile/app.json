@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "scaventure-mobile",
-    "description": "This project is really great.",
+    "description": "Quests playing",
     "slug": "scaventure-mobile",
     "privacy": "public",
     "sdkVersion": "25.0.0",
@@ -9,7 +9,9 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "android.config.googleMaps.apiKey": "AIzaSyA1YwT9x6Plp8GBa0nqGPCWBnRF-kvWWVk",
+    "android": {
+      "package": "com.scaventureseneca.scaventure"
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",

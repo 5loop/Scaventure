@@ -10,6 +10,7 @@ import Colors from '../../constants/colors';
 // Local Imports
 import { getMyQuests, deleteQuest } from '../../actions/questActions';
 import AnnotatedButton from '../common/AnnotatedButton';
+import EmptyListScreen from '../common/EmptyListScreen';
 
 const renderIf = require('render-if');
 
@@ -72,7 +73,12 @@ class MyQuestScreen extends React.Component {
     const ifNotEmptyQuest = renderIf(this.props.quests.length !== 0);
     return (
       <View style={styles.container}>
-        {ifEmptyQuest(<Text style={styles.emptText}>Your quest is empty!</Text>)}
+        {ifEmptyQuest(            
+          <EmptyListScreen 
+            title={'No Quests :('}
+            description={'Push that \'plus\' button & create your first quest!'}
+          />
+        )}
         {ifNotEmptyQuest(
           <ListView
             enableEmptySections

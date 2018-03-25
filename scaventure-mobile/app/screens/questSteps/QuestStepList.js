@@ -1,67 +1,45 @@
-import React from 'react';
-import { Text, View, StyleSheet, ListView, TouchableHighlight, Alert } from 'react-native';
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  Platform,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
+import SortableListView from 'react-native-sortable-listview'; 
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-/* -- Local imports -- */
-/* ------------------- */
-import StepRow from './StepRow';
-import Colors from '../../constants/colors';
 import AnnotatedDropdown from '../common/AnnotatedDropdown';
-/* -- Actions */
-import { getSteps, deleteStep } from '../../actions/questActions';
+import AnnotatedButton from '../common/AnnotatedButton';
 import EmptyListScreen from '../common/EmptyListScreen';
 
-const renderIf = require('render-if');
+import Colors from '../../constants/colors';
+/* -- Actions */
+import { getSteps, deleteStep, reorderSteps } from '../../actions/questActions';
+import StepRow from './StepRow';
 
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 40,
-    paddingBottom: 40,
-    backgroundColor: '#FAFAFA',
-    flex: 1,
-    justifyContent: 'flex-start',
-  },
-  button: {
-    height: 60,
-    borderColor: '#05A5D1',
-    borderWidth: 2,
-    backgroundColor: '#333',
-    margin: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#FAFAFA',
-    fontSize: 20,
-  },
-  descriptionText: {
-    fontSize: 16,
-    padding: 20,
-    color: Colors.black,
-  },
-});
+const window = Dimensions.get('window');
 
-class QuestStepList extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+class QuestStepList extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      ds,
+      steps: props.steps,
+      disableSorting: true,
+      oldOrder: props.steps.map(s => s.stepNumber),
     };
-
-    this.onQABttnPress = this.onQABttnPress.bind(this);
   }
-
-  componentWillReceiveProps(props) {
-    const ds = this.state.ds.cloneWithRows(props.steps);
-    this.setState({ ds });
-  }
-
+  
   componentDidMount() {
     const { quest } = this.props.navigation.state.params;
     this.props.getSteps(quest._id); 
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ steps: nextProps.steps });
   }
 
   onQABttnPress() {
@@ -91,52 +69,130 @@ class QuestStepList extends React.Component {
     );
   }
 
-  renderRow(step) {
-    return (
-      <StepRow 
-      step={step} 
-      onEditBttnPress={this.onEditBttnPress.bind(this)} 
-      onDelBttnPress={this.onDelBttnPress.bind(this)}
-      />
-      
-    );
+  /**
+   * Reorder steps on row moved
+   */
+  onRowMoved = (e) => {
+    const steps = [...this.state.steps];
+
+    if (e.to < e.from) {
+      // from top to bottom
+      for (let i = e.to; i <= e.from; i++) {
+        steps[i].stepNumber += 1;
+      }
+    } else {
+      // from bottom to top
+      for (let i = e.from + 1; i <= e.to; i++) {
+        steps[i].stepNumber -= 1;
+      }
+    }
+
+    steps[e.from].stepNumber = e.to;
+    steps.sort((obj1, obj2) => obj1.stepNumber - obj2.stepNumber);
+
+    this.setState({ steps });
   }
 
-  renderElement(){
-    return <EmptyListScreen 
-    title={'There are no steps for this quests!'}
-    icon={'alert-circle'} 
-    description={'Please add some steps and come back!'}
-  />;
-   }
- 
+  toggleReorder = () => this.setState({ disableSorting: !this.state.disableSorting })
+  
+  // Single row
+  _renderRow = (row) => 
+    (<StepRow 
+      data={row}   
+      onEditBttnPress={this.onEditBttnPress.bind(this)} 
+      onDelBttnPress={this.onDelBttnPress.bind(this)} 
+      disableSorting={this.state.disableSorting}
+    />);
+
+  /**
+   * Send to backend server
+   */
+  saveOrder() {
+    const { quest } = this.props.navigation.state.params;
+   
+    // change array to key-value pairs where _id=key, value=stepNumber
+    const order = this.state.steps.reduce((map, obj) => {
+      map[obj._id] = obj.stepNumber;
+      return map;
+    }, {});
+
+    this.toggleReorder();
+    this.props.reorderSteps(quest._id, order).then(() => {
+      console.log('Added!');
+    }).catch((e) => {
+      console.log(e);
+    });
+  }
 
   render() {
-    const ifStepsEmpty = renderIf(this.props.steps.length === 0);
-    const ifStepsNotEmpty = renderIf(this.props.steps.length !== 0);
-    const { navigate } = this.props.navigation;
+    /* eslint-disable no-nested-ternary */
+    const order = this.state.steps.map(s => s.stepNumber);
+
     return (
       <View style={styles.container}>
-        {ifStepsEmpty(this.renderElement())}      
-        {/* {this.props.steps.length === 0 ? this.renderElement() : */}
-        {ifStepsNotEmpty(
-          <ListView               
-            enableEmptySections
-            dataSource={this.state.ds.cloneWithRows(this.props.steps)}
-            key={this.props.steps}
-            renderRow={this.renderRow.bind(this)}
+        {(!this.props.stepsLoading && this.state.steps && this.state.steps.length !== 0) ?          
+          <SortableListView
+            style={styles.list}
+            contentContainerStyle={styles.contentContainer}
+            data={this.state.steps}
+            order={order}
+            onRowMoved={this.onRowMoved.bind(this)}
+            disableSorting={this.state.disableSorting}
+            renderRow={this._renderRow} 
           />
-        )}              
-        <AnnotatedDropdown 
-          onPress={this.onQABttnPress.bind(this)} 
-          buttonText={'Add New Step!'} 
-          options={['Q/A Step', 'QR Step']} 
-          optionFunctions={[this.onQABttnPress.bind(this), this.onQRBttnPress.bind(this)]}
-        />
+          : (this.props.stepsLoading ? 
+            <ActivityIndicator size="large" color={Colors.primaryColor} /> 
+            :
+            <EmptyListScreen 
+              title={'No Steps :('}
+              description={'Select step type from \'Step Options\' menu & add new step!'}
+            />
+          )
+
+        }
+        { this.state.disableSorting ?
+          <AnnotatedDropdown 
+            onPress={this.onQABttnPress.bind(this)} 
+            buttonText={'Step Options'} 
+            icon='settings'
+            options={['Q/A Step', 'QR Step', 'Reorder Steps']} 
+            optionFunctions={[this.onQABttnPress.bind(this), this.onQRBttnPress.bind(this), this.toggleReorder.bind(this)]}
+          />
+          :
+          <AnnotatedButton color={Colors.green} icon="check" buttonText="Done!" onPress={this.saveOrder.bind(this)} />
+        }
       </View>
     );
   }
 }
+/* eslint-disable */
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.white,
+
+    ...Platform.select({
+      ios: {
+        paddingTop: 20,
+      },
+    }),
+  },
+  list: {
+    flex: 1,
+    marginTop: 17,
+    marginBottom: 50,
+  },
+  contentContainer: {
+    width: window.width,
+  },
+  text: {
+    fontSize: 18,
+    color: Colors.darkPrimary,
+  },
+});
 
 function mapStateToProps(state, props) {
   return {
@@ -146,7 +202,7 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getSteps, deleteStep }, dispatch);
+  return bindActionCreators({ getSteps, deleteStep, reorderSteps }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestStepList);

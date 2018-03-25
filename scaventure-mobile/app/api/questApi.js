@@ -10,7 +10,6 @@ class QuestApi {
     return axios.post(`${apiUrl}/api/quests`, data);
   }
 
-  
   static getMyQuests() {
     return axios.get(`${apiUrl}/api/quests?type=user`);
   }
@@ -33,11 +32,14 @@ class QuestApi {
 
   static deleteStep(questId, stepId) {
     return axios.delete(`${apiUrl}/api/quests/${questId}/steps/${stepId}`);
-
   }
   
   static addStep(type, questId, data) {
     return axios.post(`${apiUrl}/api/quests/${questId}/steps/${type}`, data);
+  }
+
+  static reorderSteps(questId, order) {
+    return axios.patch(`${apiUrl}/api/quests/${questId}/steps/reorder`, order);
   }
 }
 

@@ -39,15 +39,14 @@ routes.delete('/quests/:id/users/:email', requireJwtAuth, InviteController.uninv
 // routes.get('/quests/:id/users' , ... ); // Get list of users invited to the quest (iff quest is private & logged-in user is the author of the quest)
 // routes.delete('/quests/:id/users/:id', ...); // 'Uninvite' a user (iff quest is private & logged-in user is the author of the quest)
 
-
-// TO BE IMPLEMENTED @Arpit & @Gaurav
-
 // Quest Steps
 routes.get('/quests/:id/steps', requireJwtAuth, StepController.getQuestSteps);    // get all quest steps
 routes.delete('/quests/:id/steps', requireJwtAuth, StepController.deleteAllStep); // delete all steps that belong to a certain quest
 routes.get('/quests/:id/steps/:sid', requireJwtAuth, StepController.getOneStep); // get one step
 routes.delete('/quests/:id/steps/:sid', requireJwtAuth, StepController.deleteOneStep); // delete one step
 routes.post('/quests/:id/steps/:type', requireJwtAuth, StepController.addStep);   // add new step
+routes.post('/quests/:id/steps/:type/:stepid', requireJwtAuth, StepController.editStep);
+routes.patch('/quests/:id/steps/reorder', requireJwtAuth, StepController.reorderSteps); // reorder steps
 
 // Steps Hints
 routes.post('/quests/:id/steps/:sid/hints/:type', requireJwtAuth, HintController.addHint); // Add new hint to a step :type is either 'location' or 'text')

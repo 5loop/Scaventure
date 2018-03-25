@@ -5,6 +5,7 @@ import { Feather } from '@expo/vector-icons';
 /** -- Local Imports */
 import Colors from '../../constants/colors';
 import StepLocation from './StepLocation';
+import AnnotatedButton from '../common/AnnotatedButton';
 
 /* - Step Imports */
 import QAStep from './QAStep';
@@ -168,6 +169,10 @@ class PlayStep extends React.Component {
         { (steps[stepIndex].type === 'QRStep' && this.state.displayCamera) &&
           <View style={styles.overlay}> 
             <QRScanScreen checkQr={this.checkQr.bind(this)} /> 
+            <AnnotatedButton 
+              onPress={() => this.setState({ displayCamera: false })} 
+              icon='flag' buttonText="View Step Description" 
+            />
           </View>
         }
 

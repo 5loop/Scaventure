@@ -11,6 +11,15 @@ export function getQuests() {
     });
 }
 
+export function getPrivateQuests() {
+  return dispatch => 
+    QuestApi.getPrivateQuests().then(res => {
+      dispatch({ type: types.LOAD_QUESTS_SUCCESS, quests: res.data.quests });
+    }).catch(e => {
+      dispatch(ajaxCallError(e));
+    });
+}
+
 export function getMyQuests() {
   return dispatch =>
     QuestApi.getMyQuests().then(res => {

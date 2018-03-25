@@ -11,6 +11,13 @@ class AnnotatedDropdown extends React.Component {
     this.state = {
       showOptions: false,
     };
+
+    this.onOptionPress = this.onOptionPress.bind(this);
+  }
+
+  onOptionPress(i) {
+    this.toggleOptions();
+    this.props.optionFunctions[i]();
   }
 
   toggleOptions() {
@@ -27,7 +34,7 @@ class AnnotatedDropdown extends React.Component {
             <View style={styles.options}>
               { this.props.options.map((opt, i) => (
                 <View style={[styles.buttonTextContainer, styles.buttonOptions]} key={i}>
-                  <TouchableHighlight onPress={this.props.optionFunctions[i]}>
+                  <TouchableHighlight onPress={() => this.onOptionPress(i)}>
                     <Text style={styles.buttonText}>{this.props.options[i]}</Text>
                   </TouchableHighlight>
                 </View>
@@ -35,7 +42,7 @@ class AnnotatedDropdown extends React.Component {
             </View>
             :  
             <View style={styles.options}>
-              <View style={styles.buttonTextContainer}>
+              <View style={[styles.buttonTextContainer, { height: 45, marginBottom: 25 }]}>
                 <Text style={styles.buttonText}>{this.props.buttonText}</Text>
               </View>
             </View>
@@ -77,8 +84,8 @@ const styles = StyleSheet.create({
     marginRight: 130,
   },
   buttonTextContainer: {
-    marginBottom: 10,
-    height: 45,
+    marginBottom: 7,
+    height: 35,
     minWidth: 120,
     padding: 5,
     alignItems: 'center',

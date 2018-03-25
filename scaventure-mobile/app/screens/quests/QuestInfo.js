@@ -137,7 +137,7 @@ class QuestInfo extends React.Component {
             <View style={{ marginBottom: 40 }}>
               <EmptyListScreen 
                 title={'Be the first Player to Rate this Quest!'}
-                icon={'MaterialIcons'} 
+                icon={'message-circle'} 
                 description={'Let other people know how you feel about this challenge!'}
               />
             </View>

@@ -105,3 +105,12 @@ export function addStep(type, questId, data) {
     // }, 2000);
   };
 }
+
+export function reorderSteps(questId, order) {
+  return dispatch =>
+    QuestApi.reorderSteps(questId, { order }).then(res => {
+      // dispatch(getSteps(questId));
+    }).catch(e => {
+      console.log(e);
+    });
+}

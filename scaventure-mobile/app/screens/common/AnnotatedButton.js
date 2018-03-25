@@ -4,14 +4,14 @@ import { Feather } from '@expo/vector-icons';
 
 import Colors from '../../constants/colors';
 
-const AnnotatedButton = ({ buttonText, onPress, icon = 'plus' }) => {
+const AnnotatedButton = ({ buttonText, onPress, icon = 'plus', color = Colors.primaryColor }) => {
   return (
     <View style={styles.buttonGroup} >
       <View style={styles.nestedButtons}>
-        <View style={styles.buttonTextContainer}>
+        <View style={[styles.buttonTextContainer, { backgroundColor: color }]}>
           <Text style={styles.buttonText}>{buttonText}</Text>
         </View>
-        <TouchableHighlight style={styles.plusButton} onPress={onPress}>
+        <TouchableHighlight style={[styles.plusButton, { backgroundColor: color }]} onPress={onPress}>
           <Feather name={icon} color={Colors.white} size={27} />
         </TouchableHighlight>
       </View>

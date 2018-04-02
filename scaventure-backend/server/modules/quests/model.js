@@ -92,7 +92,7 @@ const questSchema = new Schema({
 });
 
 // Index to allow geo-optimization
-questSchema.index({'loc': '2dsphere'});
+questSchema.index({'loc.geometry': '2dsphere'});
 
 const options = { discriminatorKey: 'type' };
 

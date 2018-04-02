@@ -190,7 +190,7 @@ class AddQuest extends React.Component {
         type: "public",
         loc: {
           type: "Point",
-          coordinates: [this.state.initialPosition.latitude, this.state.initialPosition.longitude]
+          coordinates: [this.state.initialPosition.longitude, this.state.initialPosition.latitude]
         }
       }
       this.props.addQuest(data).then(() => {
@@ -208,7 +208,7 @@ class AddQuest extends React.Component {
         type: "public",
         loc: {
           type: "Point",
-          coordinates: [this.state.x.latitude, this.state.x.longitude]
+          coordinates: [this.state.x.longitude, this.state.x.latitude]
         }
       }
       this.props.addQuest(data).then(() => {

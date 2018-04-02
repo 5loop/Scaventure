@@ -11,6 +11,15 @@ export function getQuests() {
     });
 }
 
+export function getQuestsNearby(coordinates, skip = 0) {
+  return dispatch => 
+    QuestApi.getQuestsNearby(coordinates, skip).then(res => {
+      dispatch({ type: types.LOAD_QUESTS_SUCCESS, quests: res.data.quests });
+    }).catch(e => {
+      console.log(e);
+    });  
+}
+
 export function getPrivateQuests() {
   return dispatch => 
     QuestApi.getPrivateQuests().then(res => {

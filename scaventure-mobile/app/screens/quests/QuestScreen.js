@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 /* ------------------- */
 import QuestRow from './QuestRow';
 import AnnotatedButton from '../common/AnnotatedButton';
+import EmptyListScreen from '../common/EmptyListScreen';
 import Colors from '../../constants/colors';
 /* -- Actions */
 import { getQuests, getQuestsNearby } from '../../actions/questActions';
@@ -31,6 +32,8 @@ class QuestScreen extends React.Component {
       ds,
       isLoadingMore: false,
       data: props.quests,
+      noMoreQuests: false,
+      sameLocation: false,
     };
 
     this.onAddQuestBttnPress = this.onAddQuestBttnPress.bind(this);
@@ -44,13 +47,17 @@ class QuestScreen extends React.Component {
           { latitude: position.coords.latitude, longitude: position.coords.longitude },
         ];
 
-        this.props.getQuestsNearby({ latitude: position.coords.latitude, longitude: position.coords.longitude });
+        this.props.getQuestsNearby({ latitude: position.coords.latitude, longitude: position.coords.longitude })
+          .then(() => this.setState({ noMoreQuests: false }))
+          .catch(() => this.setState({ noMoreQuests: true }))
+          .then(() => this.setState({ isLoadingMore: false }));
 
         console.log("lat:  " + position.coords.latitude + "  long: "+ position.coords.longitude);
         this.setState({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
           error: null,
+          sameLocation: false,
         });
 
         if (this.mapRef && arrayMarker.length === 2 && arrayMarker[0].latitude && arrayMarker[1].latitude) {
@@ -86,7 +93,10 @@ class QuestScreen extends React.Component {
 
   _fetchMore() {
     console.log(this.state.data.length);
-    this.props.getQuestsNearby({ latitude: this.state.latitude, longitude: this.state.longitude }, this.state.data.length);    
+    this.props.getQuestsNearby({ latitude: this.state.latitude, longitude: this.state.longitude }, this.state.data.length)
+      .then(() => this.setState({ noMoreQuests: false }))
+      .catch(() => this.setState({ noMoreQuests: true }))
+      .then(() => this.setState({ isLoadingMore: false, sameLocation: true }));
   }
 
   renderRow(quest) {
@@ -114,10 +124,17 @@ class QuestScreen extends React.Component {
               this.setState({ isLoadingMore: true }, () => this._fetchMore())}
             renderFooter={() => {
               return (
-                this.state.isLoadingMore &&
-                <View style={{ flex: 1 }}>
-                  <ActivityIndicator size="small" color={Colors.primaryColor} />
-                </View>
+                (this.state.isLoadingMore && (!this.state.sameLocation || !this.state.noMoreQuests)) ?
+                  <View style={{ flex: 1 }}>
+                    <ActivityIndicator size="small" color={Colors.primaryColor} />
+                  </View>
+                  : 
+                  (this.state.noMoreQuests &&
+                    <EmptyListScreen 
+                      title={'No More Quests Around :('}
+                      description={'Please, select a diffrent location!'}
+                    />
+                  )
               );
             }}
           />

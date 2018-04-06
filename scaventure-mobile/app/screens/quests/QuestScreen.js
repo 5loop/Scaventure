@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, ListView, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ListView, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 import { bindActionCreators } from 'redux';
@@ -52,7 +52,7 @@ class QuestScreen extends React.Component {
           .catch(() => this.setState({ noMoreQuests: true }))
           .then(() => this.setState({ isLoadingMore: false }));
 
-        console.log("lat:  " + position.coords.latitude + "  long: "+ position.coords.longitude);
+        // console.log("lat:  " + position.coords.latitude + "  long: "+ position.coords.longitude);
         this.setState({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -70,11 +70,13 @@ class QuestScreen extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
     if (nextProps.quests && nextProps.quests.length !== 0) {
-      const data = [...this.state.data].concat(nextProps.quests);
-      // data.concat(...nextProps.quests);
-      console.log("len : " + this.state.data.length);
+      const newQuests = nextProps.quests.filter((q) => this.state.data.map((d) => d._id).indexOf(q._id) === -1);
+      const data = [...this.state.data].concat(newQuests);
+      // console.log("Receiving props - len : " + this.state.data.length + " + " + newQuests.length);
+      // console.log("-- Current data  : " + this.state.data.map((d) => d.title));
+      // console.log("-- Concatinating : " + newQuests.map((d) => d.title));
+
       this.setState({ data });
     }
   }
@@ -92,7 +94,7 @@ class QuestScreen extends React.Component {
   }
 
   _fetchMore() {
-    console.log(this.state.data.length);
+    // console.log("#Data before fetch more " + this.state.data.length);
     this.props.getQuestsNearby({ latitude: this.state.latitude, longitude: this.state.longitude }, this.state.data.length)
       .then(() => this.setState({ noMoreQuests: false }))
       .catch(() => this.setState({ noMoreQuests: true }))
@@ -119,6 +121,7 @@ class QuestScreen extends React.Component {
             enableEmptySections
             dataSource={this.state.ds.cloneWithRows(this.state.data)}
             key={this.state.data}
+            onEndReachedThreshold={100}
             renderRow={this.renderRow.bind(this)}
             onEndReached={() =>
               this.setState({ isLoadingMore: true }, () => this._fetchMore())}
@@ -145,7 +148,7 @@ class QuestScreen extends React.Component {
   }
 }
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
     quests: state.quests.quests,
     questsLoading: state.quests.loading,

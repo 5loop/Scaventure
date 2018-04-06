@@ -8,7 +8,7 @@ export default {
     loading: true,
   },
   privateQuests: {
-    myQuests: [],
+    quests: [],
     loading: true,
   },
   feedbacks: {

@@ -6,7 +6,7 @@ class QuestApi {
     return axios.get(`${apiUrl}/api/quests?type=public`);
   }
 
-  static getQuestsNearby(coordinates, skip, distance = 10 * 1000) {
+  static getQuestsNearby(coordinates, skip, distance = 100 * 1000) {
     const { longitude, latitude } = coordinates;
     const query = `type=nearby&longitude=${longitude}&latitude=${latitude}&distance=${distance}&skip=${skip}`;
     return axios.get(`${apiUrl}/api/quests?${query}`);

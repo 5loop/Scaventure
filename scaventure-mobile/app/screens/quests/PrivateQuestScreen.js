@@ -74,7 +74,8 @@ class PrivateQuestScreen extends React.Component {
   }
 }
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
+  console.log(state);
   return {
     quests: state.privateQuests.quests,
     questsLoading: state.privateQuests.loading,

@@ -14,7 +14,7 @@ export function questReducer(state = initialState.quests, action) {
 export function privateQuestReducer(state = initialState.privateQuests, action) {
   switch (action.privateQuests) {
     case types.LOAD_PRIVATE_QUESTS_SUCCESS:
-      state = Object.assign({}, state, { privateQuests: action.privateQuests, loading: false });
+      state = Object.assign({}, state, { quests: action.quests, loading: false });
       return state;
     default:
       return state;
@@ -22,10 +22,10 @@ export function privateQuestReducer(state = initialState.privateQuests, action) 
 }
 
 export function myQuestReducer(state = initialState.myQuests, action) {
-  console.log(action.myQuests);
+//  console.log(action.myQuests);
   switch (action.type) {
     case types.LOAD_MY_QUESTS_SUCCESS:
-      state = Object.assign({}, state, { myQuests: action.myQuests, loading: false });
+      state = Object.assign({}, state, { quests: action.quests, loading: false });
       return state;
     default:
       return state;

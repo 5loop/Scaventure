@@ -24,7 +24,7 @@ export function getQuestsNearby(coordinates, skip = 0) {
 export function getPrivateQuests() {
   return dispatch => 
     QuestApi.getPrivateQuests().then(res => {
-      dispatch({ type: types.LOAD_PRIVATE_QUESTS_SUCCESS, privateQuests: res.data.quests });
+      dispatch({ type: types.LOAD_PRIVATE_QUESTS_SUCCESS, quests: res.data.quests });
     }).catch(e => {
       dispatch(ajaxCallError(e));
     });
@@ -33,7 +33,7 @@ export function getPrivateQuests() {
 export function getMyQuests() {
   return dispatch =>
     QuestApi.getMyQuests().then(res => {
-      dispatch({ type: types.LOAD_MY_QUESTS_SUCCESS, myQuests: res.data.quests });
+      dispatch({ type: types.LOAD_MY_QUESTS_SUCCESS, quests: res.data.quests });
     }).catch(e => {
       console.log(e); 
     });

@@ -55,6 +55,16 @@ export function newQuest(state = initialState.newQuest, action) {
   }
 }
 
+export function editedQuest(state = initialState.editedQuest, action) {
+  
+    switch (action.type) {
+      case types.EDIT_QUEST_SUCCESS:
+        state = Object.assign({}, state, { editedQuest: action.editedQuest, loading: false });
+        return state;
+      default:
+        return state;
+    }
+  }
 
 
 

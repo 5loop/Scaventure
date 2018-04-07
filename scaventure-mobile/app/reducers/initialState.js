@@ -14,5 +14,9 @@ export default {
   newQuest:{
     newQuest: {},
     loading: true,
+  },
+  editedQuest:{
+    editedQuest: {},
+    loading: true,
   }
 };

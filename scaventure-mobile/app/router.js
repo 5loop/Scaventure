@@ -13,7 +13,7 @@ import PrivateQuestScreen from './screens/quests/PrivateQuestScreen';
 import QuestInfo from './screens/quests/QuestInfo';
 import QuestLocation from './screens/quests/QuestLocation';
 import AddQuest from './screens/quests/AddQuest';
-
+import EditQuest from './screens/quests/EditQuest';
 import FeedbackForm from './screens/quests/FeedbackForm';
 import AddQAStep from './screens/quests/AddQAStep';
 import MyQuestScreen from './screens/quests/MyQuestScreen';
@@ -252,6 +252,15 @@ const MyQuestsStack = StackNavigator({
     screen: EditStep,
     navigationOptions: ({ navigation }) => ({
       title: 'Edit Step',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  EditQuest: {
+    screen: EditQuest,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Edit Quest',
       headerStyle,
       headerTitleStyle,
       headerLeft: <GoBack navigation={navigation} />,

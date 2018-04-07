@@ -31,12 +31,18 @@ const styles = StyleSheet.create({
   description: {
     minHeight: 160,
     backgroundColor: Colors.white,
-    borderBottomColor: Colors.secondaryColor,
-    borderBottomWidth: 20,
+    // borderBottomColor: Colors.secondaryColor,
+    // borderBottomWidth: 20,
     padding: 30,
   },
   h1: {
     fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: Colors.white,
+  },
+  h2: {
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
     color: Colors.white,
@@ -132,6 +138,11 @@ class QuestInfo extends React.Component {
               {quest.description}
             </Text>
           </View>
+          {/* Players Title */}
+          <View style={styles.separator}><Text style={styles.h2}> Players </Text></View>
+
+          {/* Feedback Title */}
+          <View style={styles.separator}><Text style={styles.h2}> Feedback </Text></View>
           {this.props.feedbacks.length === 0 
             ?
             <View style={{ marginBottom: 40 }}>

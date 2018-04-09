@@ -47,6 +47,7 @@ class SignupScreen extends React.Component {
         { email: this.state.email.toLowerCase(), password: this.state.password }
       ).then(() => { 
         console.log('Logged in');
+        
         Alert.alert('Info.', 'Verification email sent. Please login to your email account and click link to confirm.');
         // TODO @Yalong -> Navigate to 'We Sent you verification email screen'
         this.props.navigation.navigate('Login');

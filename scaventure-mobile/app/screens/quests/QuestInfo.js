@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 // Local Imports
 import Colors from '../../constants/colors';
 import FeedbackRow from './FeedbackRow';
-import { getFeedbacks } from '../../actions/questActions';
+import { getFeedbacks, getInvitedUsers } from '../../actions/questActions';
 import EmptyListScreen from '../common/EmptyListScreen';
 import AnnotatedButton from '../common/AnnotatedButton';
 
@@ -85,6 +85,7 @@ class QuestInfo extends React.Component {
   componentDidMount() {
     const { quest } = this.props.navigation.state.params;
     this.props.getFeedbacks(quest._id); 
+    this.props.getInvitedUsers(quest._id);
   }
   
   showMap() {
@@ -140,7 +141,12 @@ class QuestInfo extends React.Component {
           </View>
           {/* Players Title */}
           <View style={styles.separator}><Text style={styles.h2}> Players </Text></View>
-
+          {this.props.invitedusers.length === 0
+            ?
+            <Text> No players! Go invite one. </Text>
+            :
+            <Text> 111111 </Text>
+          }
           {/* Feedback Title */}
           <View style={styles.separator}><Text style={styles.h2}> Feedback </Text></View>
           {this.props.feedbacks.length === 0 
@@ -171,15 +177,17 @@ class QuestInfo extends React.Component {
 // export default QuestInfo;
 
 function mapStateToProps(state, props) {
-
+  console.log("PROPS");
+  console.log(state.invitedusers.users);
   return {
     feedbacks: state.feedbacks.feedbacks,
     feedbacksLoading: state.feedbacks.loading,
+    invitedusers: state.invitedusers.users,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getFeedbacks }, dispatch);
+  return bindActionCreators({ getInvitedUsers, getFeedbacks }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestInfo);

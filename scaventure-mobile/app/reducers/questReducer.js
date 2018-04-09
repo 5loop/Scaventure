@@ -24,6 +24,16 @@ export function authenticated(state = { authenticated: false }, action) {
   }
 }
 
+export function invitationReducer(state = initialState.invitedUsers, action) {
+  switch (action.type) {
+    case types.LOAD_USERS_SUCCESS:
+      state = Object.assign({}, state, { invitedUsers: action.invitedUsers, loading: false });
+      return state;
+    default:
+      return state;
+  }
+}
+
 export function feedbackReducer(state = initialState.feedbacks, action) {
   switch (action.type) {
     case types.LOAD_FEEDBACKS_SUCCESS:

@@ -11,8 +11,12 @@ export default {
     steps: [],
     loading: true,
   },
-  newQuest:{
+  invitedUsers: {
+    users: [],
+    loading: true,
+  },
+  newQuest: {
     newQuest: {},
     loading: true,
-  }
+  },
 };

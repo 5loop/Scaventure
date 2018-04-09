@@ -22,6 +22,10 @@ class QuestApi {
     return axios.delete(`${apiUrl}/api/quests/${questId}`);
   }
 
+  static getInvitedUsers(questId) {
+    return axios.get(`${apiUrl}/api/quests/${questId}/users`);
+  }
+
   static getFeedbacks(questId) {
     return axios.get(`${apiUrl}/api/quests/${questId}/feedbacks`);
   }

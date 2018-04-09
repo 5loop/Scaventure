@@ -39,6 +39,15 @@ export function deleteQuest(questId) {
     });
 }
 
+export function getInvitedUsers(questId) {
+  return dispatch =>
+    QuestApi.getInvitedUsers(questId).then(res => {
+      dispatch({ type: types.LOAD_USERS_SUCCESS, invitedusers: res.data.link });
+    }).catch(e => {
+      console.log(e);
+    });
+}
+
 export function getFeedbacks(questId) {
   return dispatch => 
     QuestApi.getFeedbacks(questId).then(res => {

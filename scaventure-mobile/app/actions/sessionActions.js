@@ -46,10 +46,10 @@ export function updateUser({ email, password }) {
     });
 }
 
-export function registerUser({ email, password, username }) {
+export function registerUser({ email, password }) {
   return dispatch => 
     new Promise((resolve, reject) => {
-      AuthApi.register({ email, password, username }).then(response => {
+      AuthApi.register({ email, password }).then(response => {
         resolve(); 
       }).catch((error) => {
         reject(error);

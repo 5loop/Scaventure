@@ -8,16 +8,14 @@ var CryptoJS = require("crypto-js");
 
 //Verify that the user used the link
 export const verifyUserLink = async(req, res) =>{
-  
-  const email = req.user.email;
+
   const hash = req.params.hash;
 
   Link.findOne({hash}, async(err, link) =>{
 
   if(link){
     console.log(link.userEmail);
-    console.log(email);
-      if(link.userEmail == email && link.hash == hash.toString()){
+      if(link.hash == hash.toString()){
         link.verified = true;
         await link.save();
         return res.status(200).json({ error: true, message: 'Link verified!'});
@@ -41,7 +39,7 @@ export const verifyUserLink = async(req, res) =>{
 //List of users invited to the quest
 export const getInvitedUsers = async(req,res) =>{
   const questId = req.params.id;
-
+  console.log(questId);
   Link.find({questId}, async(err, links) =>{
     if(links){
       return res.status(200).json({ error: false, links });
@@ -141,7 +139,7 @@ export const inviteUser = async (req, res) => {
         content: [
           {
             type: 'text/plain',
-            value: `Please follow the link http://localhost:4100/api/quests/${id}/verify/${hash}`
+            value: `Please follow the link http://${req.headers.host}/api/quests/${id}/users/verify/${hash}`
           }
         ]
       }

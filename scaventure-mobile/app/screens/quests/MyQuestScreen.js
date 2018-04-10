@@ -123,8 +123,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    quests: state.quests.quests,
-    questsLoading: state.quests.loading,
+    quests: state.myQuests.quests,
+    questsLoading: state.myQuests.loading,
   };
 }
 

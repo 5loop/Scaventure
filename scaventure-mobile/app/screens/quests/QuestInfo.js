@@ -83,7 +83,7 @@ class QuestInfo extends React.Component {
   
   showMap() {
     const { quest } = this.props.navigation.state.params;
-    this.props.navigation.navigate('QuestLocation', { longitude: quest.loc.coordinates[1], latitude: quest.loc.coordinates[0] });
+    this.props.navigation.navigate('QuestLocation', { longitude: quest.loc.coordinates[0], latitude: quest.loc.coordinates[1] });
   }
   
   startGame() {

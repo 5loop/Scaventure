@@ -203,15 +203,12 @@ validateField(fieldname) {
       this.setState({ displayMap: true });
     }
 
-  onPress(){
+  onPress() {
     const { quest } = this.props.navigation.state.params;
 
     const errorTitle = this.validateField('question');
     const errorHint = this.validateField('hint');
     const errPoints = this.validateField('Points');
-   
-
-    
 
     if (errorTitle || errorHint ||errPoints || !this.state.question || !this.state.Points || !this.state.hint ) {
       this.setState({ errors: { title: errorTitle, description: errorTitle } });
@@ -220,62 +217,36 @@ validateField(fieldname) {
     }
 
     this.setState({ addingFeedback: true });
+    let startLocation = [];
+    let stepLocation = []; // must be separate from start location
 
-
-    if(this.state.x == undefined) {
-      console.log(this.state.value);
-      const data = {
-        question: this.state.question,
-        startLocation: {
-          type: "Point",
-          coordinates: [this.state.initialPosition.latitude, this.state.initialPosition.longitude]
-        
-        },
-        stepLocation: {
-          type: "Point",
-          coordinates: [this.state.initialPosition.latitude, this.state.initialPosition.longitude]
-        
-        },
-          description: this.state.question,
-          
-          points: 10,
-
-          stepHint: this.state.hint,
-          
-      }
-      this.props.addStep('gps', quest._id, data).then(() => {
-        console.log("Add Quest from no lat");
-        this.props.navigation.goBack();
-
-      })
-
-    }else{
-      const data = {
-        question: this.state.question,
-        startLocation: {
-          type: "Point",
-          coordinates: [this.state.x.latitude, this.state.x.longitude]
-        
-        },
-        stepLocation: {
-          type: "Point",
-          coordinates: [this.state.x.latitude, this.state.x.longitude]
-        
-        },
-          description: this.state.question,
-         
-          points: 10,
-
-          stepHint: this.state.hint,
-
-      }
-      this.props.addStep('gps', quest._id, data).then(() => {
-        console.log("Add Quest from no lat");
-        this.props.navigation.goBack();
-
-      })
+    if (this.state.x === undefined) {
+      startLocation = [this.state.initialPosition.longitude, this.state.initialPosition.latitude];
+    } else {
+      startLocation = [this.state.x.longitude, this.state.x.latitude];
     }
 
+    stepLocation = startLocation; // TODO: remove 
+
+    const data = {
+      question: this.state.question,
+      startLocation: {
+        type: 'Point',
+        coordinates: startLocation,
+      },
+      stepLocation: {
+        type: 'Point',
+        coordinates: stepLocation,
+      },
+      description: this.state.question,
+      points: 10, // TODO: get from state
+      stepHint: this.state.hint,
+    };
+
+    this.props.addStep('gps', quest._id, data).then(() => {
+      console.log("Add Quest from no lat");
+      this.props.navigation.goBack();
+    });
 }
 
   render() {    

@@ -6,6 +6,6 @@ import { requireJwtAuth } from '../../utils/requireJwtAuth';
 const routes = new Router();
 
 routes.post('/progress', requireJwtAuth, ProgressController.progress); 
-routes.get('/progress/:id', requireJwtAuth, ProgressController.getAllProgress); 
+routes.get('/progress', requireJwtAuth, ProgressController.getAllProgress); 
 
 export default routes;

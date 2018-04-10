@@ -39,7 +39,7 @@ class QuestStepList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ steps: nextProps.steps });
+    this.setState({ steps: nextProps.steps, stepsLoading: nextProps.stepsLoading });
   }
 
   onQABttnPress() {

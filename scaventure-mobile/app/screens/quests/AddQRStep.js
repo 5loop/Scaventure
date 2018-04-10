@@ -82,8 +82,10 @@ class QRsteps extends Component {
         startLocation,
         stepLocation: startLocation,
         points: 10,
-        stepNumber: 0,
+        //stepNumber: 0,
         qrCode: text,
+        stepHint: this.state.hint,
+
       };
 
       this.props.addStep('qr', quest._id, data).then(() => {
@@ -125,6 +127,14 @@ class QRsteps extends Component {
             characterRestriction={100}
             maxLength={100}
           />
+          <TextField
+            label='Hint'
+            baseColor={Colors.secondaryColor}
+            tintColor={Colors.primaryColor}
+            onChangeText={(hint)=> this.setState({hint})}
+            onBlur={() => this.checkHint()}
+            />
+
           <View style={styles.qrStyle}> 
             <QRCode
               value={this.state.text}

@@ -88,7 +88,6 @@ class QuestRow extends React.Component {
         
         <View style={styles.contentRow}>
             <View style={styles.icon}>
-
             </View>
             <View style={styles.description}>
               <Text numberOfLines={3} >{this.props.quest.description} </Text>

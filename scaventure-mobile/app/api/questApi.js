@@ -32,7 +32,6 @@ class QuestApi {
     return axios.get(`${apiUrl}/api/quests/${questId}/feedbacks`);
   }
 
-
   static addFeedback(questId, data) {
     return axios.post(`${apiUrl}/api/quests/${questId}/feedbacks`, data);
   }
@@ -57,7 +56,9 @@ class QuestApi {
     return axios.patch(`${apiUrl}/api/quests/${questId}/steps/reorder`, order);
   }
 
-  
+  static saveProgress(data) {
+    return axios.post(`${apiUrl}/api/progress`, data);
+  }
 }
 
 export default QuestApi;

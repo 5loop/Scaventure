@@ -78,14 +78,14 @@ class QuestStartLocation extends React.Component {
           minHeight={100}
           style={{ flex: 1 }}
           initialRegion={{
-            longitude: params.quest.loc.coordinates[1],
-            latitude: params.quest.loc.coordinates[0],
+            longitude: params.quest.loc.coordinates[0],
+            latitude: params.quest.loc.coordinates[1],
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
         >
           <MapView.Marker
-            coordinate={{ latitude: params.quest.loc.coordinates[0], longitude: params.quest.loc.coordinates[1] }}
+            coordinate={{ latitude: params.quest.loc.coordinates[1], longitude: params.quest.loc.coordinates[0] }}
           />
         </MapView>
         <AnnotatedButton onPress={this._setContent.bind(this)} buttonText={'Copy location to ClipBoard'} icon='copy' />

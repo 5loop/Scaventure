@@ -11,6 +11,7 @@ import QuestRow from './QuestRow';
 import AnnotatedButton from '../common/AnnotatedButton';
 import EmptyListScreen from '../common/EmptyListScreen';
 import Colors from '../../constants/colors';
+import QuestMap from './QuestMap';
 /* -- Actions */
 import { getQuests, getQuestsNearby } from '../../actions/questActions';
 
@@ -21,6 +22,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#FAFAFA',
     flex: 1,
     justifyContent: 'flex-start',
+  },
+  overlay: {
+    flex: 1,
+    position: 'absolute',
+    alignSelf: 'stretch',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: Colors.darkPrimary,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
@@ -34,13 +47,11 @@ class QuestScreen extends React.Component {
       data: props.quests,
       noMoreQuests: false,
       sameLocation: false,
+      displayMap: false,
     };
-
-    this.onAddQuestBttnPress = this.onAddQuestBttnPress.bind(this);
   }
 
   componentDidMount() {
-    // this.props.getQuests(); 
     this.watchId = navigator.geolocation.watchPosition(
       (position) => {
         const arrayMarker = [
@@ -81,10 +92,6 @@ class QuestScreen extends React.Component {
     }
   }
 
-  onAddQuestBttnPress() {
-    this.props.navigation.navigate('AddQuest');
-  }
-
   onInfoBttnPress(quest) {
     this.props.navigation.navigate('QuestInfo', { quest });
   }
@@ -96,9 +103,24 @@ class QuestScreen extends React.Component {
   _fetchMore() {
     // console.log("#Data before fetch more " + this.state.data.length);
     this.props.getQuestsNearby({ latitude: this.state.latitude, longitude: this.state.longitude }, this.state.data.length)
-      .then(() => this.setState({ noMoreQuests: false }))
+      .then(() => { 
+        this.setState({ noMoreQuests: false }); 
+        this.listView.scrollToEnd();
+      })
       .catch(() => this.setState({ noMoreQuests: true }))
-      .then(() => this.setState({ isLoadingMore: false, sameLocation: true }));
+      .then(() => { 
+        this.setState({ isLoadingMore: false, sameLocation: true }); 
+      });
+  }
+
+  // Map Overlay - close
+  closeMap() {
+    this.setState({ displayMap: false });
+  }
+
+  // Map Overlay - open
+  openMap() {
+    this.setState({ displayMap: true });
   }
 
   renderRow(quest) {
@@ -112,19 +134,22 @@ class QuestScreen extends React.Component {
   }
  
   render() {
+    const coordinates = this.state.data.map((d) => 
+      ({ title: d.title, latlng: { longitude: d.loc.coordinates[0], latitude: d.loc.coordinates[1] } }));
+
     return (
       <View style={styles.container}>
         {this.props.questsLoading ? 
           <ActivityIndicator size="large" color={Colors.primaryColor} /> 
           :
           <ListView
+            ref={ref => { this.listView = ref; }}
             enableEmptySections
             dataSource={this.state.ds.cloneWithRows(this.state.data)}
             key={this.state.data}
             onEndReachedThreshold={100}
             renderRow={this.renderRow.bind(this)}
-            onEndReached={() =>
-              this.setState({ isLoadingMore: true }, () => this._fetchMore())}
+            onEndReached={() => this.setState({ isLoadingMore: true }, () => this._fetchMore())}
             renderFooter={() => {
               return (
                 (this.state.isLoadingMore && (!this.state.sameLocation || !this.state.noMoreQuests)) ?
@@ -142,7 +167,14 @@ class QuestScreen extends React.Component {
             }}
           />
         }
-        <AnnotatedButton onPress={this.onAddQuestBttnPress} buttonText={'Add New Quest!'} />
+        <AnnotatedButton onPress={this.openMap.bind(this)} buttonText={'Map View'} icon={'map'} />
+
+        {/* Map Overlay */}
+        { this.state.displayMap &&
+          <View style={styles.overlay}> 
+            <QuestMap closeMap={this.closeMap.bind(this)} coordinates={coordinates} /> 
+          </View>
+        }
       </View>
     );
   }

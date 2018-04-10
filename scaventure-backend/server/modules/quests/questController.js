@@ -30,7 +30,7 @@ export const getQuests = async (req, res) => {
   } else if (type === 'nearby') {
 
     const { longitude, latitude, distance } = req.query;
-    const limit = req.query.limit || 3;
+    const limit = req.query.limit || 10;
     const skip  = parseInt(req.query.skip) || 0;
 
     try {

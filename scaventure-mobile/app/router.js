@@ -16,6 +16,7 @@ import AddQuest from './screens/quests/AddQuest';
 
 import FeedbackForm from './screens/quests/FeedbackForm';
 import AddQAStep from './screens/quests/AddQAStep';
+import AddGPSStep from './screens/quests/AddGPSStep';
 import MyQuestScreen from './screens/quests/MyQuestScreen';
 import QuestStartLocation from './screens/gameplay/QuestStartLocation';
 import LogoutNavOption from './logout';
@@ -28,6 +29,7 @@ import AddQRStepScreen from './screens/quests/AddQRStep';
 import QRScanScreen from './screens/gameplay/QRScanScreen';
 import PlayStepScreen from './screens/gameplay/PlayStepScreen';
 import GameOverScreen from './screens/gameplay/GameOverScreen';
+
 
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
@@ -148,6 +150,16 @@ const AddQRStepStack = {
   }),
 };
 
+const AddGPSStepStack = {
+  screen: AddGPSStep,
+  navigationOptions: ({ navigation }) => ({
+    title: 'Add GPS Step',  
+    headerStyle,
+    headerTitleStyle,
+    headerLeft: <GoBack navigation={navigation} />,
+  }),
+};
+
 const PlayStepScreenStack = {
   screen: PlayStepScreen,
   navigationOptions: ({ navigation }) => ({
@@ -199,6 +211,7 @@ const PublicQuestsStack = StackNavigator({
   },
   AddQAStep: AddQAStepStack,
   AddQRStep: AddQRStepStack,
+  AddGPSStep: AddGPSStepStack,
   AddQuest: AddQuestStack,
   QuestInfo: QuestInfoStack,
   QuestLocation: QuestLocationStack,
@@ -220,6 +233,7 @@ const PrivateQuestsStack = StackNavigator({
   },
   AddQAStep: AddQAStepStack,
   AddQRStep: AddQRStepStack,
+  AddGPSStep: AddGPSStepStack,
   AddQuest: AddQuestStack,
   QuestInfo: QuestInfoStack,
   QuestLocation: QuestLocationStack,
@@ -259,6 +273,7 @@ const MyQuestsStack = StackNavigator({
   },
   AddQAStep: AddQAStepStack,
   AddQRStep: AddQRStepStack,
+  AddGPSStep: AddGPSStepStack,
   AddQuest: AddQuestStack,
   QuestInfo: QuestInfoStack,
   QuestLocation: QuestLocationStack,

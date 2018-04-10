@@ -9,7 +9,7 @@ import { Container, Content, List, ListItem, Radio } from 'native-base';
 import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button';
 import { width, height, totalSize } from 'react-native-dimension';
 import MapView from 'react-native-maps';
-import { addStep } from '../../actions/questActions';
+import { addStep, addHint } from '../../actions/questActions';
 import { Feather } from '@expo/vector-icons';
 
 
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
 
 
 
-class AddQAStep extends React.Component {
+class AddGPSStep extends React.Component {
   constructor(props){
     super(props)
 
@@ -126,7 +126,7 @@ class AddQAStep extends React.Component {
       Points: 0,
       hint: '',
       addingFeedback: false,
-      errors: { hint: null, Points: null , question: null, option1: null, option2: null, option3: null, option4: null,item1: null, item2: null, item3: null, item4: null },
+      errors: { hint: null, Points: null , question: null, },
     }
 
 
@@ -138,9 +138,9 @@ validateField(fieldname) {
 
     if (fieldname === 'question') {
       error = (!value || value.trim() === '') ? 'question cannot be empty!' : null;
-    } else if (fieldname === 'item1' || fieldname === 'item2' || fieldname === 'item3' || fieldname === 'item4') {
+    } else if (fieldname === 'Points') {
       error = (!value || value.trim() === '') ? 'You must select an answer to this question!' : null;
-    }else if(fieldname === 'option1' || fieldname === 'option2'  ||fieldname === 'option3'  ||fieldname === 'option4' ){
+    }else if(fieldname === 'hint' ){
       error = (!value || value.trim() === '') ? 'You must provide an option in all fields!' : null;
 
     }
@@ -150,69 +150,19 @@ validateField(fieldname) {
 
   checkPoint() {
     const error = this.validateField('Points');
-    this.setState({ errors: { question: error, Points: this.state.errors.Points } }); 
+    this.setState({ errors: { Points: error, question: this.state.errors.question } }); 
   }
 
   checkHint() {
     const error = this.validateField('hint');
-    this.setState({ errors: { question: error, Points: this.state.errors.hint } }); 
+    this.setState({ errors: { hint: error, Points: this.state.errors.Points } }); 
   }
   checkQuestion() {
     const error = this.validateField('question');
-    this.setState({ errors: { question: error, option1: this.state.errors.option1 } }); 
+    this.setState({ errors: { question: error, hint: this.state.errors.hint } }); 
   }
 
-  CheckOption1() {
-    const error = this.validateField('option1');
-    this.setState({ errors: { question: this.state.errors.title, 
-                              item1: this.state.errors.item1,
-                              item2: this.state.errors.item2,
-                              item3: this.state.errors.item3,
-                              item4: this.state.errors.item4,
-                              option2: this.state.errors.title,
-                              option3: this.state.errors.title,
-                              option4: this.state.errors.title,
-                              option1: error } });  
-  }
 
-  CheckOption2() {
-    const error = this.validateField('option1');
-    this.setState({ errors: { question: this.state.errors.title, 
-                              item1: this.state.errors.item1,
-                              item2: this.state.errors.item2,
-                              item3: this.state.errors.item3,
-                              item4: this.state.errors.item4,
-                              option1: this.state.errors.option1,
-                              option3: this.state.errors.option3,
-                              option4: this.state.errors.option4,
-                              option2: error } });  
-  }
-
-  CheckOption3() {
-    const error = this.validateField('option1');
-    this.setState({ errors: { question: this.state.errors.title, 
-                              item1: this.state.errors.item1,
-                              item2: this.state.errors.item2,
-                              item3: this.state.errors.item3,
-                              item4: this.state.errors.item4,
-                              option1: this.state.errors.option1,
-                              option2: this.state.errors.option2,
-                              option4: this.state.errors.option4,
-                              option3: error } });  
-  }
-
-  CheckOption4() {
-    const error = this.validateField('option1');
-    this.setState({ errors: { question: this.state.errors.title, 
-                              item1: this.state.errors.item1,
-                              item2: this.state.errors.item2,
-                              item3: this.state.errors.item3,
-                              item4: this.state.errors.item4,
-                              option1: this.state.errors.option1,
-                              option2: this.state.errors.option2,
-                              option3: this.state.errors.option4,
-                              option4: error } });  
-  }
 
 
 
@@ -242,14 +192,6 @@ validateField(fieldname) {
   }
 
   
-  
-  
-  onSelect(index, value){
-    this.setState({
-      index
-      
-    })
-  }
 
     // Map Overlay - close
     closeMap() {
@@ -265,15 +207,14 @@ validateField(fieldname) {
     const { quest } = this.props.navigation.state.params;
 
     const errorTitle = this.validateField('question');
-    const errOption1 = this.validateField('option1');
-    const errOption2 = this.validateField('option2');
-    const errOption3 = this.validateField('option3');
-    const errOption4 = this.validateField('option4');
+    const errorHint = this.validateField('hint');
+    const errPoints = this.validateField('Points');
+   
 
     
 
-    if (errorTitle || errOption1 ||errOption2 || errOption3 || errOption4  || !this.state.question || !this.state.option1 || !this.state.option2 || !this.state.option3 || !this.state.option4|| !this.state.Points) {
-      this.setState({ errors: { title: errorTitle, description: errOption1 } });
+    if (errorTitle || errorHint ||errPoints || !this.state.question || !this.state.Points || !this.state.hint ) {
+      this.setState({ errors: { title: errorTitle, description: errorTitle } });
       Alert.alert('Alert', 'Please Fill in all the required fields!');
       return;
     }
@@ -295,16 +236,14 @@ validateField(fieldname) {
           coordinates: [this.state.initialPosition.latitude, this.state.initialPosition.longitude]
         
         },
-          //stepNumber: 1,
           description: this.state.question,
-          options: [this.state.option1, this.state.option2, this.state.option3, this.state.option4],
-          answer: this.state.index,
+          
           points: 10,
+
           stepHint: this.state.hint,
           
       }
-     // this.props.addHint(quest.stepNumber,quest._id,data);
-      this.props.addStep('qa', quest._id, data).then(() => {
+      this.props.addStep('gps', quest._id, data).then(() => {
         console.log("Add Quest from no lat");
         this.props.navigation.goBack();
 
@@ -323,14 +262,14 @@ validateField(fieldname) {
           coordinates: [this.state.x.latitude, this.state.x.longitude]
         
         },
-          //stepNumber: 1,
           description: this.state.question,
-          options: [this.state.option1, this.state.option2, this.state.option3, this.state.option4],
-          answer: this.state.index,
+         
           points: 10,
+
           stepHint: this.state.hint,
+
       }
-      this.props.addStep('qa', quest._id, data).then(() => {
+      this.props.addStep('gps', quest._id, data).then(() => {
         console.log("Add Quest from no lat");
         this.props.navigation.goBack();
 
@@ -343,81 +282,36 @@ validateField(fieldname) {
     return (
       <View style={styles.container}>
             
+        <View>
+            <TextField
+            label='Question'
+            baseColor={Colors.secondaryColor}
+            tintColor={Colors.primaryColor}
+            onChangeText={(question)=> this.setState({question})}
+            error={this.state.errors.question}
+            onBlur={() => this.checkQuestion()}
+            />
 
-          <View>
-          <TextField
-          label='Question'
-          baseColor={Colors.secondaryColor}
-          tintColor={Colors.primaryColor}
-          onChangeText={(question)=> this.setState({question})}
-          error={this.state.errors.question}
-          onBlur={() => this.checkQuestion()}
-        />
-        <RadioGroup
-        onSelect = {(index, value) => this.onSelect(index, value)}>
-        
-        <RadioButton value={'item1'} >
-        <TextInput
-            underlineColorAndroid='transparent'
-            style={styles.textIpt}
-            placeholder='Option 1'
-            onChangeText={(option1) => this.setState({ option1 })}
-            error={this.state.errors.option1}
-            onBlur={() => this.CheckOption1()}
-          />
-        </RadioButton>
- 
-        <RadioButton value={'item2'}>
-        <TextInput
-            underlineColorAndroid='transparent'
-            style={styles.textIpt}
-            placeholder='Option 2'
-            onChangeText={(option2) => this.setState({ option2 })}
-            error={this.state.errors.option2}
-            onBlur={() => this.CheckOption2()}
-          />
-        </RadioButton>
- 
-        <RadioButton value={'item3'}>
-        <TextInput
-            underlineColorAndroid='transparent'
-            style={styles.textIpt}
-            placeholder='Option 3'
-            onChangeText={(option3) => this.setState({ option3 })}
-            error={this.state.errors.option3}
-            onBlur={() => this.CheckOption3()}
-          />
-        </RadioButton>
-        <RadioButton value={'item4'}>
-        <TextInput
-            underlineColorAndroid='transparent'
-            style={styles.textIpt}
-            placeholder='Option 4'
-            onChangeText={(option4) => this.setState({ option4 })}
-            error={this.state.errors.option4}
-            onBlur={() => this.CheckOption4()}
-          />
-        </RadioButton>
-      </RadioGroup>
-      
-      <TextField
-          label='Hint'
-          baseColor={Colors.secondaryColor}
-          tintColor={Colors.primaryColor}
-          onChangeText={(hint)=> this.setState({hint})}
-          error={this.state.errors.hint}
-          onBlur={() => this.checkHint()}
-        />
+            <TextField
+            label='Hint'
+            baseColor={Colors.secondaryColor}
+            tintColor={Colors.primaryColor}
+            onChangeText={(hint)=> this.setState({hint})}
+            error={this.state.errors.hint}
+            onBlur={() => this.checkHint()}
+            />
 
-      <TextField
-          label='Points'
-          baseColor={Colors.secondaryColor}
-          tintColor={Colors.primaryColor}
-          onChangeText={(Points)=> this.setState({Points})}
-          error={this.state.errors.Points}
-          onBlur={() => this.CheckOption4()}
-        />
-      </View> 
+            <TextField
+            label='Points'
+            baseColor={Colors.secondaryColor}
+            tintColor={Colors.primaryColor}
+            onChangeText={(Points)=> this.setState({Points})}
+            error={this.state.errors.Points}
+            onBlur={() => this.checkPoint()}
+            />
+
+        </View>
+         
       
       {/* Button to open-up a map */}       
       <View>
@@ -472,7 +366,7 @@ validateField(fieldname) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addStep }, dispatch);
+  return bindActionCreators({ addStep, addHint }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(AddQAStep);
+export default connect(null, mapDispatchToProps)(AddGPSStep);

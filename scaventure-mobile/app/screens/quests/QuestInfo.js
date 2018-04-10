@@ -14,6 +14,8 @@ import { getFeedbacks, getInvitedUsers } from '../../actions/questActions';
 import EmptyListScreen from '../common/EmptyListScreen';
 import AnnotatedButton from '../common/AnnotatedButton';
 
+const renderIf = require('render-if');
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,                           
@@ -70,6 +72,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 4,
   },
+  inviteUsers: {
+    alignItems: 'center',
+  },
+  inviteUsersText: {
+    fontSize: 16,
+    color: Colors.darkSecondary,
+  },
 });
 
 class QuestInfo extends React.Component {
@@ -106,6 +115,10 @@ class QuestInfo extends React.Component {
 
   render() {
     const { quest } = this.props.navigation.state.params;
+    const notPublic = this.props.questType !== 'public';
+    const ifNotPublicQuest = renderIf(notPublic);
+    const ifInviNotEmpty = renderIf(notPublic && this.props.invitedusers.length !== 0);
+    const ifInviIsEmpty = renderIf(notPublic && this.props.invitedusers.length === 0);
     return ( 
       <View style={styles.container}>
 
@@ -140,13 +153,17 @@ class QuestInfo extends React.Component {
             </Text>
           </View>
           {/* Players Title */}
-          <View style={styles.separator}><Text style={styles.h2}> Players </Text></View>
-          {this.props.invitedusers.length === 0
-            ?
-            <Text> No players! Go invite one. </Text>
-            :
-            <Text> 111111 </Text>
-          }
+          {ifNotPublicQuest(
+            <View style={styles.separator}><Text style={styles.h2}> Players </Text></View>
+          )}
+          {ifInviNotEmpty(
+            <Text> Not empty </Text>
+          )}
+          {ifInviIsEmpty(
+            <View style={styles.inviteUsers}>
+              <Text style={styles.inviteUsersText}> No players! Go invite one. </Text>
+            </View>
+          )}
           {/* Feedback Title */}
           <View style={styles.separator}><Text style={styles.h2}> Feedback </Text></View>
           {this.props.feedbacks.length === 0 
@@ -177,12 +194,12 @@ class QuestInfo extends React.Component {
 // export default QuestInfo;
 
 function mapStateToProps(state, props) {
-  console.log("PROPS");
-  console.log(state.invitedusers.users);
+  // console.log(state.invitedusers.users);
   return {
     feedbacks: state.feedbacks.feedbacks,
     feedbacksLoading: state.feedbacks.loading,
     invitedusers: state.invitedusers.users,
+    questType: props.navigation.state.params.quest.type,
   };
 }
 

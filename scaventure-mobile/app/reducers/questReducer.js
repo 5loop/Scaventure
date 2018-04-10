@@ -24,10 +24,10 @@ export function authenticated(state = { authenticated: false }, action) {
   }
 }
 
-export function invitationReducer(state = initialState.invitedUsers, action) {
+export function invitationReducer(state = initialState.invitedusers, action) {
   switch (action.type) {
     case types.LOAD_USERS_SUCCESS:
-      state = Object.assign({}, state, { invitedUsers: action.invitedUsers, loading: false });
+      state = Object.assign({}, state, { loading: false });
       return state;
     default:
       return state;

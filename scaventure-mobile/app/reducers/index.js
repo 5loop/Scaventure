@@ -7,7 +7,7 @@ const rootReducer = combineReducers({
   steps,
   authenticated,
   invitedusers,
-  newQuest
+  newQuest,
 });
 
 export default rootReducer;

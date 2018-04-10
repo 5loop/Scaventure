@@ -11,7 +11,7 @@ export default {
     steps: [],
     loading: true,
   },
-  invitedUsers: {
+  invitedusers: {
     users: [],
     loading: true,
   },

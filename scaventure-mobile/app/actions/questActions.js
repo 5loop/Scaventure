@@ -1,6 +1,7 @@
 import QuestApi from '../api/questApi';
 import * as types from '../constants/actionTypes';
 import { ajaxCallError } from './ajaxStatusActions';
+//import { getOneHint } from '../../../scaventure-backend/server/modules/quests/hintController';
 
 export function getQuests() {
   return dispatch => 
@@ -106,6 +107,7 @@ export function addStep(type, questId, data) {
   };
 }
 
+
 export function reorderSteps(questId, order) {
   return dispatch =>
     QuestApi.reorderSteps(questId, { order }).then(res => {
@@ -113,4 +115,18 @@ export function reorderSteps(questId, order) {
     }).catch(e => {
       console.log(e);
     });
+}
+
+export function addHint(stepId, questId, data) {
+  return dispatch => {
+    return QuestApi.addHint(stepId, questId, data).then(res => {
+      //dispatch(getOneHint(stepId));
+    }).catch(e => {
+      console.log(e);
+    });
+    // setTimeout(() => {
+    //   const quests = Data.quests;
+    //   dispatch({ type: LOAD_QUESTS_SUCCESS, quests });
+    // }, 2000);
+  };
 }

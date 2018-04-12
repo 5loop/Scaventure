@@ -42,7 +42,7 @@ export function deleteQuest(questId) {
 export function getInvitedUsers(questId) {
   return dispatch =>
     QuestApi.getInvitedUsers(questId).then(res => {
-      dispatch({ type: types.LOAD_USERS_SUCCESS, invitedusers: res.data.link });
+      dispatch({ type: types.LOAD_USERS_SUCCESS, invitedusers: res.data.links });
     }).catch(e => {
       console.log(e);
     });

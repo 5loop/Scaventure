@@ -1,6 +1,6 @@
 import React from 'react';
 import { ImageBackground, View, ScrollView, 
-  Text, Keyboard, 
+  Text, TextInput, TouchableOpacity,
   ListView, TouchableHighlight, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
@@ -72,17 +72,49 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 4,
   },
+  playersSection: {
+    // padding: 5,
+  },
   inviteUsers: {
     alignItems: 'center',
   },
   inviteUsersText: {
+    marginTop: 10,
     fontSize: 16,
+    color: Colors.darkSecondary,
+  },
+  btn: {
+    borderColor: 'transparent',
+    borderWidth: 0,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnText: {
+    color: Colors.white,
+    fontSize: 16,
+  },
+  inviteBtn: {
+    backgroundColor: Colors.primaryColor,
+    width: 50,
+    height: 30,
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  emailInput: {
+    height: 20,
+    width: 200,
+    marginTop: 10,
+    textAlign: 'center',
+  },
+  userListStyle: {
+    margin: 10,
+    fontSize: 14,
     color: Colors.darkSecondary,
   },
 });
 
 class QuestInfo extends React.Component {
-
   constructor(props, context) {
     super(props, context);
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
@@ -107,6 +139,18 @@ class QuestInfo extends React.Component {
     this.props.navigation.navigate('QuestStartLocation', { quest });
   }
 
+  inviteClick() {
+    console.warn('invite pressed.');
+  }
+
+  renderUserList(arr) {
+    const userList = [];
+    arr.forEach(element => {
+      userList.push(element.userEmail.trim().replace(/@.+\..+/g, ''));
+    });
+    return userList;
+  }
+
   renderFeedbackRow(feedback) {
     return (
       <FeedbackRow feedback={feedback} />
@@ -119,6 +163,7 @@ class QuestInfo extends React.Component {
     const ifNotPublicQuest = renderIf(notPublic);
     const ifInviNotEmpty = renderIf(notPublic && this.props.invitedusers.length !== 0);
     const ifInviIsEmpty = renderIf(notPublic && this.props.invitedusers.length === 0);
+    const userList = this.renderUserList(this.props.invitedusers);
     return ( 
       <View style={styles.container}>
 
@@ -157,11 +202,25 @@ class QuestInfo extends React.Component {
             <View style={styles.separator}><Text style={styles.h2}> Players </Text></View>
           )}
           {ifInviNotEmpty(
-            <Text> Not empty </Text>
-          )}
+            // not empty
+            userList.map((item, key) => (
+              <Text key={key} style={styles.userListStyle}>Player {key+1}: { item } </Text>
+            ))
+          )}          
           {ifInviIsEmpty(
             <View style={styles.inviteUsers}>
               <Text style={styles.inviteUsersText}> No players! Go invite one. </Text>
+              <TextInput
+                style={styles.emailInput}
+                placeholder='email address'
+                onChangeText={(inviteEmail) => this.setState({ inviteEmail })}
+              />
+              <TouchableOpacity 
+                style={[styles.btn, styles.inviteBtn]}
+                onPress={this.inviteClick.bind(this)}
+              >
+                <Text style={styles.btnText}>Invite</Text>
+              </TouchableOpacity>
             </View>
           )}
           {/* Feedback Title */}
@@ -194,6 +253,7 @@ class QuestInfo extends React.Component {
 // export default QuestInfo;
 
 function mapStateToProps(state, props) {
+  // console.log(props);
   // console.log(state.invitedusers.users);
   return {
     feedbacks: state.feedbacks.feedbacks,

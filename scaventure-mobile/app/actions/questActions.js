@@ -1,6 +1,7 @@
 import QuestApi from '../api/questApi';
 import * as types from '../constants/actionTypes';
 import { ajaxCallError } from './ajaxStatusActions';
+//import { getOneHint } from '../../../scaventure-backend/server/modules/quests/hintController';
 
 export function getQuests() {
   return dispatch => 
@@ -11,10 +12,20 @@ export function getQuests() {
     });
 }
 
+export function getQuestsNearby(coordinates, skip = 0) {
+  return dispatch => 
+    QuestApi.getQuestsNearby(coordinates, skip).then(res => {
+      dispatch({ type: types.LOAD_QUESTS_SUCCESS, quests: res.data.quests });
+    }).catch(e => {
+      dispatch({ type: types.LOAD_QUESTS_SUCCESS, quests: [] });
+      throw (e);  
+    });  
+}
+
 export function getPrivateQuests() {
   return dispatch => 
     QuestApi.getPrivateQuests().then(res => {
-      dispatch({ type: types.LOAD_QUESTS_SUCCESS, quests: res.data.quests });
+      dispatch({ type: types.LOAD_PRIVATE_QUESTS_SUCCESS, quests: res.data.quests });
     }).catch(e => {
       dispatch(ajaxCallError(e));
     });
@@ -23,7 +34,7 @@ export function getPrivateQuests() {
 export function getMyQuests() {
   return dispatch =>
     QuestApi.getMyQuests().then(res => {
-      dispatch({ type: types.LOAD_QUESTS_SUCCESS, quests: res.data.quests });
+      dispatch({ type: types.LOAD_MY_QUESTS_SUCCESS, quests: res.data.quests });
     }).catch(e => {
       console.log(e); 
     });
@@ -90,7 +101,6 @@ export function addQuest(data) {
   return dispatch => {
     return QuestApi.addQuest(data).then(res => {
       dispatch({ type: types.ADD_QUEST_SUCCESS, newQuest: res.data.quest });
-      dispatch(getQuests());
     }).catch(e => {
       console.log(e);
     });
@@ -115,10 +125,34 @@ export function addStep(type, questId, data) {
   };
 }
 
+
 export function reorderSteps(questId, order) {
   return dispatch =>
     QuestApi.reorderSteps(questId, { order }).then(res => {
       // dispatch(getSteps(questId));
+    }).catch(e => {
+      console.log(e);
+    });
+}
+
+export function addHint(stepId, questId, data) {
+  return dispatch => {
+    return QuestApi.addHint(stepId, questId, data).then(res => {
+      //dispatch(getOneHint(stepId));
+    }).catch(e => {
+      console.log(e);
+    });
+    // setTimeout(() => {
+    //   const quests = Data.quests;
+    //   dispatch({ type: LOAD_QUESTS_SUCCESS, quests });
+    // }, 2000);
+  };
+}
+
+export function saveProgress(data) {
+  return dispatch =>
+    QuestApi.saveProgress(data).then(() => {
+      dispatch({ type: types.ADD_PROGRESS_SUCCESS, progress: data });
     }).catch(e => {
       console.log(e);
     });

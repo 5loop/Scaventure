@@ -7,7 +7,8 @@ import Colors from '../../constants/colors';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { addQuest } from '../../actions/questActions';
-
+import { RadioGroup, RadioButton } from 'react-native-flexi-radio-button';
+import { Label } from 'native-base';
 
 
 const SCREEN_HEIGHT = height
@@ -79,6 +80,16 @@ const styles = StyleSheet.create({
   maps:{
     flex:1,
     
+  },
+
+  radioButtons: {
+    flex:1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    backgroundColor: '#C0C0C0',
+    marginBottom: 5,
+    height:'40%',
+    padding:5,
   }
 
 });
@@ -163,7 +174,12 @@ class AddQuest extends React.Component {
   }
 
 
-
+  onSelect(index, value){
+    this.setState({
+      value
+      
+    })
+  }
 
 
   onPress(){
@@ -187,10 +203,10 @@ class AddQuest extends React.Component {
       const data = {
         title: this.state.title,
         description: this.state.description,
-        type: "public",
+        type: this.state.value,
         loc: {
           type: "Point",
-          coordinates: [this.state.initialPosition.latitude, this.state.initialPosition.longitude]
+          coordinates: [this.state.initialPosition.longitude, this.state.initialPosition.latitude]
         }
       }
       this.props.addQuest(data).then(() => {
@@ -205,10 +221,10 @@ class AddQuest extends React.Component {
       const data = {
         title: this.state.title,
         description: this.state.description,
-        type: "public",
+        type: this.state.value,
         loc: {
           type: "Point",
-          coordinates: [this.state.x.latitude, this.state.x.longitude]
+          coordinates: [this.state.x.longitude, this.state.x.latitude]
         }
       }
       this.props.addQuest(data).then(() => {
@@ -255,6 +271,20 @@ class AddQuest extends React.Component {
           maxLength={300}
 
         />
+
+        <RadioGroup
+        onSelect = {(index, value) => this.onSelect(index, value)} >
+
+        
+          <RadioButton value={'public'} >
+            <Text>Public</Text>
+          </RadioButton>
+          <RadioButton value={'private'} >
+            <Text>Private</Text>
+          </RadioButton>
+        
+        </RadioGroup>
+
           </View>
           <MapView
             style={styles.map}

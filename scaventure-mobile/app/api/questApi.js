@@ -6,6 +6,12 @@ class QuestApi {
     return axios.get(`${apiUrl}/api/quests?type=public`);
   }
 
+  static getQuestsNearby(coordinates, skip, distance = 100 * 1000) {
+    const { longitude, latitude } = coordinates;
+    const query = `type=nearby&longitude=${longitude}&latitude=${latitude}&distance=${distance}&skip=${skip}`;
+    return axios.get(`${apiUrl}/api/quests?${query}`);
+  }
+
   static getPrivateQuests() {
     return axios.get(`${apiUrl}/api/quests?type=private`);
   }
@@ -34,6 +40,10 @@ class QuestApi {
     return axios.post(`${apiUrl}/api/quests/${questId}/feedbacks`, data);
   }
 
+  static addHint(stepId, questId, data) {
+    return axios.post(`${apiUrl}/api/quests/${questId}/steps/${stepId}/hints/text`, data);
+  }
+
   static getSteps(questId) {
     return axios.get(`${apiUrl}/api/quests/${questId}/steps`);
   }
@@ -48,6 +58,10 @@ class QuestApi {
 
   static reorderSteps(questId, order) {
     return axios.patch(`${apiUrl}/api/quests/${questId}/steps/reorder`, order);
+  }
+
+  static saveProgress(data) {
+    return axios.post(`${apiUrl}/api/progress`, data);
   }
 }
 

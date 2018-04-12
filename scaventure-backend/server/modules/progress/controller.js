@@ -1,21 +1,21 @@
 import { Progress } from './model';
 import { User } from '../users/model'
 import config from '../../config/config';
+import { Quest } from '../quests/model';
 
 export const progress = async (req, res)  => {
 
     // id of the logged-in user
   const userId = req.user._id;
   try {
-
     const {_questId, timeTaken, pointsEarned} = req.body;    
 
     let progress = new Progress({
-        timeTaken,
-        pointsEarned,
-        _questId: _questId, 
-        _userId: userId
-      });  
+      timeTaken,
+      pointsEarned,
+      _questId: _questId, 
+      _userId: userId
+    });  
 
     return res.status(200).json({ error: false, progress: await progress.save()});
   } catch (e) {
@@ -25,18 +25,18 @@ export const progress = async (req, res)  => {
 
 
 export const getAllProgress = async (req, res) => {    
-    const { id } = req.params;    
-    const email  = req.user.email; 
-    User.findById({ _id: id }, (err, user) => {        
-        if (!user) {
-            return res.status(404).json({ error: true, message: 'There is no progress report.' });
-        }
-        else{
-            const q = User.find({ email: email, isVerified: true }).select('_id');
-            q.exec(async (err, progressIds) => {
-                progressIds = progressIds.map( v => v._id );
-                return res.status(200).json({ error: false, progress: await Progress.find({ '_userId' : { $in: progressIds } }) });
-            });
-        }
-    });    
-  }
+  const id = req.user._id;   
+  const email  = req.user.email; 
+  Progress.find({ _userId: id },  async (err, progress) => {        
+    if (progress.length === 0) {
+      return res.status(404).json({ error: true, message: 'There is no progress report.' });
+    }
+    
+    let progQuest = [];
+    for (let i = 0; i < progress.length; i++) {
+      const q = await Quest.findById(progress[i]._questId);
+      progQuest.push({ title: q.title, ...progress[i]._doc });
+    }
+    return res.status(200).json({ error: false, progQuest });
+  });    
+}

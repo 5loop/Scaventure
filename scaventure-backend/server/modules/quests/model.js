@@ -4,7 +4,7 @@ import mongoose, { Schema } from 'mongoose';
 const linkSchema = new Schema({
   userEmail: {
     type: String,
-    required: true 
+    required: true
   },
   questId: {
     type: Schema.ObjectId,
@@ -13,7 +13,7 @@ const linkSchema = new Schema({
   verified: {
     type: Boolean,
     default: false
-  }, 
+  },
   hash: {
     type: String,
     required: true
@@ -43,7 +43,7 @@ questId: {
 },
 reportedBy: {
 	type: Schema.ObjectId
-} 
+}
 });
 
 const Feedback  = mongoose.model('Feedback',  feedbackSchema);
@@ -125,6 +125,11 @@ const stepSchema = new Schema({
   stepNumber: { // order of the step
     type: Number,
     required: true
+  },
+  stepHint: {
+    type: String,
+    required: false,
+    default: "",
   },
 
   // keys //

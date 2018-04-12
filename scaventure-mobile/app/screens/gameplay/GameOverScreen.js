@@ -1,11 +1,30 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 /** -- Local Imports */
 import Colors from '../../constants/colors';
+import { saveProgress } from '../../actions/questActions';
 
-class PlayStep extends React.Component { 
+class GaveOverScreen extends React.Component { 
+
+  componentDidMount() {
+    const { totalScore = 0, totalElapsed = 0, questId } = this.props.navigation.state.params;
+    
+    const elapsed = Math.round(totalElapsed / 100);
+    const seconds = (elapsed / 10).toFixed(1); 
+    
+    this.props.saveProgress({
+      _questId: questId,
+      timeTaken: seconds,
+      pointsEarned: totalScore,
+    }).then(() => {
+
+    }).catch(e => console.log("error") );
+  }
+
   render() {
     const { totalScore = 0, totalElapsed = 0 } = this.props.navigation.state.params;
 
@@ -57,4 +76,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlayStep;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ saveProgress }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(GaveOverScreen);

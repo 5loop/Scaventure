@@ -39,7 +39,7 @@ class QuestStepList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ steps: nextProps.steps });
+    this.setState({ steps: nextProps.steps, stepsLoading: nextProps.stepsLoading });
   }
 
   onQABttnPress() {
@@ -50,6 +50,10 @@ class QuestStepList extends Component {
   onQRBttnPress() {
     const { quest } = this.props.navigation.state.params;
     this.props.navigation.navigate('AddQRStep', { quest });
+  }
+  onGPSBttnPress() {
+    const { quest } = this.props.navigation.state.params;
+    this.props.navigation.navigate('AddGPSStep', { quest });
   }
 
   onEditBttnPress(step) {
@@ -155,8 +159,8 @@ class QuestStepList extends Component {
             onPress={this.onQABttnPress.bind(this)} 
             buttonText={'Step Options'} 
             icon='settings'
-            options={['Q/A Step', 'QR Step', 'Reorder Steps']} 
-            optionFunctions={[this.onQABttnPress.bind(this), this.onQRBttnPress.bind(this), this.toggleReorder.bind(this)]}
+            options={['Q/A Step', 'QR Step', 'GPS Step' ,'Reorder Steps']} 
+            optionFunctions={[this.onQABttnPress.bind(this), this.onQRBttnPress.bind(this),this.onGPSBttnPress.bind(this),this.toggleReorder.bind(this)]}
           />
           :
           <AnnotatedButton color={Colors.green} icon="check" buttonText="Done!" onPress={this.saveOrder.bind(this)} />

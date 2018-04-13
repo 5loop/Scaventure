@@ -16,6 +16,16 @@ class AuthApi {
   static register(credentials) {
     return axios.post(`${apiUrl}/api/auth/register`, credentials);
   }
+
+  // send confirmation code
+  static sendCode(credentials) {
+    return axios.post(`${apiUrl}/api/auth/forgot_password`, credentials);
+  }
+
+  // reset password
+  static resetPasswd(credentials) {
+    return axios.post(`${apiUrl}/api/auth/reset_password`, credentials);
+  }
 }
 
 export default AuthApi;

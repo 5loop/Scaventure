@@ -53,7 +53,7 @@ class SignupScreen extends React.Component {
         this.props.navigation.navigate('Login');
       }).catch((e) => { 
         // display error that could not login
-        Alert.alert('Error', 'Something went wrong!');
+        Alert.alert('Error', 'Something went wrong! Reset your password if you have registried with this emal.');
         console.log(e); 
       }).then(() => {
         // Release Loader (HTTP call has ended)

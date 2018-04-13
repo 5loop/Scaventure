@@ -29,7 +29,7 @@ import AddQRStepScreen from './screens/quests/AddQRStep';
 import QRScanScreen from './screens/gameplay/QRScanScreen';
 import PlayStepScreen from './screens/gameplay/PlayStepScreen';
 import GameOverScreen from './screens/gameplay/GameOverScreen';
-
+import ProgressScreen from './screens/ProgressScreen';
 
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
@@ -283,10 +283,7 @@ const MyQuestsStack = StackNavigator({
   GameOver: GameOverScreenStack,
 });
 
-// screenToStack(QuestScreen, 'PublicQuests', 'Public Quests');
-//const PrivateQuestsStack = screenToStack(ToBeImplemented, 'PrivateQuests', 'Private Quests');
-// const MyQuestsStack = screenToStack(myQuestStack, 'MyQuests', 'My Quests');
-const CompletedQuestsStack = screenToStack(ToBeImplemented, 'CompletedQuests', 'Completed Quests');
+const CompletedQuestsStack = screenToStack(ProgressScreen, 'CompletedQuests', 'Completed Quests');
 
 export default DrawerNavigator({
   PublicQuests: {
@@ -297,6 +294,9 @@ export default DrawerNavigator({
   }, 
   MyQuests: {
     screen: MyQuestsStack,
+  },
+  CompletedQuests: {
+    screen: CompletedQuestsStack,
   },
 }, {
   contentOptions: {

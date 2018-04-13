@@ -148,3 +148,11 @@ export function saveProgress(data) {
       console.log(e);
     });
 }
+
+export function getProgress() {
+  return dispatch => 
+    QuestApi.getProgress().then((res) => {
+      dispatch({ type: types.LOAD_PROGRESS_SUCCESS, progress: res.data.progress });
+    });
+}
+

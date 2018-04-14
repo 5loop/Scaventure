@@ -28,6 +28,18 @@ class QuestApi {
     return axios.delete(`${apiUrl}/api/quests/${questId}`);
   }
 
+  static getInvitedUsers(questId) {
+    return axios.get(`${apiUrl}/api/quests/${questId}/users`);
+  }
+
+  static deleteInvitedUsers(questId, email) {
+    return axios.delete(`${apiUrl}/api/quests/${questId}/users/${email}`);
+  }
+
+  static sendInvitation(questId, data) {
+    return axios.post(`${apiUrl}/api/quests/${questId}/users`, data);
+  }
+
   static getFeedbacks(questId) {
     return axios.get(`${apiUrl}/api/quests/${questId}/feedbacks`);
   }

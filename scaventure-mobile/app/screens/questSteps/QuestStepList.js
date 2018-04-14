@@ -159,7 +159,7 @@ class QuestStepList extends Component {
             onPress={this.onQABttnPress.bind(this)} 
             buttonText={'Step Options'} 
             icon='settings'
-            options={['Q/A Step', 'QR Step', 'GPS Step' ,'Reorder Steps']} 
+            options={['Q/A Step', 'QR Step', 'GPS Step', 'Reorder Steps']} 
             optionFunctions={[this.onQABttnPress.bind(this), this.onQRBttnPress.bind(this),this.onGPSBttnPress.bind(this),this.toggleReorder.bind(this)]}
           />
           :

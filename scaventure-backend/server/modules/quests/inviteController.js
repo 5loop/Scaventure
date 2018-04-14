@@ -3,6 +3,10 @@ import { Quest } from './model';
 
 import config from '../../config/config';
 var sg = require('sendgrid')(config.sendgrid_key);
+var path = require('path');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(config.sendgrid_key);
+
 var SHA256 = require("crypto-js/sha256");
 var CryptoJS = require("crypto-js");
 
@@ -20,10 +24,8 @@ export const verifyUserLink = async(req, res) =>{
       if(link.userEmail == email && link.hash == hash.toString()){
         link.verified = true;
         await link.save();
-        return res.status(200).json({ error: true, message: 'Link verified!'});
-
-
-      }else{
+        return res.sendFile(path.join(__dirname + '/invitation.html'));
+      } else {
         return res.status(404).json({ error: true, message: 'Link not verified'});
 
       }
@@ -32,10 +34,6 @@ export const verifyUserLink = async(req, res) =>{
 
     }
   });
-
-
-
-
 }
 
 //List of users invited to the quest
@@ -119,49 +117,25 @@ export const inviteUser = async (req, res) => {
 
     await link.save();
 
+    const msg = {
+      to: email.toString(),
+      from: "scaventureapp@gmail.com",
+      subject: `Scaventure App: Invitation to Join '${quest.title}'`,
+      templateId: 'df118fc5-b78c-4cac-ad01-57a8c2fb87a4',
+      substitutions: {
+        preText: 'You were invited to join a private quest!',
+        url: `http://${req.headers.host}/api/quests/${id}/users/verify/${hash}`,
+        text: `You should be able to play the quest '${quest.title}' after that!`
+      },
+    };
 
-    
-    var request = sg.emptyRequest({
-      method: 'POST',
-      path: '/v3/mail/send',
-      body: {
-        personalizations: [
-          {
-            to: [
-              {
-                email: email.toString()
-              }
-            ],
-            subject: `You were invited to a new exciting quest '${quest.title}'`
-          }
-        ],
-        from: {
-          email: 'scaventureapp@gmail.com'
-        },
-        content: [
-          {
-            type: 'text/plain',
-            value: `Please follow the link http://localhost:4100/api/quests/${id}/verify/${hash}`
-          }
-        ]
-      }
-    });
-     
-    // With promise
-    sg.API(request)
-    .then(function (response) {
-      console.log("Sent!!")
-      console.log(response.statusCode);
-      console.log(response.body);
-      console.log(response.headers);
-      return res.status(200).json({ error: false, message: "Invited the user!"});
+    sgMail.send(msg).then(function (response) {
+      console.log("Sent!!");
+      return res.status(200).send({ error: false, message: 'Success'})
     })
     .catch(function (error) {
-      console.log("Sent!!")
-      // error is an instance of SendGridError
-      // The full response is attached to error.response
-      console.log(error.response.statusCode);
-      return res.status(500).json({ error: false, message: "Failed to send the email"});
+      console.log(error)
+      console.log("Not Sent!!")
     });
   });
 }

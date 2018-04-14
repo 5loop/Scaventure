@@ -21,7 +21,6 @@ routes.post('/quests', requireJwtAuth, QuestController.addQuest);
 routes.post('/quests/:id', requireJwtAuth, QuestController.updateQuest);
 routes.delete('/quests/:id',  requireJwtAuth, QuestController.deleteQuest);
 
-// TO BE IMPLEMENTED @Parth
 
 // Feedback
 routes.get('/quests/:id/feedbacks' , requireJwtAuth, FeedbackController.getFeedback ); // Get list of feedbacks for a quest
@@ -32,7 +31,7 @@ routes.post('/quests/:id/feedbacks/:id' , requireJwtAuth, FeedbackController.upd
 // Invitations
 // POST /quests/1/users
 routes.post('/quests/:id/users', requireJwtAuth, InviteController.inviteUser);
-routes.get('/quests/:id/users/verify/:hash', requireJwtAuth, InviteController.verifyUserLink);
+routes.get('/quests/:id/users/verify/:hash', InviteController.verifyUserLink);
 routes.get('/quests/:id/users' , requireJwtAuth, InviteController.getInvitedUsers); // Get list of users invited to the quest (iff quest is private & logged-in user is the author of the quest)
 routes.delete('/quests/:id/users/:email', requireJwtAuth, InviteController.uninviteUser); // 'Uninvite' a user (iff quest is private & logged-in user is the author of the quest)
 

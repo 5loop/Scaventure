@@ -76,7 +76,7 @@ export const deleteOneStep = async (req, res) => {
 }
 
 export const editStep = async (req, res) => {
-  const { id, stepid } = req.params; // quest id
+  const { id, stepId } = req.params; // quest id
   const userId = req.user._id;
 
   Quest.findById(id, async (err, quest) => {
@@ -90,7 +90,7 @@ export const editStep = async (req, res) => {
     }
 
     try {
-      Step.findById(stepid, async (err, step) => {
+      Step.findById(stepId, async (err, step) => {
         if (!step) {
           return res.status(404).json({ error: true, message: 'Step Does not exist!' });
         }

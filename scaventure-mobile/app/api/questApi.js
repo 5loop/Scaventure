@@ -20,9 +20,9 @@ class QuestApi {
     return axios.post(`${apiUrl}/api/quests`, data);
   }
 
-  static editQuest(questId, data) {
-    return axios.post(`${apiUrl}/api/quests/${questId}`, data);
-  }
+  static editStep(stepId, questId, data) {
+    return axios.post(`${apiUrl}/api/quests/${questId}/steps/${stepId}`, data);
+  }  
   
   static getMyQuests() {
     return axios.get(`${apiUrl}/api/quests?type=user`);

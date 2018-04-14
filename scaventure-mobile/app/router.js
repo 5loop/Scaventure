@@ -21,7 +21,9 @@ import MyQuestScreen from './screens/quests/MyQuestScreen';
 import QuestStartLocation from './screens/gameplay/QuestStartLocation';
 import LogoutNavOption from './logout';
 import QuestStepList from './screens/questSteps/QuestStepList';
-import EditStep from './screens/questSteps/EditStep';
+import EditQAStep from './screens/quests/EditQAStep';
+import EditQRStep from './screens/quests/EditQRStep';
+import EditGPSStep from './screens/quests/EditGPSStep';
 
 // testing qr code generator
 import AddQRStepScreen from './screens/quests/AddQRStep';
@@ -262,10 +264,28 @@ const MyQuestsStack = StackNavigator({
       headerLeft: <GoBack navigation={navigation} />,
     }),
   },
-  EditStep: {
-    screen: EditStep,
+  EditQAStep: {
+    screen: EditQAStep,
     navigationOptions: ({ navigation }) => ({
-      title: 'Edit Step',
+      title: 'Edit QA Step',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  EditQRStep: {
+    screen: EditQRStep,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Edit QR Step',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  EditGPSStep: {
+    screen: EditGPSStep,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Edit GPS Step',
       headerStyle,
       headerTitleStyle,
       headerLeft: <GoBack navigation={navigation} />,

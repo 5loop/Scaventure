@@ -132,7 +132,7 @@ class QRsteps extends Component {
             baseColor={Colors.secondaryColor}
             tintColor={Colors.primaryColor}
             onChangeText={(hint)=> this.setState({hint})}
-            onBlur={() => this.checkHint()}
+            
             />
 
           <View style={styles.qrStyle}> 
@@ -169,7 +169,7 @@ class QRsteps extends Component {
                   draggable
                   coordinate={this.state.initialPosition}
                   onDragEnd={(e) => {
-                    this.setState({ x: e.nativeEvent.coordinate });
+                    this.setState({ x: e.nativeEvent.coordinate,  initialPosition: e.nativeEvent.coordinate });
                   }}
                   region={this.state.coordinate}
                 />

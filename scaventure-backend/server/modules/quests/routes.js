@@ -32,7 +32,7 @@ routes.post('/quests/:id/feedbacks/:id' , requireJwtAuth, FeedbackController.upd
 // POST /quests/1/users
 routes.post('/quests/:id/users', requireJwtAuth, InviteController.inviteUser);
 routes.get('/quests/:id/users/verify/:hash', InviteController.verifyUserLink);
-routes.get('/quests/:id/users' , requireJwtAuth, InviteController.getInvitedUsers); // Get list of users invited to the quest (iff quest is private & logged-in user is the author of the quest)
+routes.get('/quests/:id/users' , requireJwtAuth, InviteController.getInvitedUsers); // Get list of users invited to the quest (iff quest is private & logged-in user is the author of the quest)// 
 routes.delete('/quests/:id/users/:email', requireJwtAuth, InviteController.uninviteUser); // 'Uninvite' a user (iff quest is private & logged-in user is the author of the quest)
 
 // routes.get('/quests/:id/users' , ... ); // Get list of users invited to the quest (iff quest is private & logged-in user is the author of the quest)

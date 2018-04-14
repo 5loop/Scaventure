@@ -46,10 +46,10 @@ export function updateUser({ email, password }) {
     });
 }
 
-export function registerUser({ email, password, username }) {
+export function registerUser({ email, password }) {
   return dispatch => 
     new Promise((resolve, reject) => {
-      AuthApi.register({ email, password, username }).then(response => {
+      AuthApi.register({ email, password }).then(response => {
         resolve(); 
       }).catch((error) => {
         reject(error);
@@ -65,4 +65,26 @@ export function logoutUser() {
       resolve();
     });
   };
+}
+
+export function sendCode({ email }) {
+  return () =>
+    new Promise((resolve, reject) => {
+      AuthApi.sendCode({ email }).then(() => {
+        resolve();
+      }).catch(error => {
+        reject(error);
+      });
+    });
+}
+
+export function resetPasswd({ email, key, password }) {
+  return () =>
+    new Promise((resolve, reject) => {
+      AuthApi.resetPasswd({ email, key, password }).then(() => {
+        resolve();
+      }).catch(err => {
+        reject(err);
+      });
+    });
 }

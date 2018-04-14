@@ -39,9 +39,15 @@ class RestorePwdScreen extends React.Component {
         Alert.alert('Alert', 'Email is not valid.');
       } else {
         // TODO - implement send code
-        Alert.alert('Info.', 'Send code needs to be implemented.');
-        // Alert.alert('Alert', 'Confirmation code sent. Please check your email inbox.');
-        this.setState({ fieldsStatus: true, myText: 'Confirm' });
+        this.props.actions.sendCode(
+          { email: this.state.email.toLowerCase() }
+        ).then(() => {
+          Alert.alert('Alert', 'Confirmation code sent. Please check your email inbox.');
+          this.setState({ fieldsStatus: true, myText: 'Confirm' });
+        }).catch((e) => {
+          console.log(e);
+          Alert.alert('Error', 'Failed to send code!');
+        });
       }
     } else if (this.state.myText === 'Confirm') {
       // Validate input, set error & return if not valid
@@ -58,8 +64,8 @@ class RestorePwdScreen extends React.Component {
         // Set Loader (some status indicating that HTTP call is in progress)
         this.setState({ textStatus: false });
         // implement change password
-        this.props.actions.updateUser(
-          { email: this.state.email.toLowerCase(), password: this.state.password }
+        this.props.actions.resetPasswd(
+          { email: this.state.email.toLowerCase(), key: this.state.code, password: this.state.password }
         ).then(() => {
           console.log('Updated password');
           Alert.alert('Info.', 'You password has been updated.');

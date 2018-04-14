@@ -194,7 +194,7 @@ class EditQuest extends React.Component {
         type: "public",
         loc: {
           type: "Point",
-          coordinates: [this.state.initialPosition.longitude, this.state.initialPosition.latitude]
+          coordinates: [this.state.initialPosition.latitude, this.state.initialPosition.longitude]
         }
       }
       this.props.editQuest(quest._id, data).then(() => {
@@ -213,7 +213,7 @@ class EditQuest extends React.Component {
         type: "public",
         loc: {
           type: "Point",
-          coordinates: [this.state.x.longitude, this.state.x.latitude]
+          coordinates: [this.state.x.latitude, this.state.x.longitude]
         }
       }
       this.props.editQuest(quest._id, data).then(() => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, ListView } from 'react-native';
+import { Text, View, StyleSheet, ListView, ActivityIndicator } from 'react-native';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import ProgressRow from './ProgressRow';
 /* -- Actions */
 import { getProgress } from '../actions/questActions';
+import Colors from '../constants/colors';
+import EmptyListScreen from './common/EmptyListScreen';
 
 const styles = StyleSheet.create({
   container: {
@@ -36,7 +38,7 @@ class ProgressScreen extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = { ds };
   }
 
@@ -53,12 +55,23 @@ class ProgressScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ListView
-          enableEmptySections
-          dataSource={this.state.ds.cloneWithRows(this.props.progress)}
-          key={this.props.progress}
-          renderRow={this.renderRow.bind(this)}
-        />
+        { (!this.props.progressLoading && this.props.progress.length === 0) ?
+          <EmptyListScreen 
+            title={'You haven\'t completed any quests yet!'}
+            description={'You can browse available quests in \'public quests\' section!'}
+          />
+          :
+          <ListView
+            enableEmptySections
+            dataSource={this.state.ds.cloneWithRows(this.props.progress)}
+            key={this.props.progress}
+            renderRow={this.renderRow.bind(this)}
+          />
+        }
+
+        {this.props.progressLoading && 
+            <ActivityIndicator size="large" color={Colors.primaryColor} /> 
+        }
       </View>
     );
   }
@@ -67,6 +80,7 @@ class ProgressScreen extends React.Component {
 function mapStateToProps(state, props) {
   return {
     progress: state.progress.progress,
+    progressLoading: state.progress.loading,
   };
 }
 

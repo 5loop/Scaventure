@@ -28,10 +28,6 @@ export const getAllProgress = async (req, res) => {
   const id = req.user._id;   
   const email  = req.user.email; 
   Progress.find({ _userId: id },  async (err, progress) => {        
-    if (progress.length === 0) {
-      return res.status(404).json({ error: true, message: 'There is no progress report.' });
-    }
-    
     let progQuest = [];
     for (let i = 0; i < progress.length; i++) {
       const q = await Quest.findById(progress[i]._questId);

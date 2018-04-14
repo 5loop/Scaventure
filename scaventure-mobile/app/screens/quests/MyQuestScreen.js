@@ -122,9 +122,10 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
+  console.log( state.myQuests);
   return {
-    quests: state.quests.quests,
-    questsLoading: state.quests.loading,
+    quests: state.myQuests.quests,
+    questsLoading: state.myQuests.loading,
   };
 }
 

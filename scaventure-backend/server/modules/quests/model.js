@@ -4,7 +4,7 @@ import mongoose, { Schema } from 'mongoose';
 const linkSchema = new Schema({
   userEmail: {
     type: String,
-    required: true 
+    required: true
   },
   questId: {
     type: Schema.ObjectId,
@@ -13,7 +13,7 @@ const linkSchema = new Schema({
   verified: {
     type: Boolean,
     default: false
-  }, 
+  },
   hash: {
     type: String,
     required: true
@@ -43,7 +43,7 @@ questId: {
 },
 reportedBy: {
 	type: Schema.ObjectId
-} 
+}
 });
 
 const Feedback  = mongoose.model('Feedback',  feedbackSchema);
@@ -92,7 +92,7 @@ const questSchema = new Schema({
 });
 
 // Index to allow geo-optimization
-questSchema.index({'loc.geometry': '2dsphere'});
+questSchema.index({'loc': '2dsphere'});
 
 const options = { discriminatorKey: 'type' };
 

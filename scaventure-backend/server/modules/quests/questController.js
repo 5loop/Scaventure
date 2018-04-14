@@ -28,23 +28,29 @@ export const getQuests = async (req, res) => {
       return res.status(200).json({ error: false, quests: await Quest.find({ '_id' : { $in: questIds } }) });
     });
   } else if (type === 'nearby') {
-    
+
     const { longitude, latitude, distance } = req.query;
     const limit = req.query.limit || 3;
     const skip  = parseInt(req.query.skip) || 0;
 
-    const quests = await Quest.find({
-      loc: { 
-        $near: { $maxDistance: distance?distance:1000 * 1000, $geometry: {type: "Point", coordinates: [longitude, latitude]} },
-      },
-      type: options.type
-    }).skip(skip).limit(limit); 
-    
-    if (quests.length === 0) {
-      return res.status(404).json({ error: true, message: 'There\'re no quests around specified location' });
+    try {
+      const quests = await Quest.find({
+        loc: {
+          $near: { $maxDistance: distance?distance:1000 * 1000, $geometry: {type: "Point", coordinates: [longitude, latitude]} },
+        },
+        type: options.type
+      }).skip(skip).limit(limit);
+
+      if (quests.length === 0) {
+        return res.status(404).json({ error: true, message: 'There\'re no quests around specified location' });
+      }
+
+      return res.status(200).json({ error: false, quests });
+
+    } catch (e) {
+      return res.status(500).json({ error: true, message: 'Server error or there\'re no quests around specified location' });
     }
 
-    return res.status(200).json({ error: false, quests });
   } else {
     return res.status(200).json({ error: false, quests: await Quest.find(options) });
   }
@@ -128,7 +134,7 @@ export const deleteQuest = async (req, res) => {
   const { id } = req.params; // quest id
 
   Quest.findById(id, async (err, quest) => {
-  
+
     if (!quest) {
       return res.status(404).json({ error: true, message: 'Quest Does not exist!' });
     }

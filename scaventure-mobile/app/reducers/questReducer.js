@@ -12,7 +12,7 @@ export function questReducer(state = initialState.quests, action) {
 }
 
 export function privateQuestReducer(state = initialState.privateQuests, action) {
-  switch (action.privateQuests) {
+  switch (action.type) {
     case types.LOAD_PRIVATE_QUESTS_SUCCESS:
       state = Object.assign({}, state, { quests: action.quests, loading: false });
       return state;

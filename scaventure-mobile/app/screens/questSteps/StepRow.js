@@ -1,117 +1,168 @@
-import React from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
-import EmptyListScreen from '../common/EmptyListScreen';
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableHighlight,
+} from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 
+import Colors from '../../constants/colors';
+
+class StepRow extends Component {
+    state = {
+      showOptions: false,
+    }
+  
+    toggleOptions() {
+      this.setState({ showOptions: !this.state.showOptions }); 
+    }
+  
+    render() {
+      const { data } = this.props;
+      let icon = 'qrcode';
+      let iconSize = 35;
+      let borderColor = 'orange';
+      if (data.type === 'QAStep') {
+        icon = 'question-circle-o';
+        borderColor = Colors.lightSecondary;
+      } else if (data.type === 'GPSStep') {
+        icon = 'map-o';
+        iconSize = 27;
+        borderColor = Colors.tertiaryColor;
+      }
+
+      return (
+        <TouchableHighlight
+          underlayColor={'#eee'}
+          style={styles.rowItem}
+          {...this.props.sortHandlers}
+          onPress={this.toggleOptions.bind(this)}
+        >  
+          <View>
+            <View style={styles.rowContainer}>
+              <View style={{ width: 45, marginRight: 10, borderColor, borderRightWidth: 3, paddingRight: 10 }}>
+                <FontAwesome name={icon} size={iconSize} color={borderColor} />
+              </View>
+              <View style={styles.rowContent}>
+                <Text style={styles.text}>{data.description}</Text>
+                {(this.state.showOptions) &&
+                  <View style={styles.buttonGroup}>
+                    <View style={styles.buttonItem}>
+                      <TouchableHighlight 
+                        color={Colors.green}
+                        style={styles.firstButton}
+                        underlayColor={Colors.lightSecondary}
+                        onPress={() => this.props.onEditBttnPress(this.props.data)}
+                      > 
+                        <FontAwesome name={'edit'} size={35} color={Colors.white} />
+                      </TouchableHighlight>
+                    </View>          
+                  
+                    <View style={styles.buttonItem}>
+                      <TouchableHighlight 
+                        color={Colors.lightSecondary}
+                        underlayColor={Colors.lightSecondary}
+                        style={styles.secondButton}
+                        onPress={() => this.props.onDelBttnPress(this.props.data._id)}
+                      >
+                        <FontAwesome name={'remove'} size={35} color={Colors.white} />
+                      </TouchableHighlight>
+                    </View>
+                  </View>
+                }
+              </View>
+            </View>
+          </View>
+        </TouchableHighlight>
+      );
+    }
+}
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#E7E7E7',
-    padding: 10,
+  rowContainer: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-    marginLeft: 20,
-    marginRight: 20,
-    height:100,
+    flexDirection: 'row',
   },
-  label: {
-    fontSize: 20,
-    fontWeight: '300',
-    width:'100%',
-    height:28,
-    alignItems: 'center',
-    backgroundColor:'#537c8aff',
-    marginBottom: 5,
-    color:'#ffffff',
-    padding:2,
-
+  rowItem: 
+  {
+    paddingRight: 25,
+    paddingBottom: 25,
+    paddingTop: 25,
+    paddingLeft: 13,
+    backgroundColor: '#F8F8F8',
+    borderBottomWidth: 1,
+    borderColor: '#eee',
+    marginBottom: 14,
+    marginLeft: 18,
+    marginRight: 18,
   }, 
-  doneButton: {
-    borderRadius: 5,
-    backgroundColor: '#EAEAEA',
-    width:'50%',
-    padding: 5,
-
+  row: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    backgroundColor: '#fff',
+    padding: 16,
+    height: 80,
+    flex: 1,
+    marginTop: 7,
+    marginBottom: 12,
+    borderRadius: 4,
   },
-  playButton: {
-    flex:1,
+  rowContent: {
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    flexGrow: 1,
   },
-  moreButton: {
-    flex:1,
+  text: {
+    fontSize: 18,
+    color: Colors.darkPrimary,
+  },
+  buttonRow: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  buttonGroup: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'stretch',
+  },
+  firstButton: {
+    backgroundColor: Colors.green,
+    paddingRight: 10,
+    paddingLeft: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    alignItems: 'center',
+    height: 50,
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'column',
     
   },
-
-  contentRow: {
-    flex:1,
-    flexDirection: 'row',
-    height:'50%',
-    justifyContent: 'space-between',
-    marginBottom: 5,
-    flexWrap: 'wrap',
-
+  secondButton: {
+    backgroundColor: Colors.lightSecondary,
+    paddingRight: 10,
+    paddingLeft: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    alignItems: 'center',
+    height: 50,
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'column',
   },
-  description: {
-    width:'70%',
-    padding:10,
-    flexDirection: 'row',
-    flexWrap:'wrap',
-
+  buttonText: {
+    fontSize: 20,
+    color: Colors.white,
+    textAlign: 'center',
   },
-
-  buttonRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-
-  },
-
   buttonItem: {
-
-    width: '48%',
-  },
-
-  icon:{
-    width:'30%',
-    height:'100%',
-    backgroundColor:'#EAEAEA',
+    margin: 3,
+    flex: 2,
   },
 });
-class StepRow extends React.Component {
-
-  render() {
-    return ( 
-      <View style={styles.container}>
-      
-        <Text style={styles.label}> {this.props.step.description} </Text>       
-        
-        <View style={styles.buttonRow}>
-          
-          <View style={styles.buttonItem}>
-            <Button 
-              title="Edit step" 
-              color="#FF9C59" 
-              style={styles.moreButton}
-              onPress={() => this.props.onEditBttnPress(this.props.step)}
-            />
-          </View>          
-         
-          <View style={styles.buttonItem}>
-            <Button 
-              title="Delete Step" 
-              color="#7bae6dff" 
-              style={styles.playButton}
-              onPress={() => this.props.onDelBttnPress(this.props.step._id)}
-            />
-          </View>
-        
-        </View>
-      
-      </View>
-    );
-  }
-}
 
 export default StepRow;

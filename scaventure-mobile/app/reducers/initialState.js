@@ -27,4 +27,8 @@ export default {
     newQuest: {},
     loading: true,
   },
+  progress: {
+    progress: [],
+    loading: true,
+  },
 };

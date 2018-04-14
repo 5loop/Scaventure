@@ -71,6 +71,10 @@ class QuestApi {
   static saveProgress(data) {
     return axios.post(`${apiUrl}/api/progress`, data);
   }
+
+  static getProgress() {
+    return axios.get(`${apiUrl}/api/progress`);
+  }
 }
 
 export default QuestApi;

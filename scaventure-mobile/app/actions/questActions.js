@@ -59,6 +59,26 @@ export function getInvitedUsers(questId) {
     });
 }
 
+export function deleteInvitedUsers(questId, email) {
+  return dispatch =>
+    QuestApi.deleteInvitedUsers(questId, email).then(() => {
+      dispatch({ type: types.DELETE_INVITATED_USERS_SUCCESS });
+      dispatch(getInvitedUsers(questId));
+    }).catch(e => {
+      console.log(e);
+    });
+}
+
+export function sendInvitation(questId, data) {
+  return dispatch =>
+    QuestApi.sendInvitation(questId, data).then(() => {
+      dispatch({ type: types.LOAD_SEND_INVITATION_SUCCESS });
+      dispatch(getInvitedUsers(questId));
+    }).catch(e => {
+      console.log(e);
+    });
+}
+
 export function getFeedbacks(questId) {
   return dispatch => 
     QuestApi.getFeedbacks(questId).then(res => {

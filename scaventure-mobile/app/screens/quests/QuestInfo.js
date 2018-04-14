@@ -1,6 +1,6 @@
 import React from 'react';
 import { ImageBackground, View, ScrollView, 
-  Text, TextInput, TouchableOpacity,
+  Text, TextInput, TouchableOpacity, Alert,
   ListView, TouchableHighlight, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
@@ -10,7 +10,8 @@ import { connect } from 'react-redux';
 // Local Imports
 import Colors from '../../constants/colors';
 import FeedbackRow from './FeedbackRow';
-import { getFeedbacks, getInvitedUsers } from '../../actions/questActions';
+import { getFeedbacks, getInvitedUsers, sendInvitation,
+  deleteInvitedUsers } from '../../actions/questActions';
 import EmptyListScreen from '../common/EmptyListScreen';
 import AnnotatedButton from '../common/AnnotatedButton';
 
@@ -72,11 +73,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 4,
   },
-  playersSection: {
-    // padding: 5,
+  invitationSection: {
+    padding: 5,
+    flex: 1,
   },
   inviteUsers: {
     alignItems: 'center',
+  },
+  userRow: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
   },
   inviteUsersText: {
     marginTop: 10,
@@ -96,8 +104,15 @@ const styles = StyleSheet.create({
   },
   inviteBtn: {
     backgroundColor: Colors.primaryColor,
-    width: 50,
-    height: 30,
+    width: 70,
+    height: 35,
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  removeBtn: {
+    backgroundColor: Colors.primaryColor,
+    width: 70,
+    height: 35,
     marginBottom: 10,
     marginTop: 10,
   },
@@ -109,8 +124,9 @@ const styles = StyleSheet.create({
   },
   userListStyle: {
     margin: 10,
-    fontSize: 14,
+    fontSize: 16,
     color: Colors.darkSecondary,
+    textAlignVertical: 'center',
   },
 });
 
@@ -121,6 +137,8 @@ class QuestInfo extends React.Component {
     this.state = {
       ds,
     };
+
+    this.removeClick = this.removeClick.bind(this);
   }
 
   componentDidMount() {
@@ -140,7 +158,25 @@ class QuestInfo extends React.Component {
   }
 
   inviteClick() {
-    console.warn('invite pressed.');
+    const email = this.state.inviteEmail;
+    const emailREGEX = /\S+@\S+\.\S+/;
+
+    if (emailREGEX.test(String(email).toLowerCase()) === false) {
+      Alert.alert('Alert', 'Email is not valid.');
+    } else {
+      // console.log(this.props);
+      const questID = this.props.navigation.state.params.quest._id;
+      this.props.sendInvitation(questID, { email });
+      Alert.alert('Alert', 'Invitation email sent.');
+      console.log('invitation sent.');
+    }
+  }
+
+  removeClick(key) {
+    const questID = this.props.navigation.state.params.quest._id;
+    const email = this.props.invitedusers[key].userEmail;
+
+    this.props.deleteInvitedUsers(questID, email);
   }
 
   renderUserList(arr) {
@@ -203,9 +239,33 @@ class QuestInfo extends React.Component {
           )}
           {ifInviNotEmpty(
             // not empty
-            userList.map((item, key) => (
-              <Text key={key} style={styles.userListStyle}>Player {key+1}: { item } </Text>
-            ))
+            <View style={styles.invitationSection}>
+              {userList.map((item, key) => (
+                <View style={styles.userRow}>
+                  <Text key={key} style={styles.userListStyle}>Player {key+1}: { item } </Text>
+                  <TouchableOpacity 
+                    style={[styles.btn, styles.removeBtn]}
+                    onPress={() => this.removeClick(key)}
+                  >
+                    <Text style={styles.btnText}>Remove</Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+              <View style={styles.inviteUsers}>
+                <Text style={styles.inviteUsersText}> Invite more players. </Text>
+                <TextInput
+                  style={styles.emailInput}
+                  placeholder='email address'
+                  onChangeText={(inviteEmail) => this.setState({ inviteEmail })}
+                />
+                <TouchableOpacity 
+                  style={[styles.btn, styles.inviteBtn]}
+                  onPress={this.inviteClick.bind(this)}
+                >
+                  <Text style={styles.btnText}>Invite</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           )}          
           {ifInviIsEmpty(
             <View style={styles.inviteUsers}>
@@ -254,7 +314,7 @@ class QuestInfo extends React.Component {
 
 function mapStateToProps(state, props) {
   // console.log(props);
-  // console.log(state.invitedusers.users);
+  // console.log(state);
   return {
     feedbacks: state.feedbacks.feedbacks,
     feedbacksLoading: state.feedbacks.loading,
@@ -264,7 +324,7 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getInvitedUsers, getFeedbacks }, dispatch);
+  return bindActionCreators({ getInvitedUsers, getFeedbacks, sendInvitation, deleteInvitedUsers }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestInfo);

@@ -126,6 +126,10 @@ const stepSchema = new Schema({
     type: Number,
     required: true
   },
+  stepHint: {
+    type: String,
+    required: false
+  },
 
   // keys //
   questId : {

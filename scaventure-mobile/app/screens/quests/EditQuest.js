@@ -153,8 +153,8 @@ class EditQuest extends React.Component {
 
   setDefaultState(quest){
     var initialRegion = {
-        latitude: quest.loc.coordinates[0],
-        longitude: quest.loc.coordinates[1],
+        latitude: quest.loc.coordinates[1],
+        longitude: quest.loc.coordinates[0],
         latitudeDelta: 0.09,
         longitudeDelta: 0.09,
       }    
@@ -194,7 +194,7 @@ class EditQuest extends React.Component {
         type: "public",
         loc: {
           type: "Point",
-          coordinates: [this.state.initialPosition.latitude, this.state.initialPosition.longitude]
+          coordinates: [this.state.initialPosition.longitude, this.state.initialPosition.latitude]
         }
       }
       this.props.editQuest(quest._id, data).then(() => {
@@ -213,7 +213,7 @@ class EditQuest extends React.Component {
         type: "public",
         loc: {
           type: "Point",
-          coordinates: [this.state.x.latitude, this.state.x.longitude]
+          coordinates: [this.state.x.longitude, this.state.x.latitude]
         }
       }
       this.props.editQuest(quest._id, data).then(() => {

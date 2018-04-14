@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-
+import geolib from 'geolib';
 /** -- Local Imports */
 import Colors from '../../constants/colors';
 import StepLocation from './StepLocation';
@@ -23,13 +23,15 @@ class PlayStep extends React.Component {
     this.state = {
       initialStepPoints: steps[stepIndex].points, // points assigned to the step
       points: steps[stepIndex].points, // points earned by the user
-      hintsUsed: 0, // 
+      
       displayOverlay: false, // display 'check answer' overlay
       displayMap: true, 
       displayCamera: false,
       answerCorrect: false,
       start: Date.now(),
       index: 0,
+      hintUsed: false, 
+      displayHintOverlay: false,
     };
   }
 
@@ -53,7 +55,7 @@ class PlayStep extends React.Component {
       // Navigate to the next step
       this.props.navigation.navigate('PlayStep', { steps, stepIndex: stepIndex + 1, totalScore, totalElapsed });
     } else {
-      this.props.navigation.navigate('GameOver', { totalScore, totalElapsed });
+      this.props.navigation.navigate('GameOver', { totalScore, totalElapsed, questId: steps[stepIndex].questId });
     }
   }
 
@@ -93,6 +95,39 @@ class PlayStep extends React.Component {
     this.setState({ displayCamera: false, displayOverlay: true, answerCorrect, points: newScore });
   }
 
+  checkGPS() {
+    const { steps, stepIndex } = this.props.navigation.state.params;
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userCoord = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+
+        const distance = geolib.getDistance(
+          userCoord,
+          { 
+            longitude: steps[stepIndex].stepLocation.coordinates[0], 
+            latitude: steps[stepIndex].stepLocation.coordinates[1],
+          }
+        );
+
+        let answerCorrect = false;
+        let newScore = this.state.points;
+
+        if (distance <= steps[stepIndex].radius) {
+          answerCorrect = true;
+        } else {
+          newScore = this.deductPoints();
+        }
+  
+        this.setState({ displayOverlay: true, answerCorrect, points: newScore });
+      },
+      (error) => this.setState({ error: error.message }),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
+  }
+
   /**
    *  Specify logic for checking answer (QA, QR, GPS)
    */
@@ -112,9 +147,19 @@ class PlayStep extends React.Component {
     } else if (steps[stepIndex].type === 'QRStep') {
       this.setState({ displayCamera: true });
     } else if (steps[stepIndex].type === 'GPSStep') {
-      console.warn("Logic for GPS -> To Be Impelemtned");
+      this.checkGPS();
     }
   }
+  
+  /* Show hint */
+  showHint = () => { 
+    if (!this.state.hintUsed) {
+      const newScore = this.deductPoints();
+      this.setState({ hintUsed: true, displayHintOverlay: true, points: newScore });
+    } else {
+      this.setState({ displayHintOverlay: true });
+    }
+  };
   
   render() {
     // get current step
@@ -135,11 +180,18 @@ class PlayStep extends React.Component {
         {/* Render Specific Step-type Description/Question */}
         { Step }   
 
-        {/* Check Answer */}
-        <TouchableHighlight style={styles.button} onPress={this.checkAnswer.bind(this)}>
-          <Text style={styles.buttonText}>Check</Text>
-        </TouchableHighlight> 
-        
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          {/* Check Answer */}
+          <TouchableHighlight style={styles.button} onPress={this.checkAnswer.bind(this)}>
+            <Text style={styles.buttonText}>Check</Text>
+          </TouchableHighlight> 
+          { steps[stepIndex].stepHint.trim() !== '' &&
+            <TouchableHighlight style={styles.button} onPress={this.showHint.bind(this)}>
+              <Text style={styles.buttonText}>Hint</Text>
+            </TouchableHighlight> 
+          }
+        </View>
+
         {/* Display current step score & timer */}
         <View style={styles.gameCard}>
           <View style={styles.gameCardElement}>
@@ -174,6 +226,16 @@ class PlayStep extends React.Component {
               icon='flag' buttonText="View Step Description" 
             />
           </View>
+        }
+
+        {/* Overlay -> display hint */}
+        { this.state.displayHintOverlay &&
+          <TouchableWithoutFeedback onPress={() => this.setState({ displayHintOverlay: false })} accessible={false}>
+            <View style={styles.overlay}> 
+              <Text style={styles.h1}> {steps[stepIndex].stepHint} </Text>
+              <Feather name='alert-circle' size={60} color={Colors.lightSecondary} />
+            </View>
+          </TouchableWithoutFeedback>
         }
 
         {/* Overlay -> displayed when answer is submitted - either correct or false */}

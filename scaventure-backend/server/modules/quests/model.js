@@ -128,7 +128,8 @@ const stepSchema = new Schema({
   },
   stepHint: {
     type: String,
-    required: false
+    required: false,
+    default: "",
   },
 
   // keys //

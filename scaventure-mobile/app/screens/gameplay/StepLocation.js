@@ -23,12 +23,12 @@ export default class StepLocation extends React.Component {
   componentDidMount() {
     this.watchId = navigator.geolocation.watchPosition(
       (position) => {
-        const stepLongitude = this.props.step.startLocation.coordinates[1];
-        const stepLatitude = this.props.step.startLocation.coordinates[0];
+        const stepLongitude = this.props.step.startLocation.coordinates[0];
+        const stepLatitude = this.props.step.startLocation.coordinates[1];
     
         const arrayMarker = [
-          { latitude: stepLatitude, longitude: stepLongitude }, 
-          { latitude: position.coords.latitude, longitude: position.coords.longitude },
+          { latitude: stepLatitude, longitude: stepLongitude, title: 'Step Location' }, 
+          { latitude: position.coords.latitude, longitude: position.coords.longitude, title: 'Your Location' },
         ];
 
         this.setState({
@@ -50,9 +50,10 @@ export default class StepLocation extends React.Component {
     // step: steps[stepIndex], longitude: steps[stepIndex].startLocation.coordinates[1], latitude: steps[stepIndex].startLocation.coordinates[0] });
 
     // const { params } = this.props.navigation.state;
-    const stepLongitude = this.props.step.startLocation.coordinates[1];
-    const stepLatitude = this.props.step.startLocation.coordinates[0];
+    const stepLongitude = this.props.step.startLocation.coordinates[0];
+    const stepLatitude = this.props.step.startLocation.coordinates[1];
 
+    // TODO: Try commenting this out (seems redundundant)
     const arrayMarker = [{ latitude: stepLatitude, longitude: stepLongitude }];
     
     if (this.state.latitude && this.state.longitude) {

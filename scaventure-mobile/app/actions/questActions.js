@@ -92,7 +92,6 @@ export function addQuest(data) {
   return dispatch => {
     return QuestApi.addQuest(data).then(res => {
       dispatch({ type: types.ADD_QUEST_SUCCESS, newQuest: res.data.quest });
-      dispatch(getQuests());
     }).catch(e => {
       console.log(e);
     });
@@ -154,4 +153,13 @@ export function addHint(stepId, questId, data) {
     //   dispatch({ type: LOAD_QUESTS_SUCCESS, quests });
     // }, 2000);
   };
+}
+
+export function saveProgress(data) {
+  return dispatch =>
+    QuestApi.saveProgress(data).then(() => {
+      dispatch({ type: types.ADD_PROGRESS_SUCCESS, progress: data });
+    }).catch(e => {
+      console.log(e);
+    });
 }

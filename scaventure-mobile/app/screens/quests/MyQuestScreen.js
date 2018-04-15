@@ -8,7 +8,7 @@ import QuestRow from './MyQuestRow';
 import Colors from '../../constants/colors';
 
 // Local Imports
-import { getMyQuests, deleteQuest } from '../../actions/questActions';
+import { getMyQuests, deleteQuest, editQuest } from '../../actions/questActions';
 import AnnotatedButton from '../common/AnnotatedButton';
 import EmptyListScreen from '../common/EmptyListScreen';
 
@@ -37,8 +37,8 @@ class MyQuestScreen extends React.Component {
     this.props.navigation.navigate('QuestInfo', { quest });
   }
 
-  onEditBtnPress() {
-    console.warn('to be implemented');
+  onEditBtnPress(quest) {
+    this.props.navigation.navigate('EditQuest', { quest });
   }
 
   onDeleteBtnPress(questId) {

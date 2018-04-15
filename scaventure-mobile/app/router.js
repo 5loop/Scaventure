@@ -13,7 +13,7 @@ import PrivateQuestScreen from './screens/quests/PrivateQuestScreen';
 import QuestInfo from './screens/quests/QuestInfo';
 import QuestLocation from './screens/quests/QuestLocation';
 import AddQuest from './screens/quests/AddQuest';
-
+import EditQuest from './screens/quests/EditQuest';
 import FeedbackForm from './screens/quests/FeedbackForm';
 import AddQAStep from './screens/quests/AddQAStep';
 import AddGPSStep from './screens/quests/AddGPSStep';
@@ -21,7 +21,9 @@ import MyQuestScreen from './screens/quests/MyQuestScreen';
 import QuestStartLocation from './screens/gameplay/QuestStartLocation';
 import LogoutNavOption from './logout';
 import QuestStepList from './screens/questSteps/QuestStepList';
-import EditStep from './screens/questSteps/EditStep';
+import EditQAStep from './screens/quests/EditQAStep';
+import EditQRStep from './screens/quests/EditQRStep';
+import EditGPSStep from './screens/quests/EditGPSStep';
 
 // testing qr code generator
 import AddQRStepScreen from './screens/quests/AddQRStep';
@@ -30,6 +32,7 @@ import QRScanScreen from './screens/gameplay/QRScanScreen';
 import PlayStepScreen from './screens/gameplay/PlayStepScreen';
 import GameOverScreen from './screens/gameplay/GameOverScreen';
 import ProgressScreen from './screens/ProgressScreen';
+
 
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
@@ -263,10 +266,37 @@ const MyQuestsStack = StackNavigator({
       headerLeft: <GoPublic navigation={navigation} />,
     }),
   },
-  EditStep: {
-    screen: EditStep,
+  EditQAStep: {
+    screen: EditQAStep,
     navigationOptions: ({ navigation }) => ({
-      title: 'Edit Step',
+      title: 'Edit QA Step',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  EditQRStep: {
+    screen: EditQRStep,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Edit QR Step',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  EditGPSStep: {
+    screen: EditGPSStep,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Edit GPS Step',
+      headerStyle,
+      headerTitleStyle,
+      headerLeft: <GoBack navigation={navigation} />,
+    }),
+  },
+  EditQuest: {
+    screen: EditQuest,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Edit Quest',
       headerStyle,
       headerTitleStyle,
       headerLeft: <GoBack navigation={navigation} />,

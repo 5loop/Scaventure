@@ -18,7 +18,7 @@ import EmptyListScreen from '../common/EmptyListScreen';
 
 import Colors from '../../constants/colors';
 /* -- Actions */
-import { getSteps, deleteStep, reorderSteps, emailQuestPackage } from '../../actions/questActions';
+import { getSteps, deleteStep, reorderSteps, editStep, emailQuestPackage } from '../../actions/questActions';
 import StepRow from './StepRow';
 
 const window = Dimensions.get('window');
@@ -57,7 +57,19 @@ class QuestStepList extends Component {
   }
 
   onEditBttnPress(step) {
-    this.props.navigation.navigate('EditStep', { step });
+    console.log(step);
+    if (step.type == "QAStep"){
+      console.log("1");
+      this.props.navigation.navigate('EditQAStep', { step });
+    }
+    else if (step.type == "QRStep"){
+      console.log("2");
+      this.props.navigation.navigate('EditQRStep', { step });
+    }
+    else if (step.type == "GPSStep"){
+      console.log("3");
+      this.props.navigation.navigate('EditGPSStep', { step });
+    }
   }
 
   onDelBttnPress(stepId) {
@@ -221,7 +233,7 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getSteps, deleteStep, reorderSteps, emailQuestPackage }, dispatch);
+  return bindActionCreators({ getSteps, deleteStep, reorderSteps, editStep, emailQuestPackage }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestStepList);

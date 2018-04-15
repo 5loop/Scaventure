@@ -27,6 +27,10 @@ export default {
     newQuest: {},
     loading: true,
   },
+  editedQuest:{
+    editedQuest: {},
+    loading: true,
+  },
   progress: {
     progress: [],
     loading: true,

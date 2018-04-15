@@ -45,11 +45,8 @@ routes.delete('/quests/:id/steps', requireJwtAuth, StepController.deleteAllStep)
 routes.get('/quests/:id/steps/:sid', requireJwtAuth, StepController.getOneStep); // get one step
 routes.delete('/quests/:id/steps/:sid', requireJwtAuth, StepController.deleteOneStep); // delete one step
 routes.post('/quests/:id/steps/:type', requireJwtAuth, StepController.addStep);   // add new step
-<<<<<<< HEAD
 routes.post('/quests/:id/steps/edit/:stepId', requireJwtAuth, StepController.editStep);
-=======
-routes.post('/quests/:id/steps/:type/:stepid', requireJwtAuth, StepController.editStep);
->>>>>>> develop
+//routes.post('/quests/:id/steps/:type/:stepid', requireJwtAuth, StepController.editStep);
 routes.patch('/quests/:id/steps/reorder', requireJwtAuth, StepController.reorderSteps); // reorder steps
 
 // Steps Hints

@@ -7,7 +7,7 @@ import Colors from '../../constants/colors';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { editQuest } from '../../actions/questActions';
-
+import { Feather } from '@expo/vector-icons';
 
 
 const SCREEN_HEIGHT = height
@@ -70,16 +70,39 @@ const styles = StyleSheet.create({
     marginBottom:10,
   },
   map: {
-    
-    left:4,
-    right:0,
+    minWidth: 300, 
+    minHeight: 500 ,
     flex:1,
     flexDirection: 'column',
+    
   },
   maps:{
     flex:1,
     
-  }
+  },
+  mapIcon: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginLeft: 20,
+    bottom: 0,
+    left: 0,
+    padding: 8,
+  },
+  overlay: {
+    flex: 1,
+    position: 'absolute',
+    alignSelf: 'stretch',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: Colors.darkPrimary,
+    opacity: 0.9,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
 });
 
@@ -137,6 +160,16 @@ class EditQuest extends React.Component {
   checkDescription() {
     const error = this.validateField('description');
     this.setState({ errors: { title: this.state.errors.title, description: error } });  
+  }
+
+  // Map Overlay - close
+  closeMap() {
+    this.setState({ displayMap: false });
+  }
+
+  // Map Overlay - open
+  openMap() {
+    this.setState({ displayMap: true });
   }
   
 
@@ -263,6 +296,18 @@ class EditQuest extends React.Component {
 
         />
         </View>
+        <View>
+          <Text style={styles.h1}>Map</Text>
+          <TouchableHighlight onPress={this.openMap.bind(this)}>
+            <Feather name="map-pin" size={35} color={Colors.black} />
+          </TouchableHighlight>
+      </View>
+      <View>
+      <TouchableHighlight style={styles.button}>
+          <Text style={styles.buttonText} onPress={this.onPress.bind(this)}>Done</Text>
+        </TouchableHighlight>
+        </View>
+        {/*
         <MapView
             style={styles.map}
             region={this.state.initialPosition}
@@ -283,10 +328,51 @@ class EditQuest extends React.Component {
               }
               />
 
-           </MapView>
-           <TouchableHighlight style={styles.button}>
-          <Text style={styles.buttonText} onPress={this.onPress.bind(this)}>Done</Text>
-        </TouchableHighlight>
+           </MapView>*/
+        }
+
+        {/* Map Overlay */}
+        { this.state.displayMap &&
+          <View style={styles.overlay}> 
+            <MapView
+            closeMap={this.closeMap.bind(this)}
+            style={styles.map}
+            region={{latitude: this.state.initialPosition.latitude,
+              longitude: this.state.initialPosition.longitude,
+              latitudeDelta: this.state.initialPosition.latitudeDelta,
+              longitudeDelta: this.state.initialPosition.longitudeDelta}}
+            
+            initialRegion = {{latitude: this.state.initialPosition.latitude,
+                longitude: this.state.initialPosition.longitude,
+                latitudeDelta: this.state.initialPosition.latitudeDelta,
+                longitudeDelta: this.state.initialPosition.longitudeDelta}}
+            //initialRegion = {this.state.coordinate}
+            //onRegionChange={this.state.coordinate}
+            >
+            <MapView.Marker draggable
+              
+              coordinate={this.state.initialPosition}
+              region={this.state.coordinate}
+              onDragEnd={(e) => {
+                
+                  //coordinate: {this.state.x}
+                
+                this.setState({ x: e.nativeEvent.coordinate, initialPosition: e.nativeEvent.coordinate})
+                  }
+              }
+              
+            
+              
+            />
+
+          </MapView>
+          <TouchableHighlight> 
+            <Text style={styles.buttonText} onPress={this.closeMap.bind(this)}>Close Map</Text> 
+            </TouchableHighlight> 
+          </View>
+
+          
+        }
           
       </View> 
     );

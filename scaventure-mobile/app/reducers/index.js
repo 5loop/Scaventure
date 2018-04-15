@@ -9,7 +9,7 @@ import {
   privateQuestReducer as privateQuests,
   myQuestReducer as myQuests,
   progressReducer as progress,
-  feedbackReducer as feedbacks, stepReducer as steps, newQuest, authenticated } from './questReducer';
+  feedbackReducer as feedbacks, stepReducer as steps, newQuest, editedQuest, authenticated } from './questReducer';
 
 const rootReducer = combineReducers({
   quests,
@@ -18,8 +18,9 @@ const rootReducer = combineReducers({
   feedbacks,
   steps,
   authenticated,
-  invitedusers,
   newQuest,
+  editedQuest,
+  invitedusers,
   progress,
 });
 

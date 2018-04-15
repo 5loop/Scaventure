@@ -27,7 +27,7 @@ export const progress = async (req, res)  => {
 export const getAllProgress = async (req, res) => {    
   const id = req.user._id;   
   const email  = req.user.email; 
-  Progress.find({ _userId: id },  async (err, progress) => {        
+  Progress.find({ _userId: id },  async (err, progress) => {  
     let progQuest = [];
     for (let i = 0; i < progress.length; i++) {
       const q = await Quest.findById(progress[i]._questId);

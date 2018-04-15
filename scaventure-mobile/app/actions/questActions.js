@@ -140,9 +140,38 @@ export function addQuest(data) {
   };
 }
 
+export function editQuest(questId, data) {
+  return dispatch => {
+    return QuestApi.editQuest(questId, data).then(res => {
+      dispatch({ type: types.EDIT_QUEST_SUCCESS, editQuest: res.data.quest });
+      dispatch(getMyQuests());
+    }).catch(e => {
+      console.log(e);
+    });
+    // setTimeout(() => {
+    //   const quests = Data.quests;
+    //   dispatch({ type: LOAD_QUESTS_SUCCESS, quests });
+    // }, 2000);
+  };
+}
+
 export function addStep(type, questId, data) {
   return dispatch => {
     return QuestApi.addStep(type, questId, data).then(res => {
+      dispatch(getSteps(questId));
+    }).catch(e => {
+      console.log(e);
+    });
+    // setTimeout(() => {
+    //   const quests = Data.quests;
+    //   dispatch({ type: LOAD_QUESTS_SUCCESS, quests });
+    // }, 2000);
+  };
+}
+
+export function editStep(stepId, questId, data) {
+  return dispatch => {
+    return QuestApi.editStep(stepId, questId, data).then(res => {
       dispatch(getSteps(questId));
     }).catch(e => {
       console.log(e);

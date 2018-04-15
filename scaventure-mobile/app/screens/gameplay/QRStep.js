@@ -29,7 +29,7 @@ export default class QRStep extends React.Component {
     const elapsed = Math.round(timePassed / 100);
     const seconds = (elapsed / 10);
 
-    if (seconds >= (4)) { // 4 minutes passed
+    if (seconds >= (4 * 60)) { // 4 minutes passed
       this.setState({ showBackup: true });
       this.props.showBackupOption();
     }

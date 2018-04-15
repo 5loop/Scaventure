@@ -10,7 +10,8 @@ import { addQuest } from '../../actions/questActions';
 import { RadioGroup, RadioButton } from 'react-native-flexi-radio-button';
 import { Label } from 'native-base';
 import { Feather } from '@expo/vector-icons';
-
+import MapButton from '../common/MapButton';
+import AnnotatedButton from '../common/AnnotatedButton';
 
 const SCREEN_HEIGHT = height
 const SCREEN_WIDTH = width
@@ -118,7 +119,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
+  mapIconDiv : {
+    width: '30%',
+    padding:5,
+    
+  },
 });
 
   
@@ -322,14 +327,18 @@ class AddQuest extends React.Component {
 
           </View>
           {/* Button to open-up a map */}       
-      <View>
-          <Text style={styles.h1}>Map</Text>
-          <TouchableHighlight onPress={this.openMap.bind(this)}>
-            <Feather name="map-pin" size={35} color={Colors.black} />
-          </TouchableHighlight>
+    
+    <View  style={{ flexDirection: 'row' }} >
+      <View style={styles.mapIconDiv}>
+          
+          <MapButton 
+                text={'Step Start Location'}
+                onPress={this.openMap.bind(this)}
+              />   
+          <Text style={{textAlign: 'center'}}>Quest Start Location</Text>
       </View>
       
-      
+    </View>
       <View>
         <TouchableHighlight style={styles.button}>
             <Text style={styles.buttonText} onPress={this.onPress.bind(this)}>Add New</Text>
@@ -372,9 +381,12 @@ class AddQuest extends React.Component {
             />
 
           </MapView>
-          <TouchableHighlight> 
-            <Text style={styles.buttonText} onPress={this.closeMap.bind(this)}>Close Map</Text> 
-            </TouchableHighlight> 
+          <AnnotatedButton 
+              color={Colors.green}
+              onPress={this.closeMap.bind(this)} 
+              icon='check' 
+              buttonText="Done!" 
+            />
           </View>
 
           

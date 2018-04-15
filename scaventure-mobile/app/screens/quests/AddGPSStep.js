@@ -11,7 +11,8 @@ import { width, height, totalSize } from 'react-native-dimension';
 import MapView from 'react-native-maps';
 import { addStep, addHint } from '../../actions/questActions';
 import { Feather } from '@expo/vector-icons';
-
+import MapButton from '../common/MapButton';
+import AnnotatedButton from '../common/AnnotatedButton';
 
 
 
@@ -96,6 +97,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
+  mapIconDiv : {
+    width: '30%',
+    padding:5,
+    
+  }
 
 
 });
@@ -146,9 +152,6 @@ validateField(fieldname) {
       error = (!value || value.trim() === '') ? 'question cannot be empty!' : null;
     } else if (fieldname === 'Points') {
       error = (!value || value.trim() === '') ? 'You must select an answer to this question!' : null;
-    }else if(fieldname === 'hint' ){
-      error = (!value || value.trim() === '') ? 'You must provide an option in all fields!' : null;
-
     }
 
     return error;
@@ -310,6 +313,7 @@ validateField(fieldname) {
 
             <TextField
             label='Points'
+            keyboardType= 'numeric'
             baseColor={Colors.secondaryColor}
             tintColor={Colors.primaryColor}
             onChangeText={(Points)=> this.setState({Points})}
@@ -319,30 +323,41 @@ validateField(fieldname) {
 
             <TextField
             label='Radius(m)'
+            keyboardType= 'numeric'
             baseColor={Colors.secondaryColor}
             tintColor={Colors.primaryColor}
             onChangeText={(radius)=> this.setState({radius})}
-            error={this.state.errors.Points}
-            onBlur={() => this.checkPoint()}
+           
             />
 
         </View>
          
       
-      {/* Button to open-up a map */}       
-      <View>
-          <Text style={styles.h1}>Map</Text>
-          <TouchableHighlight onPress={this.openMap.bind(this)}>
-            <Feather name="map-pin" size={35} color={Colors.black} />
-          </TouchableHighlight>
-      </View>
+      {/* Button to open-up a map */}    
+      <View
+                  style={{ flexDirection: 'row' }}
+                >
+      <View style={styles.mapIconDiv}>
       
-      <View>
-          <Text style={styles.h1}>Map</Text>
-          <TouchableHighlight onPress={this.openMap2.bind(this)}>
-            <Feather name="map-pin" size={35} color={Colors.black} />
-          </TouchableHighlight>
+              <MapButton 
+                text={'Step Start Location'}
+                onPress={this.openMap.bind(this)}
+                
+              /> 
+              <Text style={{textAlign: 'center'}}>Step Start Location</Text>
       </View>
+      <View style={styles.mapIconDiv} >
+     
+              <MapButton 
+                text={'Step Start Location'}
+                onPress={this.openMap2.bind(this)}
+              />
+               <Text style={{textAlign: 'center'}}>Step Start Location</Text>
+      </View>
+     
+      
+      
+    </View>
       
       <View>
         <TouchableHighlight style={styles.button}>
@@ -382,9 +397,12 @@ validateField(fieldname) {
             />
 
           </MapView>
-          <TouchableHighlight> 
-            <Text style={styles.buttonText} onPress={this.closeMap.bind(this)}>Close Map</Text> 
-            </TouchableHighlight> 
+          <AnnotatedButton 
+              color={Colors.green}
+              onPress={this.closeMap.bind(this)} 
+              icon='check' 
+              buttonText="Done!" 
+            />
           </View>
 
           
@@ -420,9 +438,12 @@ validateField(fieldname) {
             />
             
           </MapView>
-          <TouchableHighlight> 
-            <Text style={styles.buttonText} onPress={this.closeMap2.bind(this)}>Close Map</Text> 
-            </TouchableHighlight> 
+          <AnnotatedButton 
+              color={Colors.green}
+              onPress={this.closeMap2.bind(this)} 
+              icon='check' 
+              buttonText="Done!" 
+            />
           </View>
 
           

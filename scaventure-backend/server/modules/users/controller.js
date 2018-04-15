@@ -5,9 +5,14 @@ import {User, Token} from './model';
 import config from '../../config/config';
 import { validateEmail } from '../../utils/validateInput'; 
 
+
 var sg = require('sendgrid')(config.sendgrid_key);
+
+var path = require('path');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(config.sendgrid_key);
+
 var crypto = require('crypto');
-var nodemailer = require('nodemailer');
 var randomize = require('randomatic');
 
 function generateToken(user) {  
@@ -84,6 +89,7 @@ export const update = function(req, res, next) {
   });
 }
 
+
   
 // Registration Route
 export const register = function(req, res, next) {  
@@ -121,57 +127,34 @@ export const register = function(req, res, next) {
         // do email verification here
         // Respond with JWT if user was created
         let userInfo = setUserInfo(user);
-        var token = new Token({ _userId: userInfo._id, token: crypto.randomBytes(16).toString('hex') });
+        const tokenCode = crypto.randomBytes(16).toString('hex');
+        var token = new Token({ _userId: userInfo._id, token: tokenCode });
         
         // Save the verification token
         token.save(function (err) {
             if (err) { return res.status(500).send({ msg: err.message }); }
             // Send the email            
-            var request = sg.emptyRequest({
-              method: 'POST',
-              path: '/v3/mail/send',
-              body: {
-                personalizations: [
-                  {
-                    to: [
-                      {
-                        email: userInfo.email
-                      }
-                    ],
-                    subject: 'Account Verification Token'
-                  }
-                ],
-                from: {
-                  email: 'scaventureapp@gmail.com'
-                },
-                content: [
-                  {
-                    type: 'text/plain',
-                    value: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/api/auth/confirmation\/' + token.token + '.\n'
-                  }
-                ]
-              }
-            });
+            const msg = {
+              to: userInfo.email,
+              from: "scaventureapp@gmail.com",
+              subject: 'Scaventure App: Confirmation Email',
+              templateId: 'df118fc5-b78c-4cac-ad01-57a8c2fb87a4',
+              substitutions: {
+                preText: 'You have registered for \'Scaventure App\'',
+                url: 'http:\/\/' + req.headers.host + '\/api/auth/confirmation\/' + tokenCode,
+                text: 'You can join the existing quests now!'
+              },
+            };
 
-            sg.API(request)
-            .then(function (response) {
-              console.log("Sent!!")
-              console.log(response.statusCode);
-              console.log(response.body);
-              console.log(response.headers);
+            sgMail.send(msg).then(function (response) {
+              console.log("Sent!!");
+              return res.status(200).send({ error: false, message: 'Success'})
             })
             .catch(function (error) {
+              console.log(error)
               console.log("Not Sent!!")
-              // error is an instance of SendGridError          
-              // The full response is attached to error.response
-              console.log(error.response.statusCode);
             });
         });        
-
-        return res.status(201).json({
-          key: 'JWT ' + generateToken(userInfo),
-          user: userInfo
-        });
       });
   });
 }
@@ -193,7 +176,7 @@ export const confirmation = function (req, res, next) {
           user.isVerified = true;
           user.save(function (err) {
               if (err) { return res.status(500).send({ msg: err.message }); }
-              return res.status(200).send("The account has been verified. Please log in.");
+              return res.sendFile(path.join(__dirname + '/verification.html'));
           });
       });
   });
@@ -225,52 +208,25 @@ export const forgot_password = function(req, res, next) {
         
         // Save the verification token
         token.save(function (err) {
-            if (err) { return res.status(500).send({ msg: err.message }); }            
-            var request = sg.emptyRequest({
-              method: 'POST',
-              path: '/v3/mail/send',
-              body: {
-                personalizations: [
-                  {
-                    to: [
-                      {
-                        email: userInfo.email
-                      }
-                    ],
-                    subject: 'Password Reset Key'
-                  }
-                ],
-                from: {
-                  email: 'scaventureapp@gmail.com'
-                },
-                content: [
-                  {
-                    type: 'text/plain',
-                    value: 'Hello,\n\n' + 'This is your reset password key: ' + token.token + ', enter the key on the reset password screen on app to reset password.\n'
-                  }
-                ]
-              }
-            });
+            if (err) { return res.status(500).send({ msg: err.message }); }   
+            
+            const msg = {
+              to: userInfo.email,
+              from: "scaventureapp@gmail.com",
+              subject: 'Scaventure App: Forgot Password',
+              templateId: 'f115cce8-e039-49d4-a65c-80b6a6531ba0',
+              html: '<p>Hello,\n\n' + 'This is your reset password key: <b>' + token.token + '</b>, enter the key on the reset password screen on app to reset password.\n</p>',
+            };
 
-            sg.API(request)
-            .then(function (response) {
-              console.log("Sent!!")
-              console.log(response.statusCode);
-              console.log(response.body);
-              console.log(response.headers);
+            sgMail.send(msg).then(function (response) {
+              console.log("Sent!!");
+              return res.status(200).send({ error: false, message: 'Success'})
             })
             .catch(function (error) {
+              console.log(error)
               console.log("Not Sent!!")
-              // error is an instance of SendGridError          
-              // The full response is attached to error.response
-              console.log(error.response.statusCode);
             });
-        });        
-
-        return res.status(201).json({
-          key: 'JWT ' + generateToken(userInfo),
-          user: userInfo
-        });     
+        });         
     }
   });
 }

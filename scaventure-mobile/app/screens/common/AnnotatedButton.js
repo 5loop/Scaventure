@@ -4,13 +4,15 @@ import { Feather } from '@expo/vector-icons';
 
 import Colors from '../../constants/colors';
 
-const AnnotatedButton = ({ buttonText, onPress, icon = 'plus', color = Colors.primaryColor }) => {
+const AnnotatedButton = ({ buttonText, onPress, icon = 'plus', color = Colors.primaryColor, layout = 'right' }) => {
   return (
-    <View style={styles.buttonGroup} >
+    <View style={layout === 'right' ? styles.buttonGroup : styles.buttonGroupLeft} >
       <View style={styles.nestedButtons}>
-        <View style={[styles.buttonTextContainer, { backgroundColor: color }]}>
-          <Text style={styles.buttonText}>{buttonText}</Text>
-        </View>
+        { layout === 'right' &&
+          <View style={[layout === 'right' ? styles.buttonTextContainer : styles.buttonTextContainerLeft, { backgroundColor: color }]}>
+            <Text style={styles.buttonText}>{buttonText}</Text>
+          </View>
+        }
         <TouchableHighlight style={[styles.plusButton, { backgroundColor: color }]} onPress={onPress}>
           <Feather name={icon} color={Colors.white} size={27} />
         </TouchableHighlight>
@@ -41,6 +43,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
   },
+  buttonGroupLeft: {
+    position: 'absolute',
+    marginLeft: 20,
+    borderRadius: 55,
+    marginBottom: 10,
+    bottom: 0,
+    left: 0,
+  },
   buttonTextContainer: {
     marginBottom: 25,
     marginRight: 8,
@@ -50,6 +60,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 0,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    backgroundColor: Colors.primaryColor,
+    borderColor: Colors.secondaryColor,
+    borderWidth: 2,
+  },
+  buttonTextContainerLeft: {
+    marginBottom: 25,
+    marginLeft: 8,
+    height: 45,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // Border stuff
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 25,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     backgroundColor: Colors.primaryColor,

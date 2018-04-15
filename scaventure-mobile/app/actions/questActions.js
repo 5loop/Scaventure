@@ -40,6 +40,15 @@ export function getMyQuests() {
     });
 }
 
+export function emailQuestPackage(questId) {
+  return dispatch => 
+    QuestApi.emailQuestPackage(questId).then(() => {
+      dispatch({ type: types.EMAIL_PACKAGE_SUCCESS });
+    }).catch(e => {
+      console.log(e);  
+    });
+}
+
 export function deleteQuest(questId) {
   return dispatch =>
     QuestApi.deleteQuest(questId).then(res => {

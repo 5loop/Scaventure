@@ -52,6 +52,7 @@ class QuestScreen extends React.Component {
   }
 
   componentDidMount() {
+    // this.props.navigation.navigate('AddQRStep', { quest: this.props.quests[0] });
     this.watchId = navigator.geolocation.watchPosition(
       (position) => {
         const arrayMarker = [

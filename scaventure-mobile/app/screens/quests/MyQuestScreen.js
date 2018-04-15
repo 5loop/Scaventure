@@ -29,6 +29,7 @@ class MyQuestScreen extends React.Component {
   }
 
   onBttnPress() {
+    console.log('BUTTON PRESSED');
     this.props.navigation.navigate('AddQuest');
   }
 

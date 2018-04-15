@@ -6,10 +6,12 @@ import { TextField } from 'react-native-material-textfield';
 import MapView from 'react-native-maps';
 import { Feather } from '@expo/vector-icons';
 
+import CheckBox from 'react-native-check-box';
+
 import {
   Alert,
   Text,
-  Button,
+  ScrollView,
   StyleSheet,
   View,
   TouchableWithoutFeedback,
@@ -19,12 +21,17 @@ import {
 
 /** -- Local Imports */
 import Colors from '../../constants/colors';
+import MapButton from '../common/MapButton';
+import AnnotatedButton from '../common/AnnotatedButton';
+
 import { addStep } from '../../actions/questActions';
  
 class QRsteps extends Component {
   state = {
-    text: 'default_text',
+    text: 'your code',
     displayMap: false,
+    displayMapBackup: false,
+    backupEnabled: false,
     initialPosition: {
       latitude: 0,
       longitude: 0,
@@ -56,7 +63,7 @@ class QRsteps extends Component {
 
   btnPressed = () => {
     const { quest } = this.props.navigation.state.params;
-    const { text, description } = this.state;
+    const { text, description, backupEnabled } = this.state;
 
     if (!text || (text && text.trim() === '')) {
       Alert.alert('Alert', 'Your answer cannot be empty.');
@@ -64,6 +71,7 @@ class QRsteps extends Component {
       Alert.alert('Alert', 'Description cannot be empty.');
     } else {
       let startLocation = {};
+      let stepLocation = {};
 
       if (this.state.x === undefined) {
         startLocation = {       
@@ -77,15 +85,26 @@ class QRsteps extends Component {
         };
       }
 
+      if (this.state.bx === undefined) {
+        stepLocation = {       
+          type: 'Point', 
+          coordinates: [this.state.initialPosition.longitude, this.state.initialPosition.latitude],
+        };
+      } else {
+        stepLocation = {       
+          type: 'Point', 
+          coordinates: [this.state.bx.longitude, this.state.bx.latitude],
+        };
+      }
+
       const data = {
         description,
         startLocation,
-        stepLocation: startLocation,
+        stepLocation,
         points: 10,
-        //stepNumber: 0,
         qrCode: text,
         stepHint: this.state.hint,
-
+        backupEnabled,
       };
 
       this.props.addStep('qr', quest._id, data).then(() => {
@@ -94,102 +113,159 @@ class QRsteps extends Component {
     }
   }
 
-  // Map Overlay - close
-  closeMap() {
-    this.setState({ displayMap: false });
-  }
+  closeMap = () => this.setState({ displayMap: false });
+  openMap = () => this.setState({ displayMap: true });
 
-  // Map Overlay - open
-  openMap() {
-    this.setState({ displayMap: true });
-  }
- 
+  closeMapBackup = () => this.setState({ displayMapBackup: false });
+  openMapBackup = () => this.setState({ displayMapBackup: true });
+
   render() {
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={styles.container}>
-          <TextField
-            label='Description'
-            baseColor={Colors.secondaryColor}
-            tintColor={Colors.primaryColor}
-            onChangeText={(description) => this.setState({ description })}
-            multiline
-            characterRestriction={300}
-            maxLength={300}
-            style={{ width: 400 }}
-          />
-          <TextField
-            label='Answer'
-            baseColor={Colors.secondaryColor}
-            tintColor={Colors.primaryColor}
-            onChangeText={(text) => this.setState({ text })}
-            value={this.state.text}
-            characterRestriction={100}
-            maxLength={100}
-          />
-          <TextField
-            label='Hint'
-            baseColor={Colors.secondaryColor}
-            tintColor={Colors.primaryColor}
-            onChangeText={(hint)=> this.setState({hint})}
-            
+      <View style={{ flex: 1 }}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <ScrollView style={styles.container}>
+            <TextField
+              label='Description'
+              baseColor={Colors.secondaryColor}
+              tintColor={Colors.primaryColor}
+              onChangeText={(description) => this.setState({ description })}
+              multiline
+              characterRestriction={300}
+              maxLength={300}
+              style={{ width: 400 }}
             />
-
-          <View style={styles.qrStyle}> 
-            <QRCode
+            <TextField
+              label='Hint (optional)'
+              baseColor={Colors.secondaryColor}
+              tintColor={Colors.primaryColor}
+              onChangeText={(hint) => this.setState({hint})}
+            />
+            <TextField
+              label='Answer'
+              baseColor={Colors.secondaryColor}
+              tintColor={Colors.primaryColor}
+              onChangeText={(text) => this.setState({ text })}
               value={this.state.text}
-              size={200}
-              bgColor='purple'
-              fgColor='white'
+              characterRestriction={100}
+              maxLength={100}
+            />
+            <View style={styles.qrStyle}> 
+              <QRCode
+                value={this.state.text}
+                size={200}
+                bgColor='purple'
+                fgColor='white'
+              />
+            </View>
+            <CheckBox 
+              style={{ flex: 1, padding: 10 }}
+              rightText={"Enable Backup Location"}
+              onClick={() => this.setState({ backupEnabled: !this.state.backupEnabled })}
+              isChecked={this.state.backupEnabled}
+            />
+            <View style={{ flexDirection: 'row' }}>
+              <MapButton 
+                text={'Step Start Location'}
+                onPress={this.openMap.bind(this)}
+              />   
+
+              {this.state.backupEnabled && 
+                <View
+                  style={{
+                    borderColor: Colors.lightSecondary,
+                    borderLeftWidth: 1,
+                    marginLeft: 6,
+                    marginRight: 6,
+                  }} 
+                />
+              }
+
+              {this.state.backupEnabled &&                 
+                <MapButton 
+                  text={'Backup GPS Location for QR'}
+                  onPress={this.openMapBackup.bind(this)}
+                /> 
+              }  
+
+            </View>
+            <View>
+              <TouchableHighlight 
+                style={styles.button} 
+                onPress={this.btnPressed.bind(this)}
+                underlayColor={Colors.darkPrimary}
+              >
+                <Text style={styles.buttonText}>Add New</Text>
+              </TouchableHighlight>
+            </View>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+        {/* Map Overlay - Step Location */}
+        { this.state.displayMap &&
+          <View style={styles.overlay}> 
+            <MapView
+              closeMap={this.closeMap.bind(this)}
+              style={styles.map}
+              region={this.state.initialPosition}
+              initialRegion={this.state.initialPosition}
+            >
+              <MapView.Marker
+                draggable
+                coordinate={this.state.initialPosition}
+                onDragEnd={(e) => {
+                  this.setState({ x: e.nativeEvent.coordinate });
+                }}
+                region={this.state.coordinate}
+              />
+            </MapView>
+            <AnnotatedButton 
+              color={Colors.green}
+              onPress={this.closeMap.bind(this)} 
+              icon='check' 
+              buttonText="Done!" 
             />
           </View>
-          <View>
-            <TouchableHighlight style={styles.button}>
-              <Text style={styles.buttonText} onPress={this.btnPressed.bind(this)}>Add New</Text>
-            </TouchableHighlight>
+        }
+        {/* Map Overlay - Step Backup Location */}
+        { this.state.displayMapBackup &&
+          <View style={styles.overlay}> 
+            <MapView
+              style={styles.map}
+              region={this.state.initialPosition}
+              initialRegion={this.state.initialPosition}
+            >
+              <MapView.Marker
+                draggable
+                coordinate={this.state.initialPosition}
+                onDragEnd={(e) => {
+                  this.setState({ bx: e.nativeEvent.coordinate });
+                }}
+                region={this.state.coordinate}
+              />
+            </MapView>
+            <AnnotatedButton 
+              color={Colors.green}
+              onPress={this.closeMapBackup.bind(this)} 
+              icon='check' 
+              buttonText="Done!" 
+            />
           </View>
-          {/* Button to open-up a map */}       
-          <View>
-            <Text style={styles.h1}>Map</Text>
-            <TouchableHighlight onPress={this.openMap.bind(this)}>
-              <Feather name="map-pin" size={35} color={Colors.black} />
-            </TouchableHighlight>
-          </View>
-
-          {/* Map Overlay */}
-          { this.state.displayMap &&
-            <View style={styles.overlay}> 
-              <MapView
-                closeMap={this.closeMap.bind(this)}
-                style={styles.map}
-                region={this.state.initialPosition}
-                initialRegion={this.state.initialPosition}
-              >
-                <MapView.Marker
-                  draggable
-                  coordinate={this.state.initialPosition}
-                  onDragEnd={(e) => {
-                    this.setState({ x: e.nativeEvent.coordinate,  initialPosition: e.nativeEvent.coordinate });
-                  }}
-                  region={this.state.coordinate}
-                />
-              </MapView>
-              <TouchableHighlight> 
-                <Text style={styles.buttonText} onPress={this.closeMap.bind(this)}>Close Map</Text> 
-              </TouchableHighlight> 
-            </View>
-          }
-        </View>
-      </TouchableWithoutFeedback>
+        }
+      </View>
     );
   }
 }
+/* 
+  <TouchableHighlight> 
+    <Text style={styles.buttonText} onPress={this.closeMap.bind(this)}>Close Map</Text> 
+  </TouchableHighlight> 
+  */
  
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 18,
     backgroundColor: 'white',
+    height: 400,
   },
   qrStyle: {
     justifyContent: 'center',
@@ -201,6 +277,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: Colors.tertiaryColor,
     justifyContent: 'center',
+    margin: 30,
     alignItems: 'center',
   },
   buttonText: {
@@ -208,11 +285,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   map: {
-    minWidth: 300, 
+    minWidth: 340, 
     minHeight: 500,
-    flex:1,
-    flexDirection: 'column',
-    
+    flex: 1,
+    flexDirection: 'column',  
   },
   mapIcon: {
     position: 'absolute',
@@ -233,7 +309,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     backgroundColor: Colors.darkPrimary,
-    opacity: 0.9,
     justifyContent: 'center',
     alignItems: 'center',
   },

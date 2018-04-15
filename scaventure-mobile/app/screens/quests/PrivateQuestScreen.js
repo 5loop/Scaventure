@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, ListView, TouchableHighlight } from 'react-native';
+import { Text, View, StyleSheet, ListView, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 import { bindActionCreators } from 'redux';
@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 /* ------------------- */
 import PrivateQuestRow from './PrivateQuestRow';
 import AnnotatedButton from '../common/AnnotatedButton';
+import EmptyListScreen from '../common/EmptyListScreen';
+import Colors from '../../constants/colors';
 /* -- Actions */
 import { getPrivateQuests } from '../../actions/questActions';
 
@@ -62,12 +64,22 @@ class PrivateQuestScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ListView
-          enableEmptySections
-          dataSource={this.state.ds.cloneWithRows(this.props.quests)}
-          key={this.props.quests}
-          renderRow={this.renderRow.bind(this)}
-        />
+        { (!this.props.questsLoading && this.props.quests.length === 0) ?
+          <EmptyListScreen 
+            title={'No Quests :('}
+            description={'This section contains quests that are visible only to the invited users.'}
+          />
+          :
+          <ListView
+            enableEmptySections
+            dataSource={this.state.ds.cloneWithRows(this.props.quests)}
+            key={this.props.quests}
+            renderRow={this.renderRow.bind(this)}
+          />
+        }
+        { this.props.questsLoading && 
+          <ActivityIndicator size="large" color={Colors.primaryColor} /> 
+        }
         <AnnotatedButton onPress={this.onAddQuestBttnPress} buttonText={'Add New Quest!'} />
       </View>
     );
@@ -75,7 +87,6 @@ class PrivateQuestScreen extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     quests: state.privateQuests.quests,
     questsLoading: state.privateQuests.loading,

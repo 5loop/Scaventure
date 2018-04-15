@@ -16,12 +16,12 @@ const routes = new Router();
 // uncomment/comment 'requireJwtAuth' to enable authentication for the routes
 routes.get('/quests', requireJwtAuth, QuestController.getQuests);
 routes.get('/quests/:id', requireJwtAuth, QuestController.getOneQuest);
+routes.get('/quests/:id/package', requireJwtAuth, QuestController.emailPackage);
 routes.post('/quests', requireJwtAuth, QuestController.addQuest);
 
 routes.post('/quests/:id', requireJwtAuth, QuestController.updateQuest);
 routes.delete('/quests/:id',  requireJwtAuth, QuestController.deleteQuest);
 
-// TO BE IMPLEMENTED @Parth
 
 // Feedback
 routes.get('/quests/:id/feedbacks' , requireJwtAuth, FeedbackController.getFeedback ); // Get list of feedbacks for a quest

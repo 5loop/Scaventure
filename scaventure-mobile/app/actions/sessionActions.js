@@ -12,7 +12,8 @@ export function loginUser({ email, password }) {
   return dispatch => 
     new Promise((resolve, reject) => {
       AuthApi.login({ email, password }).then(response => {
-        // localStorage.setItem('token', response.data.token);
+        AsyncStorage.setItem('@user:user_id', response.data.user._id);
+        // console.log(response.data.user._id);
         AsyncStorage.setItem('@app:token', response.data.token).then(()=> {
           axios.defaults.headers.common.Authorization = response.data.token;
           dispatch({ type: AUTH_USER });

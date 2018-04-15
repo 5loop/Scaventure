@@ -259,12 +259,13 @@ class PlayStep extends React.Component {
               <View style={styles.overlay}> 
                 <Text style={styles.h1}>Correct: +{this.state.points} points</Text>
                 <Feather name='check' size={60} color={Colors.lightSecondary} /> 
+                <Text style={styles.h1}>Please, Proceed to the Next Step</Text>
               </View>
             </TouchableWithoutFeedback>
             :
             <TouchableWithoutFeedback onPress={() => this.setState({ displayOverlay: false })} accessible={false}>            
               <View style={styles.overlay}> 
-                <Text style={[styles.h1, { color: 'red' }]}>Wrong: -2 points</Text>
+                <Text style={[styles.h1, { color: 'red' }]}>Wrong: -{Math.round(this.state.initialStepPoints / 4)} points</Text>
                 <Feather name='x' size={60} color={Colors.lightSecondary} />
               </View>  
             </TouchableWithoutFeedback>
@@ -333,7 +334,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     color: Colors.primaryColor,
-  },
+  }, 
   button: {
     height: 40,
     borderColor: Colors.lightSecondary,

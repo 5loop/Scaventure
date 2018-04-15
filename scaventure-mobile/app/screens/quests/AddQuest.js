@@ -384,15 +384,14 @@ class AddQuest extends React.Component {
   }
 }
 
-/*function mapStateToProps(state){
-  console.log(state)
-  return{
+function mapStateToProps(state) {
+  return {
     newQuest: state.newQuest.newQuest,
-  }
-}*/
+  };
+}
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ addQuest }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(AddQuest);
+export default connect(mapStateToProps, mapDispatchToProps)(AddQuest);

@@ -56,7 +56,6 @@ export default class StepLocation extends React.Component {
     // const { params } = this.props.navigation.state;
     const stepLongitude = this.props.step.startLocation.coordinates[0];
     const stepLatitude = this.props.step.startLocation.coordinates[1];
-    console.log(this.props.step.startLocation);
 
     // TODO: Try commenting this out (seems redundundant)
     const arrayMarker = [{ latitude: stepLatitude, longitude: stepLongitude }];
@@ -65,29 +64,29 @@ export default class StepLocation extends React.Component {
       arrayMarker.push({ latitude: this.state.latitude, longitude: this.state.longitude });
     }
 
-    let pin = {};
     let img = {};
     if (this.props.step.type === 'GPSStep') {
-      pin = require('../../../assets/images/gpsPin.png');
       img = (<Image 
         source={require('../../../assets/images/gpsPin.png')} 
         key={`${this.state.extraData}`}
       />);
     } else if (this.props.step.type === 'QAStep') {
-      pin = require('../../../assets/images/qaPin.png');
       img = (<Image 
         source={require('../../../assets/images/qaPin.png')} 
         key={`${this.state.extraData}`}
       />);
     } else {
-      pin = require('../../../assets/images/qrPin.png');
+      img = (<Image 
+        source={require('../../../assets/images/qrPin.png')} 
+        key={`${this.state.extraData}`}
+      />);
     }
 
     const initialPosition = {
       latitude: stepLatitude, 
       longitude: stepLongitude,
-      latitudeDelta: 0.4,
-      longitudeDelta: 0.4,
+      latitudeDelta: 11,
+      longitudeDelta: 11,
     };
 
     return (
@@ -96,8 +95,6 @@ export default class StepLocation extends React.Component {
         <MapView
           style={{ flex: 1, minWidth: 300, minHeight: 500 }}
           ref={(ref) => { this.mapRef = ref; }}
-          initialRegion={initialPosition}
-          
           followsUserLocation
           showsUserLocation
         >

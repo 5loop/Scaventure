@@ -340,14 +340,14 @@ const styles = StyleSheet.create({
     borderColor: Colors.lightSecondary,
     minWidth: 80,
     borderWidth: 2,
-    margin: 20,
+    marginLeft: 20,
     padding: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
   buttonText: {
     color: Colors.lightSecondary,
-    fontSize: 20,
+    fontSize: 15,
   },
   overlay: {
     flex: 1,

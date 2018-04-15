@@ -234,7 +234,9 @@ class AddQuest extends React.Component {
     }
 
     this.setState({ addingFeedback: true });
-    const img = (Math.floor(Math.random() * (10 - 2)) + 1).toString();
+    const imgIdx = (Math.floor(Math.random() * (25 - 2)) + 1).toString();
+    // console.log(imgIdx);
+    const img = imgIdx;
 
     if (this.state.x == undefined) {
 

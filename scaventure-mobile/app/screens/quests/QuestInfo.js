@@ -1,6 +1,6 @@
 import React from 'react';
 import { ImageBackground, View, ScrollView, 
-  Text, TextInput, TouchableOpacity, Alert,
+  Text, TextInput, TouchableOpacity, Alert, AsyncStorage,
   ListView, TouchableHighlight, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
@@ -136,9 +136,14 @@ class QuestInfo extends React.Component {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       ds,
+      uid: 0,
     };
 
     this.removeClick = this.removeClick.bind(this);
+  }
+  
+  componentWillMount() {
+    this.getItem('@user:user_id').then((i) => this.setState({ uid: i }));
   }
 
   componentDidMount() {
@@ -146,12 +151,16 @@ class QuestInfo extends React.Component {
     this.props.getFeedbacks(quest._id); 
     this.props.getInvitedUsers(quest._id);
   }
-  
-  showMap() {
-    const { quest } = this.props.navigation.state.params;
-    this.props.navigation.navigate('QuestLocation', { longitude: quest.loc.coordinates[0], latitude: quest.loc.coordinates[1] });
+
+  async getItem(item) {
+    try {
+      const value = await AsyncStorage.getItem(item);
+      return value;
+    } catch (error) {
+      console.log(error);
+    }
   }
-  
+
   startGame() {
     const { quest } = this.props.navigation.state.params;
     this.props.navigation.navigate('QuestStartLocation', { quest });
@@ -170,6 +179,11 @@ class QuestInfo extends React.Component {
       Alert.alert('Alert', 'Invitation email sent.');
       console.log('invitation sent.');
     }
+  }
+
+  showMap() {
+    const { quest } = this.props.navigation.state.params;
+    this.props.navigation.navigate('QuestLocation', { longitude: quest.loc.coordinates[0], latitude: quest.loc.coordinates[1] });
   }
 
   removeClick(key) {
@@ -195,10 +209,11 @@ class QuestInfo extends React.Component {
 
   render() {
     const { quest } = this.props.navigation.state.params;
-    const notPublic = this.props.questType !== 'public';
-    const ifNotPublicQuest = renderIf(notPublic);
-    const ifInviNotEmpty = renderIf(notPublic && this.props.invitedusers.length !== 0);
-    const ifInviIsEmpty = renderIf(notPublic && this.props.invitedusers.length === 0);
+    const displayPlayers = this.props.questType !== 'public'
+      && this.props.navigation.state.params.quest.createdBy === this.state.uid;
+    const ifNotPublicQuest = renderIf(displayPlayers);
+    const ifInviNotEmpty = renderIf(displayPlayers && this.props.invitedusers.length !== 0);
+    const ifInviIsEmpty = renderIf(displayPlayers && this.props.invitedusers.length === 0);
     const userList = this.renderUserList(this.props.invitedusers);
     return ( 
       <View style={styles.container}>

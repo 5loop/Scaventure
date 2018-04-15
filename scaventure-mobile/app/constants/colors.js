@@ -2,6 +2,7 @@ export default {
   primaryColor: '#3d3f6fff',
   darkPrimary: '#242542',
   secondaryColor: '#537c8aff',
+  blue: '#9fbcc6',
   lightSecondary: '#cfdee2',
   darkSecondary: '#3b585e',
   tertiaryColor: '#7bae6dff',

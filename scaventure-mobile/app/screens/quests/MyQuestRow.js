@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet, Button, Image } from 'react-native';
 import Colors from '../../constants/colors';
+import { Images } from '../common/Images';
 
 const styles = StyleSheet.create({
   container: {
@@ -79,13 +80,17 @@ const styles = StyleSheet.create({
 
 class QuestRow extends React.Component {
   render() {
+    const img = Images[parseInt(this.props.quest.img)];
     return ( 
       <View style={styles.container}>
       
         <Text style={styles.label}> {this.props.quest.title} </Text>
         
         <View style={styles.contentRow}>
-          <View style={styles.icon} />
+          <Image 
+            style={styles.icon}
+            source={img}
+          />
           <View style={styles.description}>
             <Text numberOfLines={3} >{this.props.quest.description} </Text>
           </View>
@@ -96,7 +101,7 @@ class QuestRow extends React.Component {
           <View style={styles.buttonItem}>
             <Button 
               title="Info" 
-              color="#FF9C59" 
+              color={Colors.blue}
               style={styles.moreButton}
               onPress={() => this.props.onInfoBttnPress(this.props.quest)}
             />
@@ -105,7 +110,7 @@ class QuestRow extends React.Component {
           <View style={styles.buttonItem}>
             <Button 
               title="Edit" 
-              color="#FF9C59" 
+              color={Colors.blue}
               style={styles.moreButton}
               onPress={() => this.props.onEditBtnPress(this.props.quest)}
             />
@@ -114,7 +119,7 @@ class QuestRow extends React.Component {
           <View style={styles.buttonItem}>
             <Button 
               title="Delete" 
-              color="#FF9C59" 
+              color={Colors.blue} 
               style={styles.moreButton}
               onPress={() => this.props.onDeleteBtnPress(this.props.quest._id)}
             />

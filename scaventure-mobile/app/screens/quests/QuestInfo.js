@@ -8,6 +8,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // Local Imports
+import { Images } from '../common/Images';
 import Colors from '../../constants/colors';
 import FeedbackRow from './FeedbackRow';
 import { getFeedbacks, getInvitedUsers, sendInvitation,
@@ -215,12 +216,14 @@ class QuestInfo extends React.Component {
     const ifInviNotEmpty = renderIf(displayPlayers && this.props.invitedusers.length !== 0);
     const ifInviIsEmpty = renderIf(displayPlayers && this.props.invitedusers.length === 0);
     const userList = this.renderUserList(this.props.invitedusers);
+    const img = Images[parseInt(quest.img)];
+
     return ( 
       <View style={styles.container}>
 
         <ScrollView bounces={false}>
           <ImageBackground
-            source={{ uri: 'https://blog.spoongraphics.co.uk/wp-content/uploads/2015/09/thumbnail.jpg' }}
+            source={img}
             style={styles.imageBackground}
           >
             <View style={styles.buttonGroup}>

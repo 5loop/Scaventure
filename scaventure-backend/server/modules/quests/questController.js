@@ -87,10 +87,10 @@ export const addQuest = async (req, res) => {
   try {
 
     // get body of the request
-    const {title, description, type, loc} = req.body;
+    const {title, description, type, loc, img} = req.body;
 
     let quest = new Quest({
-      title, description, type, loc,
+      title, description, type, loc, img,
       createdBy: userId
     });
 

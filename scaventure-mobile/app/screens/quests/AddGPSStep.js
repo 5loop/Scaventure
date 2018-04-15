@@ -113,6 +113,12 @@ class AddGPSStep extends React.Component {
         latitudeDelta:0,
         longitudeDelta:0,
       },
+      initialPosition2: {
+        latitude:0,
+        longitude:0,
+        latitudeDelta:0,
+        longitudeDelta:0,
+      },
 
       question: '',
       option1: '',
@@ -180,8 +186,21 @@ validateField(fieldname) {
         latitudeDelta: 0.09,
         longitudeDelta: 0.09,
       }
+
+      var initialRegion2 = {
+        latitude: lat,
+        longitude: long,
+        latitudeDelta: 0.09,
+        longitudeDelta: 0.09,
+      }
+      
+
+      
       this.setState({initialPosition: initialRegion})
       this.setState({markerPosition: initialRegion})
+
+      this.setState({initialPosition2: initialRegion2})
+      this.setState({markerPosition2: initialRegion})
       
     }, (error)=> alert(JSON.stringify(error)),
     {enableHighAccuracy: false, timeout: 20000, maximumAge:1000})
@@ -203,6 +222,16 @@ validateField(fieldname) {
       this.setState({ displayMap: true });
     }
 
+        // Map Overlay - close
+        closeMap2() {
+          this.setState({ displayMap: false });
+        }
+      
+        // Map Overlay - open
+        openMap2() {
+          this.setState({ displayMap: true });
+        }
+        
   onPress() {
     const { quest } = this.props.navigation.state.params;
 
@@ -226,7 +255,13 @@ validateField(fieldname) {
       startLocation = [this.state.x.longitude, this.state.x.latitude];
     }
 
-    stepLocation = startLocation; // TODO: remove 
+    if(this.state.y === undefined){
+      stepLocation = [this.state.initialPosition2.longitude, this.state.initialPosition2.latitude];
+    } else {
+      stepLocation = [this.state.y.longitude, this.state.y.latitude];
+    }
+
+    //stepLocation = startLocation; // TODO: remove 
 
     const data = {
       question: this.state.question,
@@ -239,8 +274,9 @@ validateField(fieldname) {
         coordinates: stepLocation,
       },
       description: this.state.question,
-      points: 10, // TODO: get from state
+      points: this.state.Points, // TODO: get from state
       stepHint: this.state.hint,
+      radius: this.state.radius,
     };
 
     this.props.addStep('gps', quest._id, data).then(() => {
@@ -281,6 +317,15 @@ validateField(fieldname) {
             onBlur={() => this.checkPoint()}
             />
 
+            <TextField
+            label='Radius(m)'
+            baseColor={Colors.secondaryColor}
+            tintColor={Colors.primaryColor}
+            onChangeText={(radius)=> this.setState({radius})}
+            error={this.state.errors.Points}
+            onBlur={() => this.checkPoint()}
+            />
+
         </View>
          
       
@@ -292,6 +337,12 @@ validateField(fieldname) {
           </TouchableHighlight>
       </View>
       
+      <View>
+          <Text style={styles.h1}>Map</Text>
+          <TouchableHighlight onPress={this.openMap2.bind(this)}>
+            <Feather name="map-pin" size={35} color={Colors.black} />
+          </TouchableHighlight>
+      </View>
       
       <View>
         <TouchableHighlight style={styles.button}>
@@ -306,20 +357,26 @@ validateField(fieldname) {
             <MapView
             closeMap={this.closeMap.bind(this)}
             style={styles.map}
-            region={this.state.initialPosition}
+            region={{latitude: this.state.initialPosition.latitude,
+              longitude: this.state.initialPosition.longitude,
+              latitudeDelta: this.state.initialPosition.latitudeDelta,
+              longitudeDelta: this.state.initialPosition.longitudeDelta}}
             
-            initialRegion = {this.state.initialPosition}
+            initialRegion = {this.state.coordinate}
+            //onRegionChange={this.state.coordinate}
             >
             <MapView.Marker draggable
               
               coordinate={this.state.initialPosition}
-              
+              region={this.state.coordinate}
               onDragEnd={(e) => {
                 
-                this.setState({ x: e.nativeEvent.coordinate})
+                  coordinate: {this.state.x}
+                
+                this.setState({ x: e.nativeEvent.coordinate, initialPosition: e.nativeEvent.coordinate})
                   }
               }
-              region={this.state.coordinate}
+              
             
               
             />
@@ -329,6 +386,46 @@ validateField(fieldname) {
             <Text style={styles.buttonText} onPress={this.closeMap.bind(this)}>Close Map</Text> 
             </TouchableHighlight> 
           </View>
+
+          
+        }
+        
+        { this.state.displayMap &&
+          <View style={styles.overlay}> 
+            <MapView
+            closeMap={this.closeMap.bind(this)}
+            style={styles.map}
+            region={{latitude: this.state.initialPosition2.latitude,
+              longitude: this.state.initialPosition2.longitude,
+              latitudeDelta: this.state.initialPosition2.latitudeDelta,
+              longitudeDelta: this.state.initialPosition2.longitudeDelta}}
+            
+            initialRegion = {{latitude: this.state.initialPosition.latitude,
+              longitude: this.state.initialPosition.longitude,
+              latitudeDelta: this.state.initialPosition.latitudeDelta,
+              longitudeDelta: this.state.initialPosition.longitudeDelta}}
+            >
+            <MapView.Marker draggable
+              
+              coordinate={this.state.initialPosition}
+              region={this.state.coordinate}
+              onDragEnd={(e) => {
+                
+                this.setState({ y: e.nativeEvent.coordinate, initialPosition2: e.nativeEvent.coordinate})
+                  }
+              }
+             
+            
+              
+            />
+            
+          </MapView>
+          <TouchableHighlight> 
+            <Text style={styles.buttonText} onPress={this.closeMap2.bind(this)}>Close Map</Text> 
+            </TouchableHighlight> 
+          </View>
+
+          
         }
 
       </View>

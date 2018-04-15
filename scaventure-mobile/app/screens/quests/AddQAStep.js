@@ -272,7 +272,7 @@ validateField(fieldname) {
 
     
 
-    if (errorTitle || errOption1 ||errOption2 || errOption3 || errOption4  || !this.state.question || !this.state.option1 || !this.state.option2 || !this.state.option3 || !this.state.option4|| !this.state.Points) {
+    if (errorTitle || errOption1 ||errOption2 || errOption3 || errOption4  || !this.state.question || !this.state.option1 || !this.state.option2 || !this.state.option3 || !this.state.option4) {
       this.setState({ errors: { title: errorTitle, description: errOption1 } });
       Alert.alert('Alert', 'Please Fill in all the required fields!');
       return;
@@ -304,7 +304,7 @@ validateField(fieldname) {
       description: this.state.question,
       options: [this.state.option1, this.state.option2, this.state.option3, this.state.option4],
       answer: this.state.index,
-      points: 10,
+      points: this.state.Points,
       stepHint: this.state.hint,
     };
 
@@ -316,6 +316,7 @@ validateField(fieldname) {
 
   render() {    
     return (
+      <ScrollView>
       <View style={styles.container}>
             
 
@@ -426,7 +427,7 @@ validateField(fieldname) {
               
               onDragEnd={(e) => {
                 
-                this.setState({ x: e.nativeEvent.coordinate})
+                this.setState({ x: e.nativeEvent.coordinate , initialPosition: e.nativeEvent.coordinate})
                   }
               }
               region={this.state.coordinate}
@@ -442,6 +443,7 @@ validateField(fieldname) {
         }
 
       </View>
+      </ScrollView>
     );
   }
 }

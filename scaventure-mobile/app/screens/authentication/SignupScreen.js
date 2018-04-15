@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     marginLeft: 77,
   },
   logo: {
-    marginTop: 50,
+    marginTop: 30,
     alignSelf: 'center',
   },
   inputField: {
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     marginTop: 20.5,
   },
   inputMargin: {
-    marginTop: 90,
+    marginTop: 40,
   },
   textIpt: {
     marginLeft: 7.5,

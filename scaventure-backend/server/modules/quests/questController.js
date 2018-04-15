@@ -1,5 +1,8 @@
-import { Quest, Link} from './model';
+import { Quest, Link, Step } from './model';
+import config from '../../config/config';
 
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(config.sendgrid_key);
 
 /**
 *  Get list of avaiable quests
@@ -145,5 +148,61 @@ export const deleteQuest = async (req, res) => {
     }
 
     return res.status(200).json({ error: false, quest: await quest.remove() });
+  });
+}
+
+export const emailPackage = async (req, res) => {
+    
+  const userId = req.user._id;
+  const { id } = req.params; // quest id
+  
+  Quest.findById({ _id: id }, (err, quest) => {
+  
+    if (!quest) {
+      return res.status(404).json({ error: true, message: 'Quest Does not exist!' });
+    }
+    if (quest.createdBy != userId.toString()) {
+      return res.status(401).json({ error: true, message: 'Not Authorized to perform the task!' });
+    }
+
+    Step.find({ questId: id },[], { sort: { stepNumber: 1 } }, (err, steps) => {
+      
+      let html = '<p>You\'ve requested a package containing all the information about your quest, here\'s what you got so far</p>';
+
+      html += `<h2>Quest: '${quest.title}'</h2>`;
+      html += `<p>Total Number of Steps: <b>${steps.length}</b></p>`
+      html += `<p>${quest.description}</p>`;
+      html += `<h2>Steps:</h2>`;
+      for (let s of steps) {
+        html += `<h3><b>Step #${s.stepNumber+1}</b></h3>`;
+        html += `<p>Step Type: <i>${s.type}</i></p>`;
+        html += `<p>${s.description}</p>`;
+        if (s.type === 'QRStep') {
+          const link = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${s.qrCode}`;
+          html += `<img src="${link}" />`
+        }
+        html += `<hr/>`;
+      }
+      
+
+      const msg = {
+        to: req.user.email.toString(),
+        from: "scaventureapp@gmail.com",
+        subject: `Scaventure App: Quest Package '${quest.title}'`,
+        templateId: 'f115cce8-e039-49d4-a65c-80b6a6531ba0',
+        html,
+      };
+  
+      sgMail.send(msg).then(function (response) {
+        console.log("Sent!!");
+        return res.status(200).send({ error: false, message: 'Success'})
+      })
+      .catch(function (error) {
+        console.log(error)
+        console.log("Not Sent!!")
+      });
+    });
+      
+
   });
 }

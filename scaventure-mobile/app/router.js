@@ -34,6 +34,7 @@ import ProgressScreen from './screens/ProgressScreen';
 // The drawer top-icon 
 const Hamburger = ({ navigation }) => <Feather name="menu" color={Colors.white} size={28} onPress={() => navigation.navigate('DrawerOpen')} />;
 
+const GoPublic = ({ navigation }) => <Feather name="arrow-left" color={Colors.white} size={28} onPress={() => navigation.navigate('myQuest')} />;
 const GoBack = ({ navigation }) => <Feather name="arrow-left" color={Colors.white} size={28} onPress={() => navigation.goBack()} />;
 const CloseQuest = ({ navigation }) => {
   return (
@@ -259,7 +260,7 @@ const MyQuestsStack = StackNavigator({
       title: 'Step List',
       headerStyle,
       headerTitleStyle,
-      headerLeft: <GoBack navigation={navigation} />,
+      headerLeft: <GoPublic navigation={navigation} />,
     }),
   },
   EditStep: {

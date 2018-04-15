@@ -12,7 +12,7 @@ export function questReducer(state = initialState.quests, action) {
 }
 
 export function privateQuestReducer(state = initialState.privateQuests, action) {
-  switch (action.privateQuests) {
+  switch (action.type) {
     case types.LOAD_PRIVATE_QUESTS_SUCCESS:
       state = Object.assign({}, state, { quests: action.quests, loading: false });
       return state;
@@ -90,8 +90,6 @@ export function progressReducer(state = initialState.progress, action) {
 
   switch (action.type) {
     case types.LOAD_PROGRESS_SUCCESS:
-      console.log("---- PROGRESS ----");
-      console.log(action.progress);
       state = Object.assign({}, state, { progress: action.progress, loading: false });
       return state;
     default:

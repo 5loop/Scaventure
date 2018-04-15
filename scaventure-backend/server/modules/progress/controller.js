@@ -31,7 +31,9 @@ export const getAllProgress = async (req, res) => {
     let progQuest = [];
     for (let i = 0; i < progress.length; i++) {
       const q = await Quest.findById(progress[i]._questId);
-      progQuest.push({ title: q.title, ...progress[i]._doc });
+      if (q) {
+        progQuest.push({ title: q.title, ...progress[i]._doc });
+      }  
     }
     return res.status(200).json({ error: false, progress: progQuest });
   });    

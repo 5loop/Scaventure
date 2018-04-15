@@ -1,9 +1,14 @@
 import React from 'react';
 import { MapView } from 'expo';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 /* -- Local Imports */
 import AnnotatedButton from '../common/AnnotatedButton';
 import Colors from '../../constants/colors';
+
+const qrPin = require('../../../assets/images/qrPin.png');
+const gpsPin = require('../../../assets/images/gpsPin.png');
+const qaPin = require('../../../assets/images/qaPin.png');
+
 
 export default class StepLocation extends React.Component {
 
@@ -15,12 +20,15 @@ export default class StepLocation extends React.Component {
       longitude: null,
       error: null,
       markers: null,
+      extraData: false
     };
 
     this.mapRef = null;
   }
 
   componentDidMount() {
+    let self = this
+    setTimeout(()=>self.setState({ extraData: true }), 100);
     this.watchId = navigator.geolocation.watchPosition(
       (position) => {
         const stepLongitude = this.props.step.startLocation.coordinates[0];
@@ -31,14 +39,10 @@ export default class StepLocation extends React.Component {
           { latitude: position.coords.latitude, longitude: position.coords.longitude, title: 'Your Location' },
         ];
 
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null,
-        });
-
         if (this.mapRef && arrayMarker.length === 2 && arrayMarker[0].latitude && arrayMarker[1].latitude) {
-          this.mapRef.fitToCoordinates(arrayMarker, { edgePadding: { top: 60, right: 60, bottom: 60, left: 60 }, animated: false });
+          this.mapRef.fitToCoordinates(arrayMarker, { 
+            edgePadding: { top: 80, right: 80, bottom: 80, left: 80 }, animated: false, 
+          });
         }
       },
       (error) => this.setState({ error: error.message }),
@@ -60,22 +64,48 @@ export default class StepLocation extends React.Component {
       arrayMarker.push({ latitude: this.state.latitude, longitude: this.state.longitude });
     }
 
+    let img = {};
+    if (this.props.step.type === 'GPSStep') {
+      img = (<Image 
+        source={require('../../../assets/images/gpsPin.png')} 
+        key={`${this.state.extraData}`}
+      />);
+    } else if (this.props.step.type === 'QAStep') {
+      img = (<Image 
+        source={require('../../../assets/images/qaPin.png')} 
+        key={`${this.state.extraData}`}
+      />);
+    } else {
+      img = (<Image 
+        source={require('../../../assets/images/qrPin.png')} 
+        key={`${this.state.extraData}`}
+      />);
+    }
+
+    const initialPosition = {
+      latitude: stepLatitude, 
+      longitude: stepLongitude,
+      latitudeDelta: 11,
+      longitudeDelta: 11,
+    };
+
     return (
       <View style={{ flex: 1 }}>
         <Text style={styles.h1}>Step Start Location</Text>
         <MapView
           style={{ flex: 1, minWidth: 300, minHeight: 500 }}
           ref={(ref) => { this.mapRef = ref; }}
+          followsUserLocation
+          showsUserLocation
         >
-          { this.state.latitude && this.state.longitude && 
-            <MapView.Marker
-              pinColor={Colors.primaryColor}
-              coordinate={{ latitude: this.state.latitude, longitude: this.state.longitude }}
-            />
-          }
+
           <MapView.Marker
             coordinate={{ latitude: stepLatitude, longitude: stepLongitude }}
-          /> 
+            title={'Start Location'}
+            description={'Please, move here first!'}
+          >
+            {img}
+          </MapView.Marker>  
         </MapView>
         <AnnotatedButton onPress={this.props.closeMap} icon='flag' buttonText="View Step Description" />
       </View>

@@ -396,11 +396,10 @@ class AddQuest extends React.Component {
   }
 }
 
-function mapStateToProps(state){
-  console.log(state)
-  return{
+function mapStateToProps(state) {
+  return {
     newQuest: state.newQuest.newQuest,
-  }
+  };
 }
 
 function mapDispatchToProps(dispatch) {

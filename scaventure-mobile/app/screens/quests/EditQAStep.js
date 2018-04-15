@@ -11,7 +11,8 @@ import { width, height, totalSize } from 'react-native-dimension';
 import MapView from 'react-native-maps';
 import { editStep } from '../../actions/questActions';
 import { Feather } from '@expo/vector-icons';
-
+import MapButton from '../common/MapButton';
+import AnnotatedButton from '../common/AnnotatedButton';
 
 
 
@@ -95,7 +96,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
+  mapIconDiv : {
+    width: '30%',
+    padding:5,
+    
+  }
 
 
 });
@@ -441,13 +446,19 @@ validateField(fieldname) {
         />
       </View> 
       
-      {/* Button to open-up a map */}       
-      <View>
-          <Text style={styles.h1}>Map</Text>
-          <TouchableHighlight onPress={this.openMap.bind(this)}>
-            <Feather name="map-pin" size={35} color={Colors.black} />
-          </TouchableHighlight>
+      {/* Button to open-up a map */}
+      <View  style={{ flexDirection: 'row' }} >
+      <View style={styles.mapIconDiv}>
+          
+          <MapButton 
+                text={'Step Start Location'}
+                onPress={this.openMap.bind(this)}
+              />   
+          <Text style={{textAlign: 'center'}}>Step Start Location</Text>
       </View>
+      
+    </View>   
+      
       
       
       <View>
@@ -482,9 +493,12 @@ validateField(fieldname) {
             />
 
           </MapView>
-          <TouchableHighlight> 
-            <Text style={styles.buttonText} onPress={this.closeMap.bind(this)}>Close Map</Text> 
-            </TouchableHighlight> 
+          <AnnotatedButton 
+          color={Colors.green}
+          onPress={this.closeMap.bind(this)} 
+          icon='check' 
+          buttonText="Done!" 
+        /> 
           </View>
         }
 

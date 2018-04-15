@@ -8,7 +8,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { editQuest } from '../../actions/questActions';
 import { Feather } from '@expo/vector-icons';
-
+import MapButton from '../common/MapButton';
+import AnnotatedButton from '../common/AnnotatedButton';
+import { Label } from 'native-base';
 
 const SCREEN_HEIGHT = height
 const SCREEN_WIDTH = width
@@ -296,11 +298,15 @@ class EditQuest extends React.Component {
 
         />
         </View>
-        <View>
-          <Text style={styles.h1}>Map</Text>
-          <TouchableHighlight onPress={this.openMap.bind(this)}>
-            <Feather name="map-pin" size={35} color={Colors.black} />
-          </TouchableHighlight>
+        <View  style={{ flexDirection: 'row' }} >
+        <View style={styles.mapIconDiv}>
+            
+            <MapButton 
+                  text={'Step Start Location'}
+                  onPress={this.openMap.bind(this)}
+                />   
+            <Text style={{textAlign: 'center'}}>Quest Start Location</Text>
+        </View>        
       </View>
       <View>
       <TouchableHighlight style={styles.button}>
@@ -366,9 +372,12 @@ class EditQuest extends React.Component {
             />
 
           </MapView>
-          <TouchableHighlight> 
-            <Text style={styles.buttonText} onPress={this.closeMap.bind(this)}>Close Map</Text> 
-            </TouchableHighlight> 
+          <AnnotatedButton 
+          color={Colors.green}
+          onPress={this.closeMap.bind(this)} 
+          icon='check' 
+          buttonText="Done!" 
+          /> 
           </View>
 
           

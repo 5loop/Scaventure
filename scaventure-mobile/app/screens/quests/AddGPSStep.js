@@ -349,10 +349,10 @@ validateField(fieldname) {
       <View style={styles.mapIconDiv} >
      
               <MapButton 
-                text={'Step Start Location'}
+                text={'Step Location'}
                 onPress={this.openMap2.bind(this)}
               />
-               <Text style={{textAlign: 'center'}}>Step Start Location</Text>
+               <Text style={{textAlign: 'center'}}>Step Location</Text>
       </View>
      
       

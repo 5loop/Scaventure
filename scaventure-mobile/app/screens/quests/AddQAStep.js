@@ -404,15 +404,15 @@ validateField(fieldname) {
       </View> 
       
       {/* Button to open-up a map */}       
-      <View>
-          
+      <View  style={{ flexDirection: 'row' }} >
+      <View style={styles.mapIconDiv}>
           <MapButton 
                 text={'Step Start Location'}
                 onPress={this.openMap.bind(this)}
               />   
           
       </View>
-      
+      </View>  
       
       <View>
         <TouchableHighlight style={styles.button}>

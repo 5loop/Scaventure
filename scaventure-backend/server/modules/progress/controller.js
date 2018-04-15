@@ -27,16 +27,12 @@ export const progress = async (req, res)  => {
 export const getAllProgress = async (req, res) => {    
   const id = req.user._id;   
   const email  = req.user.email; 
-  Progress.find({ _userId: id },  async (err, progress) => {        
-    if (progress.length === 0) {
-      return res.status(404).json({ error: true, message: 'There is no progress report.' });
-    }
-    
+  Progress.find({ _userId: id },  async (err, progress) => {  
     let progQuest = [];
     for (let i = 0; i < progress.length; i++) {
       const q = await Quest.findById(progress[i]._questId);
       progQuest.push({ title: q.title, ...progress[i]._doc });
     }
-    return res.status(200).json({ error: false, progQuest });
+    return res.status(200).json({ error: false, progress: progQuest });
   });    
 }

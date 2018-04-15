@@ -38,7 +38,7 @@ export default class StepLocation extends React.Component {
         });
 
         if (this.mapRef && arrayMarker.length === 2 && arrayMarker[0].latitude && arrayMarker[1].latitude) {
-          this.mapRef.fitToCoordinates(arrayMarker, { edgePadding: { top: 60, right: 60, bottom: 60, left: 60 }, animated: true });
+          this.mapRef.fitToCoordinates(arrayMarker, { edgePadding: { top: 60, right: 60, bottom: 60, left: 60 }, animated: false });
         }
       },
       (error) => this.setState({ error: error.message }),

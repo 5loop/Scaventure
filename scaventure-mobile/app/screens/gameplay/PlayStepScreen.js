@@ -32,6 +32,7 @@ class PlayStep extends React.Component {
       index: 0,
       hintUsed: false, 
       displayHintOverlay: false,
+      showBackup: false,
     };
   }
 
@@ -115,7 +116,7 @@ class PlayStep extends React.Component {
         let answerCorrect = false;
         let newScore = this.state.points;
 
-        if (distance <= steps[stepIndex].radius) {
+        if (distance <= (steps[stepIndex].radius ? steps[stepIndex].radius : 15)) {
           answerCorrect = true;
         } else {
           newScore = this.deductPoints();
@@ -160,18 +161,25 @@ class PlayStep extends React.Component {
       this.setState({ displayHintOverlay: true });
     }
   };
-  
+
+  showBackupOption = () => {
+    this.setState({ showBackup: true });
+  }
+
   render() {
     // get current step
     const { steps, stepIndex } = this.props.navigation.state.params;
     
     let Step = null;
+    let checkText = 'Check';
     if (steps[stepIndex].type === 'QAStep') {
       Step = <QAStep step={steps[stepIndex]} onSelect={this.onSelect.bind(this)} />;
     } else if (steps[stepIndex].type === 'QRStep') {
-      Step = <QRStep step={steps[stepIndex]} />; // pass any props here
+      Step = <QRStep step={steps[stepIndex]} showBackupOption={this.showBackupOption.bind(this)} />; // pass any props here
+      checkText = 'Scan QR';
     } else if (steps[stepIndex].type === 'GPSStep') {
       Step = <GPSStep step={steps[stepIndex]} />;
+      checkText = 'Check GPS';
     }
 
     return (
@@ -183,8 +191,13 @@ class PlayStep extends React.Component {
         <View style={{ flex: 1, flexDirection: 'row' }}>
           {/* Check Answer */}
           <TouchableHighlight style={styles.button} onPress={this.checkAnswer.bind(this)}>
-            <Text style={styles.buttonText}>Check</Text>
-          </TouchableHighlight> 
+            <Text style={styles.buttonText}>{checkText}</Text>
+          </TouchableHighlight>
+          { (steps[stepIndex].type === 'QRStep' && this.state.showBackup) && 
+          <TouchableHighlight style={styles.button} onPress={this.checkGPS.bind(this)}>
+            <Text style={styles.buttonText}>Check GPS</Text>
+          </TouchableHighlight>
+          } 
           { steps[stepIndex].stepHint.trim() !== '' &&
             <TouchableHighlight style={styles.button} onPress={this.showHint.bind(this)}>
               <Text style={styles.buttonText}>Hint</Text>
@@ -324,10 +337,10 @@ const styles = StyleSheet.create({
   button: {
     height: 40,
     borderColor: Colors.lightSecondary,
-    width: 80,
+    minWidth: 80,
     borderWidth: 2,
     margin: 20,
-    padding: 4,
+    padding: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },

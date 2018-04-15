@@ -16,12 +16,12 @@ const routes = new Router();
 // uncomment/comment 'requireJwtAuth' to enable authentication for the routes
 routes.get('/quests', requireJwtAuth, QuestController.getQuests);
 routes.get('/quests/:id', requireJwtAuth, QuestController.getOneQuest);
+routes.get('/quests/:id/package', requireJwtAuth, QuestController.emailPackage);
 routes.post('/quests', requireJwtAuth, QuestController.addQuest);
 
 routes.post('/quests/:id', requireJwtAuth, QuestController.updateQuest);
 routes.delete('/quests/:id',  requireJwtAuth, QuestController.deleteQuest);
 
-// TO BE IMPLEMENTED @Parth
 
 // Feedback
 routes.get('/quests/:id/feedbacks' , requireJwtAuth, FeedbackController.getFeedback ); // Get list of feedbacks for a quest
@@ -32,8 +32,8 @@ routes.post('/quests/:id/feedbacks/:id' , requireJwtAuth, FeedbackController.upd
 // Invitations
 // POST /quests/1/users
 routes.post('/quests/:id/users', requireJwtAuth, InviteController.inviteUser);
-routes.get('/quests/:id/users/verify/:hash', requireJwtAuth, InviteController.verifyUserLink);
-routes.get('/quests/:id/users' , requireJwtAuth, InviteController.getInvitedUsers); // Get list of users invited to the quest (iff quest is private & logged-in user is the author of the quest)
+routes.get('/quests/:id/users/verify/:hash', InviteController.verifyUserLink);
+routes.get('/quests/:id/users' , requireJwtAuth, InviteController.getInvitedUsers); // Get list of users invited to the quest (iff quest is private & logged-in user is the author of the quest)// 
 routes.delete('/quests/:id/users/:email', requireJwtAuth, InviteController.uninviteUser); // 'Uninvite' a user (iff quest is private & logged-in user is the author of the quest)
 
 // routes.get('/quests/:id/users' , ... ); // Get list of users invited to the quest (iff quest is private & logged-in user is the author of the quest)
@@ -45,7 +45,11 @@ routes.delete('/quests/:id/steps', requireJwtAuth, StepController.deleteAllStep)
 routes.get('/quests/:id/steps/:sid', requireJwtAuth, StepController.getOneStep); // get one step
 routes.delete('/quests/:id/steps/:sid', requireJwtAuth, StepController.deleteOneStep); // delete one step
 routes.post('/quests/:id/steps/:type', requireJwtAuth, StepController.addStep);   // add new step
+<<<<<<< HEAD
 routes.post('/quests/:id/steps/edit/:stepId', requireJwtAuth, StepController.editStep);
+=======
+routes.post('/quests/:id/steps/:type/:stepid', requireJwtAuth, StepController.editStep);
+>>>>>>> develop
 routes.patch('/quests/:id/steps/reorder', requireJwtAuth, StepController.reorderSteps); // reorder steps
 
 // Steps Hints

@@ -32,8 +32,24 @@ class QuestApi {
     return axios.get(`${apiUrl}/api/quests?type=user`);
   }
 
+  static emailQuestPackage(questId) {
+    return axios.get(`${apiUrl}/api/quests/${questId}/package`);
+  }
+
   static deleteQuest(questId) {
     return axios.delete(`${apiUrl}/api/quests/${questId}`);
+  }
+
+  static getInvitedUsers(questId) {
+    return axios.get(`${apiUrl}/api/quests/${questId}/users`);
+  }
+
+  static deleteInvitedUsers(questId, email) {
+    return axios.delete(`${apiUrl}/api/quests/${questId}/users/${email}`);
+  }
+
+  static sendInvitation(questId, data) {
+    return axios.post(`${apiUrl}/api/quests/${questId}/users`, data);
   }
 
   static getFeedbacks(questId) {
@@ -66,6 +82,10 @@ class QuestApi {
 
   static saveProgress(data) {
     return axios.post(`${apiUrl}/api/progress`, data);
+  }
+
+  static getProgress() {
+    return axios.get(`${apiUrl}/api/progress`);
   }
 }
 

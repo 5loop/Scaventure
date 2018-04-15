@@ -40,6 +40,15 @@ export function getMyQuests() {
     });
 }
 
+export function emailQuestPackage(questId) {
+  return dispatch => 
+    QuestApi.emailQuestPackage(questId).then(() => {
+      dispatch({ type: types.EMAIL_PACKAGE_SUCCESS });
+    }).catch(e => {
+      console.log(e);  
+    });
+}
+
 export function deleteQuest(questId) {
   return dispatch =>
     QuestApi.deleteQuest(questId).then(res => {
@@ -47,6 +56,35 @@ export function deleteQuest(questId) {
       dispatch(getMyQuests());
     }).catch(e => {
       console.log(e); 
+    });
+}
+
+export function getInvitedUsers(questId) {
+  return dispatch =>
+    QuestApi.getInvitedUsers(questId).then(res => {
+      dispatch({ type: types.LOAD_USERS_SUCCESS, invitedusers: res.data.links });
+    }).catch(e => {
+      console.log(e);
+    });
+}
+
+export function deleteInvitedUsers(questId, email) {
+  return dispatch =>
+    QuestApi.deleteInvitedUsers(questId, email).then(() => {
+      dispatch({ type: types.DELETE_INVITATED_USERS_SUCCESS });
+      dispatch(getInvitedUsers(questId));
+    }).catch(e => {
+      console.log(e);
+    });
+}
+
+export function sendInvitation(questId, data) {
+  return dispatch =>
+    QuestApi.sendInvitation(questId, data).then(() => {
+      dispatch({ type: types.LOAD_SEND_INVITATION_SUCCESS });
+      dispatch(getInvitedUsers(questId));
+    }).catch(e => {
+      console.log(e);
     });
 }
 
@@ -177,3 +215,11 @@ export function saveProgress(data) {
       console.log(e);
     });
 }
+
+export function getProgress() {
+  return dispatch => 
+    QuestApi.getProgress().then((res) => {
+      dispatch({ type: types.LOAD_PROGRESS_SUCCESS, progress: res.data.progress });
+    });
+}
+

@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { addQuest } from '../../actions/questActions';
 import { RadioGroup, RadioButton } from 'react-native-flexi-radio-button';
 import { Label } from 'native-base';
+import { Feather } from '@expo/vector-icons';
 
 
 const SCREEN_HEIGHT = height
@@ -70,13 +71,16 @@ const styles = StyleSheet.create({
     backgroundColor:'rgba(61,63,111,0.3)',
     marginBottom:10,
   },
-  map: {
+
     
-    left:4,
-    right:0,
-    flex:1,
-    flexDirection: 'column',
-  },
+    map: {
+      minWidth: 300, 
+      minHeight: 500 ,
+      flex:1,
+      flexDirection: 'column',
+      
+    },
+
   maps:{
     flex:1,
     
@@ -90,7 +94,30 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     height:'40%',
     padding:5,
-  }
+  },
+  mapIcon: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginLeft: 20,
+    bottom: 0,
+    left: 0,
+    padding: 8,
+  },
+  overlay: {
+    flex: 1,
+    position: 'absolute',
+    alignSelf: 'stretch',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: Colors.darkPrimary,
+    opacity: 0.9,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
 });
 
@@ -149,7 +176,15 @@ class AddQuest extends React.Component {
     const error = this.validateField('description');
     this.setState({ errors: { title: this.state.errors.title, description: error } });  
   }
-  
+  // Map Overlay - close
+  closeMap() {
+    this.setState({ displayMap: false });
+  }
+
+  // Map Overlay - open
+  openMap() {
+    this.setState({ displayMap: true });
+  }
 
   componentDidMount(){
     navigator.geolocation.getCurrentPosition((position) => {
@@ -286,49 +321,78 @@ class AddQuest extends React.Component {
         </RadioGroup>
 
           </View>
-          <MapView
+          {/* Button to open-up a map */}       
+      <View>
+          <Text style={styles.h1}>Map</Text>
+          <TouchableHighlight onPress={this.openMap.bind(this)}>
+            <Feather name="map-pin" size={35} color={Colors.black} />
+          </TouchableHighlight>
+      </View>
+      
+      
+      <View>
+        <TouchableHighlight style={styles.button}>
+            <Text style={styles.buttonText} onPress={this.onPress.bind(this)}>Add New</Text>
+          </TouchableHighlight>
+      </View>
+      
+
+          {/* Map Overlay */}
+        { this.state.displayMap &&
+          <View style={styles.overlay}> 
+            <MapView
+            closeMap={this.closeMap.bind(this)}
             style={styles.map}
-            region={this.state.initialPosition}
+            region={{latitude: this.state.initialPosition.latitude,
+              longitude: this.state.initialPosition.longitude,
+              latitudeDelta: this.state.initialPosition.latitudeDelta,
+              longitudeDelta: this.state.initialPosition.longitudeDelta}}
             
-            initialRegion = {this.state.initialPosition}
-            onMapReady={this.onMapReady}
-            
-           >
+            initialRegion = {{latitude: this.state.initialPosition.latitude,
+                longitude: this.state.initialPosition.longitude,
+                latitudeDelta: this.state.initialPosition.latitudeDelta,
+                longitudeDelta: this.state.initialPosition.longitudeDelta}}
+            //initialRegion = {this.state.coordinate}
+            //onRegionChange={this.state.coordinate}
+            >
             <MapView.Marker draggable
               
               coordinate={this.state.initialPosition}
-              
+              region={this.state.coordinate}
               onDragEnd={(e) => {
                 
-                this.setState({ x: e.nativeEvent.coordinate,
-                               });
+                  //coordinate: {this.state.x}
                 
-                  
+                this.setState({ x: e.nativeEvent.coordinate, initialPosition: e.nativeEvent.coordinate})
+                  }
+              }
               
-                
-                  
-              }
-              }
-              />
+            
+              
+            />
 
-           </MapView>
-          <TouchableHighlight style={styles.button}>
-          <Text style={styles.buttonText} onPress={this.onPress.bind(this)}>Add New</Text>
-        </TouchableHighlight>
+          </MapView>
+          <TouchableHighlight> 
+            <Text style={styles.buttonText} onPress={this.closeMap.bind(this)}>Close Map</Text> 
+            </TouchableHighlight> 
+          </View>
+
+          
+        }
       </View> 
     );
   }
 }
 
-function mapStateToProps(state){
+/*function mapStateToProps(state){
   console.log(state)
   return{
     newQuest: state.newQuest.newQuest,
   }
-}
+}*/
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ addQuest }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddQuest);
+export default connect(null, mapDispatchToProps)(AddQuest);

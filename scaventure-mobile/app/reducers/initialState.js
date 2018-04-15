@@ -19,12 +19,20 @@ export default {
     steps: [],
     loading: true,
   },
-  newQuest:{
+  invitedusers: {
+    users: [],
+    loading: true,
+  },
+  newQuest: {
     newQuest: {},
     loading: true,
   },
   editedQuest:{
     editedQuest: {},
     loading: true,
-  }
+  },
+  progress: {
+    progress: [],
+    loading: true,
+  },
 };

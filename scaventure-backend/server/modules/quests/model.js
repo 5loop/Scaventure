@@ -168,6 +168,11 @@ const QRStep = Step.discriminator('QRStep',
       type: String,
       required: true
     },
+    backupEnabled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
 }, options));
 
 

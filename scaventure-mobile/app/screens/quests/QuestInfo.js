@@ -1,6 +1,6 @@
 import React from 'react';
 import { ImageBackground, View, ScrollView, 
-  Text, Keyboard, 
+  Text, TextInput, TouchableOpacity, Alert,
   ListView, TouchableHighlight, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
@@ -10,9 +10,12 @@ import { connect } from 'react-redux';
 // Local Imports
 import Colors from '../../constants/colors';
 import FeedbackRow from './FeedbackRow';
-import { getFeedbacks } from '../../actions/questActions';
+import { getFeedbacks, getInvitedUsers, sendInvitation,
+  deleteInvitedUsers } from '../../actions/questActions';
 import EmptyListScreen from '../common/EmptyListScreen';
 import AnnotatedButton from '../common/AnnotatedButton';
+
+const renderIf = require('render-if');
 
 const styles = StyleSheet.create({
   container: {
@@ -31,12 +34,18 @@ const styles = StyleSheet.create({
   description: {
     minHeight: 160,
     backgroundColor: Colors.white,
-    borderBottomColor: Colors.secondaryColor,
-    borderBottomWidth: 20,
+    // borderBottomColor: Colors.secondaryColor,
+    // borderBottomWidth: 20,
     padding: 30,
   },
   h1: {
     fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: Colors.white,
+  },
+  h2: {
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
     color: Colors.white,
@@ -64,21 +73,78 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 4,
   },
+  invitationSection: {
+    padding: 5,
+    flex: 1,
+  },
+  inviteUsers: {
+    alignItems: 'center',
+  },
+  userRow: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+  },
+  inviteUsersText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: Colors.darkSecondary,
+  },
+  btn: {
+    borderColor: 'transparent',
+    borderWidth: 0,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnText: {
+    color: Colors.white,
+    fontSize: 16,
+  },
+  inviteBtn: {
+    backgroundColor: Colors.primaryColor,
+    width: 70,
+    height: 35,
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  removeBtn: {
+    backgroundColor: Colors.primaryColor,
+    width: 70,
+    height: 35,
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  emailInput: {
+    height: 20,
+    width: 200,
+    marginTop: 10,
+    textAlign: 'center',
+  },
+  userListStyle: {
+    margin: 10,
+    fontSize: 16,
+    color: Colors.darkSecondary,
+    textAlignVertical: 'center',
+  },
 });
 
 class QuestInfo extends React.Component {
-
   constructor(props, context) {
     super(props, context);
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       ds,
     };
+
+    this.removeClick = this.removeClick.bind(this);
   }
 
   componentDidMount() {
     const { quest } = this.props.navigation.state.params;
     this.props.getFeedbacks(quest._id); 
+    this.props.getInvitedUsers(quest._id);
   }
   
   showMap() {
@@ -91,6 +157,36 @@ class QuestInfo extends React.Component {
     this.props.navigation.navigate('QuestStartLocation', { quest });
   }
 
+  inviteClick() {
+    const email = this.state.inviteEmail;
+    const emailREGEX = /\S+@\S+\.\S+/;
+
+    if (emailREGEX.test(String(email).toLowerCase()) === false) {
+      Alert.alert('Alert', 'Email is not valid.');
+    } else {
+      // console.log(this.props);
+      const questID = this.props.navigation.state.params.quest._id;
+      this.props.sendInvitation(questID, { email });
+      Alert.alert('Alert', 'Invitation email sent.');
+      console.log('invitation sent.');
+    }
+  }
+
+  removeClick(key) {
+    const questID = this.props.navigation.state.params.quest._id;
+    const email = this.props.invitedusers[key].userEmail;
+
+    this.props.deleteInvitedUsers(questID, email);
+  }
+
+  renderUserList(arr) {
+    const userList = [];
+    arr.forEach(element => {
+      userList.push(element.userEmail.trim().replace(/@.+\..+/g, ''));
+    });
+    return userList;
+  }
+
   renderFeedbackRow(feedback) {
     return (
       <FeedbackRow feedback={feedback} />
@@ -99,6 +195,11 @@ class QuestInfo extends React.Component {
 
   render() {
     const { quest } = this.props.navigation.state.params;
+    const notPublic = this.props.questType !== 'public';
+    const ifNotPublicQuest = renderIf(notPublic);
+    const ifInviNotEmpty = renderIf(notPublic && this.props.invitedusers.length !== 0);
+    const ifInviIsEmpty = renderIf(notPublic && this.props.invitedusers.length === 0);
+    const userList = this.renderUserList(this.props.invitedusers);
     return ( 
       <View style={styles.container}>
 
@@ -132,6 +233,58 @@ class QuestInfo extends React.Component {
               {quest.description}
             </Text>
           </View>
+          {/* Players Title */}
+          {ifNotPublicQuest(
+            <View style={styles.separator}><Text style={styles.h2}> Players </Text></View>
+          )}
+          {ifInviNotEmpty(
+            // not empty
+            <View style={styles.invitationSection}>
+              {userList.map((item, key) => (
+                <View style={styles.userRow}>
+                  <Text key={key} style={styles.userListStyle}>Player {key+1}: { item } </Text>
+                  <TouchableOpacity 
+                    style={[styles.btn, styles.removeBtn]}
+                    onPress={() => this.removeClick(key)}
+                  >
+                    <Text style={styles.btnText}>Remove</Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+              <View style={styles.inviteUsers}>
+                <Text style={styles.inviteUsersText}> Invite more players. </Text>
+                <TextInput
+                  style={styles.emailInput}
+                  placeholder='email address'
+                  onChangeText={(inviteEmail) => this.setState({ inviteEmail })}
+                />
+                <TouchableOpacity 
+                  style={[styles.btn, styles.inviteBtn]}
+                  onPress={this.inviteClick.bind(this)}
+                >
+                  <Text style={styles.btnText}>Invite</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}          
+          {ifInviIsEmpty(
+            <View style={styles.inviteUsers}>
+              <Text style={styles.inviteUsersText}> No players! Go invite one. </Text>
+              <TextInput
+                style={styles.emailInput}
+                placeholder='email address'
+                onChangeText={(inviteEmail) => this.setState({ inviteEmail })}
+              />
+              <TouchableOpacity 
+                style={[styles.btn, styles.inviteBtn]}
+                onPress={this.inviteClick.bind(this)}
+              >
+                <Text style={styles.btnText}>Invite</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          {/* Feedback Title */}
+          <View style={styles.separator}><Text style={styles.h2}> Feedback </Text></View>
           {this.props.feedbacks.length === 0 
             ?
             <View style={{ marginBottom: 40 }}>
@@ -160,15 +313,18 @@ class QuestInfo extends React.Component {
 // export default QuestInfo;
 
 function mapStateToProps(state, props) {
-
+  // console.log(props);
+  // console.log(state);
   return {
     feedbacks: state.feedbacks.feedbacks,
     feedbacksLoading: state.feedbacks.loading,
+    invitedusers: state.invitedusers.users,
+    questType: props.navigation.state.params.quest.type,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getFeedbacks }, dispatch);
+  return bindActionCreators({ getInvitedUsers, getFeedbacks, sendInvitation, deleteInvitedUsers }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestInfo);

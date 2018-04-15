@@ -12,7 +12,7 @@ export function questReducer(state = initialState.quests, action) {
 }
 
 export function privateQuestReducer(state = initialState.privateQuests, action) {
-  switch (action.privateQuests) {
+  switch (action.type) {
     case types.LOAD_PRIVATE_QUESTS_SUCCESS:
       state = Object.assign({}, state, { quests: action.quests, loading: false });
       return state;
@@ -39,6 +39,16 @@ export function authenticated(state = { authenticated: false }, action) {
       return state;
     case types.AUTH_USER:
       state = Object.assign({}, state, { authenticated: true });
+      return state;
+    default:
+      return state;
+  }
+}
+
+export function invitationReducer(state = initialState.invitedusers, action) {
+  switch (action.type) {
+    case types.LOAD_USERS_SUCCESS:
+      state = Object.assign({}, state, { users: action.invitedusers, loading: false });
       return state;
     default:
       return state;
@@ -86,6 +96,15 @@ export function editedQuest(state = initialState.editedQuest, action) {
         return state;
     }
   }
+export function progressReducer(state = initialState.progress, action) {
 
+  switch (action.type) {
+    case types.LOAD_PROGRESS_SUCCESS:
+      state = Object.assign({}, state, { progress: action.progress, loading: false });
+      return state;
+    default:
+      return state;
+  }
+}
 
 

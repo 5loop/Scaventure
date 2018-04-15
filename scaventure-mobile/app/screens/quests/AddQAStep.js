@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, TextInput, TouchableHighlight, Alert, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, Button, TextInput, TouchableHighlight, Alert, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 import Colors from '../../constants/colors';
 import { bindActionCreators } from 'redux';
@@ -11,6 +11,8 @@ import { width, height, totalSize } from 'react-native-dimension';
 import MapView from 'react-native-maps';
 import { addStep } from '../../actions/questActions';
 import { Feather } from '@expo/vector-icons';
+import MapButton from '../common/MapButton';
+import AnnotatedButton from '../common/AnnotatedButton';
 
 
 
@@ -34,6 +36,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.tertiaryColor,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 100,
   },
   buttonText: {
     color: '#FAFAFA',
@@ -142,6 +145,9 @@ validateField(fieldname) {
       error = (!value || value.trim() === '') ? 'You must select an answer to this question!' : null;
     }else if(fieldname === 'option1' || fieldname === 'option2'  ||fieldname === 'option3'  ||fieldname === 'option4' ){
       error = (!value || value.trim() === '') ? 'You must provide an option in all fields!' : null;
+
+    }else if(fieldname === 'Points'){
+      error = (!value || value.trim() === '') ? 'You must provide points for the step!' : null;
 
     }
 
@@ -269,10 +275,10 @@ validateField(fieldname) {
     const errOption2 = this.validateField('option2');
     const errOption3 = this.validateField('option3');
     const errOption4 = this.validateField('option4');
-
+    const errPoints = this.validateField('Points')
     
 
-    if (errorTitle || errOption1 ||errOption2 || errOption3 || errOption4  || !this.state.question || !this.state.option1 || !this.state.option2 || !this.state.option3 || !this.state.option4) {
+    if (errorTitle || errOption1 ||errOption2 || errOption3 || errOption4  || !this.state.question || !this.state.option1 || !this.state.option2 || !this.state.option3 || !this.state.option4 || !this.state.Points) {
       this.setState({ errors: { title: errorTitle, description: errOption1 } });
       Alert.alert('Alert', 'Please Fill in all the required fields!');
       return;
@@ -316,8 +322,9 @@ validateField(fieldname) {
 
   render() {    
     return (
-      <ScrollView>
-      <View style={styles.container}>
+      <View style={{ flex: 1 }}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <ScrollView style={styles.container}>
             
 
           <View>
@@ -387,20 +394,23 @@ validateField(fieldname) {
 
       <TextField
           label='Points'
+          keyboardType= 'numeric'
           baseColor={Colors.secondaryColor}
           tintColor={Colors.primaryColor}
           onChangeText={(Points)=> this.setState({Points})}
           error={this.state.errors.Points}
-          onBlur={() => this.CheckOption4()}
+          onBlur={() => this.checkPoint()}
         />
       </View> 
       
       {/* Button to open-up a map */}       
       <View>
-          <Text style={styles.h1}>Map</Text>
-          <TouchableHighlight onPress={this.openMap.bind(this)}>
-            <Feather name="map-pin" size={35} color={Colors.black} />
-          </TouchableHighlight>
+          
+          <MapButton 
+                text={'Step Start Location'}
+                onPress={this.openMap.bind(this)}
+              />   
+          
       </View>
       
       
@@ -410,7 +420,8 @@ validateField(fieldname) {
           </TouchableHighlight>
       </View>
       
-
+      </ScrollView>
+        </TouchableWithoutFeedback>
         {/* Map Overlay */}
         { this.state.displayMap &&
           <View style={styles.overlay}> 
@@ -436,14 +447,17 @@ validateField(fieldname) {
             />
 
           </MapView>
-          <TouchableHighlight> 
-            <Text style={styles.buttonText} onPress={this.closeMap.bind(this)}>Close Map</Text> 
-            </TouchableHighlight> 
+          
+            <AnnotatedButton 
+              color={Colors.green}
+              onPress={this.closeMap.bind(this)} 
+              icon='check' 
+              buttonText="Done!" 
+            />
           </View>
         }
 
       </View>
-      </ScrollView>
     );
   }
 }

@@ -18,7 +18,7 @@ import EmptyListScreen from '../common/EmptyListScreen';
 
 import Colors from '../../constants/colors';
 /* -- Actions */
-import { getSteps, deleteStep, reorderSteps } from '../../actions/questActions';
+import { getSteps, deleteStep, reorderSteps, emailQuestPackage } from '../../actions/questActions';
 import StepRow from './StepRow';
 
 const window = Dimensions.get('window');
@@ -128,6 +128,20 @@ class QuestStepList extends Component {
     });
   }
 
+  emailPackage() {
+    const { quest } = this.props.navigation.state.params;
+    Alert.alert(
+      'Quest Package',
+      'Do you want to email quest package to yourself?',
+      [
+        { text: 'No', onPress: () => {}, style: 'cancel' },
+        { text: 'Yes', onPress: () => this.props.emailQuestPackage(quest._id) },
+      ],
+      { cancelable: true }
+    );
+    
+  }
+
   render() {
     /* eslint-disable no-nested-ternary */
     const order = this.state.steps.map(s => s.stepNumber);
@@ -154,6 +168,7 @@ class QuestStepList extends Component {
           )
 
         }
+        <AnnotatedButton color={Colors.green} layout="left" icon="mail" buttonText="Email Me" onPress={this.emailPackage.bind(this)} />
         { this.state.disableSorting ?
           <AnnotatedDropdown 
             onPress={this.onQABttnPress.bind(this)} 
@@ -206,7 +221,7 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getSteps, deleteStep, reorderSteps }, dispatch);
+  return bindActionCreators({ getSteps, deleteStep, reorderSteps, emailQuestPackage }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestStepList);

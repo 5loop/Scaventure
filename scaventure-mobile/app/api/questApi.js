@@ -24,6 +24,10 @@ class QuestApi {
     return axios.get(`${apiUrl}/api/quests?type=user`);
   }
 
+  static emailQuestPackage(questId) {
+    return axios.get(`${apiUrl}/api/quests/${questId}/package`);
+  }
+
   static deleteQuest(questId) {
     return axios.delete(`${apiUrl}/api/quests/${questId}`);
   }

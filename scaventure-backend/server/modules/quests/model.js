@@ -72,6 +72,11 @@ const questSchema = new Schema({
     type: {type: String, default: 'Point'},
     coordinates: [Number]
   },
+  img: {
+    type: String,
+    required: false,
+    default: 1,
+  },
   type: {
     type: String,
     enum: ['public', 'private'],

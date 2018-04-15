@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
-
+import { Text, View, StyleSheet, Button, Image } from 'react-native';
+import Colors from '../../constants/colors';
+import { Images } from '../common/Images';
 
 const styles = StyleSheet.create({
   container: {
@@ -81,25 +82,29 @@ const styles = StyleSheet.create({
 class PrivateQuestRow extends React.Component {
 
   render() {
+
+    const img = Images[parseInt(this.props.quest.img)];
+
     return ( 
       <View style={styles.container}>
       
         <Text style={styles.label}> {this.props.quest.title} </Text>
         
         <View style={styles.contentRow}>
-            <View style={styles.icon}>
-
-            </View>
-            <View style={styles.description}>
-              <Text numberOfLines={3} >{this.props.quest.description} </Text>
-            </View>
+          <Image 
+            style={styles.icon}
+            source={img}
+          />
+          <View style={styles.description}>
+            <Text numberOfLines={3} >{this.props.quest.description} </Text>
+          </View>
         </View>
         <View style={styles.buttonRow}>
           
           <View style={styles.buttonItem}>
             <Button 
               title="More info" 
-              color="#FF9C59" 
+              color={Colors.blue}
               style={styles.moreButton}
               onPress={() => this.props.onInfoBttnPress(this.props.quest)}
             />

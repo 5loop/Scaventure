@@ -222,7 +222,7 @@ class AddQuest extends React.Component {
   }
 
 
-  onPress(){
+  onPress() {
     console.log(this.state.x);
     
     const errorTitle = this.validateField('title');
@@ -234,16 +234,15 @@ class AddQuest extends React.Component {
     }
 
     this.setState({ addingFeedback: true });
+    const img = (Math.floor(Math.random() * (10 - 2)) + 1).toString();
 
-    
-    if(this.state.x == undefined) {
-      
-      
+    if (this.state.x == undefined) {
 
       const data = {
         title: this.state.title,
         description: this.state.description,
         type: this.state.value,
+        img,
         loc: {
           type: "Point",
           coordinates: [this.state.initialPosition.longitude, this.state.initialPosition.latitude]
@@ -262,6 +261,7 @@ class AddQuest extends React.Component {
         title: this.state.title,
         description: this.state.description,
         type: this.state.value,
+        img,
         loc: {
           type: "Point",
           coordinates: [this.state.x.longitude, this.state.x.latitude]

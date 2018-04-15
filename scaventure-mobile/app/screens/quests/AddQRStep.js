@@ -38,6 +38,12 @@ class QRsteps extends Component {
       latitudeDelta: 0,
       longitudeDelta: 0,
     },
+    initialPosition2: {
+      latitude: 0,
+      longitude: 0,
+      latitudeDelta: 0,
+      longitudeDelta: 0,
+    },
   };
 
   componentDidMount() {    
@@ -52,8 +58,20 @@ class QRsteps extends Component {
         longitudeDelta: 0.09,
       };
 
+      const initialRegion2 = {
+        latitude: lat,
+        longitude: long,
+        latitudeDelta: 0.09,
+        longitudeDelta: 0.09,
+      };
+
       this.setState({ initialPosition: initialRegion });
       this.setState({ markerPosition: initialRegion });
+
+      this.setState({ initialPosition2: initialRegion2 });
+      this.setState({ markerPosition2: initialRegion });
+
+
       
     }, (error) => alert(JSON.stringify(error)),
     { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 });
@@ -63,12 +81,14 @@ class QRsteps extends Component {
 
   btnPressed = () => {
     const { quest } = this.props.navigation.state.params;
-    const { text, description, backupEnabled } = this.state;
+    const { text, description, backupEnabled, Points } = this.state;
 
     if (!text || (text && text.trim() === '')) {
       Alert.alert('Alert', 'Your answer cannot be empty.');
     } else if (!description || (description && description.trim() === '')) {
       Alert.alert('Alert', 'Description cannot be empty.');
+    } else if (!Points || (Points && Points.trim() === '')) {
+      Alert.alert('Alert', 'Points cannot be empty.');
     } else {
       let startLocation = {};
       let stepLocation = {};
@@ -101,7 +121,7 @@ class QRsteps extends Component {
         description,
         startLocation,
         stepLocation,
-        points: 10,
+        points: this.state.Points,
         qrCode: text,
         stepHint: this.state.hint,
         backupEnabled,
@@ -149,6 +169,15 @@ class QRsteps extends Component {
               characterRestriction={100}
               maxLength={100}
             />
+            <TextField
+            label='Points'
+            keyboardType= 'numeric'
+            baseColor={Colors.secondaryColor}
+            tintColor={Colors.primaryColor}
+            onChangeText={(Points)=> this.setState({Points})}
+            
+            />
+            
             <View style={styles.qrStyle}> 
               <QRCode
                 value={this.state.text}
@@ -205,16 +234,22 @@ class QRsteps extends Component {
             <MapView
               closeMap={this.closeMap.bind(this)}
               style={styles.map}
-              region={this.state.initialPosition}
-              initialRegion={this.state.initialPosition}
+              region={{latitude: this.state.initialPosition.latitude,
+                longitude: this.state.initialPosition.longitude,
+                latitudeDelta: this.state.initialPosition.latitudeDelta,
+                longitudeDelta: this.state.initialPosition.longitudeDelta}}
+
+              initialRegion={this.state.coordinate}
             >
               <MapView.Marker
                 draggable
                 coordinate={this.state.initialPosition}
-                onDragEnd={(e) => {
-                  this.setState({ x: e.nativeEvent.coordinate });
-                }}
                 region={this.state.coordinate}
+                onDragEnd={(e) => {
+                  coordinate: {this.state.x}
+                  this.setState({ x: e.nativeEvent.coordinate , initialPosition: e.nativeEvent.coordinate });
+                }}
+                
               />
             </MapView>
             <AnnotatedButton 
@@ -230,16 +265,25 @@ class QRsteps extends Component {
           <View style={styles.overlay}> 
             <MapView
               style={styles.map}
-              region={this.state.initialPosition}
-              initialRegion={this.state.initialPosition}
+              region={{latitude: this.state.initialPosition2.latitude,
+                longitude: this.state.initialPosition2.longitude,
+                latitudeDelta: this.state.initialPosition2.latitudeDelta,
+                longitudeDelta: this.state.initialPosition2.longitudeDelta}}
+              
+              initialRegion = {{latitude: this.state.initialPosition.latitude,
+                longitude: this.state.initialPosition.longitude,
+                latitudeDelta: this.state.initialPosition.latitudeDelta,
+                longitudeDelta: this.state.initialPosition.longitudeDelta}}
             >
               <MapView.Marker
                 draggable
                 coordinate={this.state.initialPosition}
-                onDragEnd={(e) => {
-                  this.setState({ bx: e.nativeEvent.coordinate });
-                }}
                 region={this.state.coordinate}
+
+                onDragEnd={(e) => {
+                  this.setState({ bx: e.nativeEvent.coordinate,  initialPosition2: e.nativeEvent.coordinate });
+                }}
+                
               />
             </MapView>
             <AnnotatedButton 

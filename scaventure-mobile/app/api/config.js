@@ -1,2 +1,2 @@
-export const apiUrl = 'http://10.43.129.153:4100';
+export const apiUrl = 'http://myvmlab.senecacollege.ca:6099';
 

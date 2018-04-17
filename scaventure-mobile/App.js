@@ -88,6 +88,7 @@ class Page1 extends Component{
             <Text style={styles.done} onPress = {() => this.props.navigator.push({id: 'Page9'})} >  Skip Tour  </Text>
         
             <Text style={styles.NextPage} onPress = {() => this.props.navigator.push ({id: 'Page2'})}> Next Page </Text>
+            <Text style={styles.dot}>.</Text>
             
           </View>
 
@@ -111,7 +112,7 @@ class Page2 extends Component{
             <Text style={styles.done} onPress = {() => this.props.navigator.push({id: 'Page1'})}>    Prev Page </Text>
             
             <Text style={styles.NextPage} onPress = {() => this.props.navigator.push({id: 'Page3'})}>    Next Page </Text>
-            
+            <Text style={styles.dot}>.</Text>
             </View>
         );  
     }
@@ -132,7 +133,7 @@ class Page3 extends Component{
             <Text style={styles.done} onPress = {() => this.props.navigator.push({id: 'Page2'})}>    Prev Page </Text>
             
             <Text style={styles.NextPage} onPress = {() => this.props.navigator.push({id: 'Page4'})}>    Next Page </Text>
-            
+            <Text style={styles.dot}>.</Text>
             </View>
         );  
     }
@@ -155,7 +156,7 @@ class Page4 extends Component{
             <Text style={styles.done} onPress = {() => this.props.navigator.push({id: 'Page3'})}>    Prev Page </Text>
             
             <Text style={styles.NextPage} onPress = {() => this.props.navigator.push({id: 'Page5'})}>     Next Page </Text>
-            
+            <Text style={styles.dot}>.</Text>
             
             </View>
         );  
@@ -177,7 +178,7 @@ class Page5 extends Component{
             <Text style={styles.done} onPress = {() => this.props.navigator.push({id: 'Page4'})}> Prev Page </Text>
             
             <Text style={styles.NextPage} onPress = {() => this.props.navigator.push({id: 'Page6'})}> Next Page </Text>
-            
+            <Text style={styles.dot}>.</Text>
             
             </View>
         );  
@@ -199,7 +200,7 @@ class Page6 extends Component{
             <Text style={styles.done} onPress = {() => this.props.navigator.push({id: 'Page5'})}> Prev Page </Text>
             
             <Text style={styles.NextPage} onPress = {() => this.props.navigator.push({id: 'Page7'})}>  Next Page  </Text>
-            
+            <Text style={styles.dot}>.</Text>
             
             </View>
         );  
@@ -221,7 +222,7 @@ class Page7 extends Component{
             <Text style={styles.done} onPress = {() => this.props.navigator.push({id: 'Page6'})}> Prev Page </Text>
             
             <Text style={styles.NextPage} onPress = {() => this.props.navigator.push({id: 'Page8'})}>  Next Page  </Text>
-            
+            <Text style={styles.dot}>.</Text>
             
             </View>
         );  
@@ -243,7 +244,7 @@ class Page8 extends Component{
             <Text style={styles.done} onPress = {() => this.props.navigator.push({id: 'Page7'})}> Prev Page </Text>
             
             <Text style={styles.NextPage} onPress = {() => this.props.navigator.push({id: 'Page9'})}>  Start App  </Text>
-            
+            <Text style={styles.dot}>.</Text>
             
             </View>
         );  
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
     
         fontSize: 22,
         fontWeight: 'bold',
-        fontFamily: 'Arial',
+        //fontFamily: 'Arial',
         flexDirection: 'column',
         textAlign: 'center',
         position: 'absolute',
@@ -284,34 +285,34 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         color: 'white',
-        marginTop: 355,
+        marginTop: 300,
       },
       descText: {
           
           fontSize: 15,
           color: 'white',
           fontWeight: 'bold',
-          fontFamily: 'Arial',
+          //fontFamily: 'Arial',
           marginLeft: 15,
-          marginTop: 400,
+          marginTop: 340,
       },
 
       done: {
     
-          fontSize : 16,
+          fontSize : 18,
           textAlign: 'left',
           fontWeight: 'bold',
-          fontFamily: 'Arial',
+         // fontFamily: 'Arial',
           marginLeft: 15,
-          marginTop: 214,
+          marginTop: 155,
       },
       NextPage: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold',
-        fontFamily: 'Arial',
+       // fontFamily: 'Arial',
         textAlign: 'left',
         marginLeft: 250.5,
-        marginTop: -18,
+        marginTop: -22,
       },
       logo:
       {
@@ -327,13 +328,13 @@ const styles = StyleSheet.create({
       },
       logo2:
       {
-        marginTop: 170,
+        marginTop: 140,
         position: 'absolute',
         marginLeft: 17,
       },
       logo3:
       {
-        marginTop: 150,
+        marginTop: 120,
         position: 'absolute',
         marginLeft: 32,
       },
@@ -345,7 +346,7 @@ const styles = StyleSheet.create({
       },
       logo5:
       {
-        marginTop: 70,
+        marginTop: 45,
         position: 'absolute',
         marginLeft: 90,
       },
@@ -374,7 +375,11 @@ const styles = StyleSheet.create({
       bg4:
       {
         backgroundColor: '#406E9F',
-      }
+      },
+      dot:
+      {
+            marginTop: 1000,
+      },
 });
 
 AppRegistry.registerComponent('AppIntro', () => AppIntro);

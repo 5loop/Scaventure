@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-
+import { AppRegistry } from 'react-native';
 import { Provider } from 'react-redux';
-
-import {AppRegistry, StyleSheet, Text, View, navigation, AsyncStorage, Image, Button} from 'react-native';
-import { Navigator } from 'react-native-deprecated-custom-components';
-//import {StackNavigator} from 'react-navigation';
 
 import axios from 'axios';
 import store from './app/store';
+<<<<<<< HEAD
 import Layout from './app/layout';  
 import colors from './app/constants/colors';
 import { loginUser } from './app/actions/sessionActions';
@@ -393,15 +390,18 @@ AppRegistry.registerComponent('AppIntro', () => AppIntro);
 
 import { loginUser } from './app/actions/sessionActions';
 store.dispatch(loginUser({ email: 'scaventure@scv.com', password: 'testtest' }));
-// global axios settings
+=======
+import Layout from './app/layout';
 
+ import { loginUser } from './app/actions/sessionActions';
+ store.dispatch(loginUser({ email: 'scaventure@scv.com', password: 'testtest' }));
+>>>>>>> 833a74348afa3ad685188ca2764ad561e28a293f
+// global axios settings
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 export default class AppDrawer extends Component {
   render() {
-
     return (
-
       <Provider store={store}>
         <Layout />
       </Provider>
@@ -409,5 +409,4 @@ export default class AppDrawer extends Component {
   }
 }
 
-AppRegistry.registerComponent('AppDrawer', () => AppDrawer);*/
-
+AppRegistry.registerComponent('AppDrawer', () => AppDrawer);

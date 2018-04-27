@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { AppRegistry } from 'react-native';
+import { AppRegistry,StyleSheet,Text,View,Image } from 'react-native';
 import { Provider } from 'react-redux';
-
+import {Navigator} from 'react-native-deprecated-custom-components';
 import axios from 'axios';
 import store from './app/store';
-<<<<<<< HEAD
+
 import Layout from './app/layout';  
 import colors from './app/constants/colors';
 import { loginUser } from './app/actions/sessionActions';
@@ -390,7 +390,7 @@ AppRegistry.registerComponent('AppIntro', () => AppIntro);
 
 import { loginUser } from './app/actions/sessionActions';
 store.dispatch(loginUser({ email: 'scaventure@scv.com', password: 'testtest' }));
-=======
+
 import Layout from './app/layout';
 
  import { loginUser } from './app/actions/sessionActions';
@@ -410,3 +410,4 @@ export default class AppDrawer extends Component {
 }
 
 AppRegistry.registerComponent('AppDrawer', () => AppDrawer);
+*/

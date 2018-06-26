@@ -38,7 +38,7 @@ paste the following:
 
     DB_URL=mongodb://localhost/scaventure
     JWT_SECRET=somerandomhashyoushouldgenerate
-    SENDGRID_KEY=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
+    SENDGRID_KEY=ASKOLGAFORKEY
 
 This file will contain all the sensitive information (e.g. API keys, secrets etc.) and **should not** be committed. 
 

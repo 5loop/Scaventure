@@ -22,6 +22,15 @@ OS:
 Install NPM dependencides 
 `cd /path/to/scaventure-mobile` 
 `npm install` 
+`npm install eslint -g`
+
+To use linter
+
+`npm run lint`
+
+Auto-Fix linter errors
+
+`npm run lint:fix`
 
 You can run the app by 
 

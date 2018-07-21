@@ -1,16 +1,19 @@
 {
   "expo": {
     "name": "scaventure-mobile",
-    "description": "A very interesting project.",
+    "description": "Quests playing",
     "slug": "scaventure-mobile",
     "privacy": "public",
     "sdkVersion": "25.0.0",
     "platforms": ["ios", "android"],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/icon.png",
+    "android": {
+      "package": "com.scaventureseneca.scaventure"
+    },
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

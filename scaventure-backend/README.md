@@ -19,9 +19,12 @@
 **Dependencies**  
 Global: 
 
-- `sudo npm install babel-cli -g`  
+- `sudo npm install babel-cli -g` 
 - mongodb
 - node/npm
+Hot reloading: 
+- `sudo npm install babel-core -g`  
+- `sudo npm install babel-watch -g`
 
 Local Dependencies: 
 `cd path/to/scaventure-backend`
@@ -35,6 +38,7 @@ paste the following:
 
     DB_URL=mongodb://localhost/scaventure
     JWT_SECRET=somerandomhashyoushouldgenerate
+    SENDGRID_KEY=ASKOLGAFORKEY
 
 This file will contain all the sensitive information (e.g. API keys, secrets etc.) and **should not** be committed. 
 

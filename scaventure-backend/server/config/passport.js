@@ -1,5 +1,5 @@
 // Importing Passport, strategies, and config
-import User from '../modules/users/model';
+import { User } from '../modules/users/model';
 const passport = require('passport'),  
       JwtStrategy = require('passport-jwt').Strategy,
       ExtractJwt = require('passport-jwt').ExtractJwt,
